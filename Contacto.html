@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contacto — Aldeias Seguras Pessoas Seguras</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --green:#3a7d44;
+      --green-2:#2e7d32;
+      --line:#e7e7e7;
+      --shadow:0 2px 8px rgba(0,0,0,.08);
+      --bg-grad: radial-gradient(1200px 600px at 20% -10%, #eaf7ee 0%, transparent 60%),
+                 radial-gradient(1200px 600px at 110% 10%, #eef5ff 0%, transparent 55%),
+                 linear-gradient(#fafafa, #f5f7f6);
+    }
+
+    /* Base */
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:'Roboto',sans-serif; color:#333; line-height:1.6;
+      display:flex; flex-direction:column; min-height:100vh; background:var(--bg-grad);
+    }
+
+    /* Header */
+    header{
+      background:#fff; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;
+      box-shadow:0 2px 6px rgba(0,0,0,.06); position:sticky; top:0; z-index:1000
+    }
+    .logo{display:flex; align-items:center; gap:10px}
+    .logo img{width:35px; height:35px}
+    .logo h1{margin:0; color:var(--green); font-weight:700; font-size:1.1rem}
+    nav ul{list-style:none; display:flex; gap:1.2rem; margin:0; padding:0}
+    nav a{text-decoration:none; color:var(--green); font-weight:500; font-size:.95rem}
+
+    /* Hero */
+    .hero{
+      padding:3.2rem 1rem; text-align:center; position:relative; overflow:hidden;
+      background:linear-gradient(135deg, #e9f5ec, #f7fbff);
+      border-bottom:1px solid var(--line);
+    }
+    .hero h2{margin:.2rem 0 0; font-size:2rem; color:#1b5e20}
+    .hero p{margin:.3rem 0 0; color:#4b6b50}
+
+    /* Content */
+    .wrap{max-width:1100px; margin:1.75rem auto 2.5rem; padding:0 1.2rem}
+    .grid{display:grid; grid-template-columns: 1.1fr .9fr; gap:1.25rem}
+    @media (max-width: 900px){ .grid{grid-template-columns:1fr} .hero h2{font-size:1.6rem} }
+
+    /* Cards */
+    .card{background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); overflow:hidden}
+    .card .head{padding:1rem 1.25rem; border-bottom:1px solid var(--line); background:#f9fbf9}
+    .card .head h3{margin:0; color:var(--green)}
+    .card .body{padding:1rem 1.25rem}
+
+    /* Info list */
+    .info{display:grid; gap:.6rem; margin:0; padding:0; list-style:none}
+    .info li{display:flex; gap:.6rem; align-items:flex-start}
+    .badge{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%;
+      background:#eef7ef; color:var(--green-2); border:1px solid #d5ead7; font-size:1rem; flex:0 0 28px}
+
+    /* Form */
+    form .row{display:grid; grid-template-columns:1fr 1fr; gap:.8rem}
+    @media (max-width: 640px){ form .row{grid-template-columns:1fr} }
+    label{display:block; font-weight:600; color:#1f3b22; margin:.2rem 0 .25rem}
+    input, select, textarea{
+      width:100%; padding:.75rem .8rem; border:1px solid #cfd9cf; border-radius:8px; font:inherit; background:#fff;
+      outline:none; box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
+    }
+    input:focus, select:focus, textarea:focus{border-color:#9acd9e; box-shadow:0 0 0 3px rgba(58,125,68,.12), inset 0 1px 2px rgba(0,0,0,.02)}
+    textarea{min-height:140px; resize:vertical}
+
+    .actions{display:flex; gap:.6rem; align-items:center; margin-top:.6rem}
+    button{
+      padding:.75rem 1.1rem; border:0; border-radius:10px; font-weight:700; cursor:pointer;
+      background:linear-gradient(180deg, #2e7d32, #256b2a); color:#fff; box-shadow:0 2px 8px rgba(46,125,50,.25)
+    }
+    button:hover{filter:brightness(1.03)}
+    .ghost{
+      background:#eef7ef; color:#2e7d32; border:1px solid #cfe7d2; box-shadow:none; font-weight:600;
+    }
+    .hint{font-size:.9rem; color:#566; margin:.2rem 0 0}
+
+    /* Utilities */
+    .emergency{margin-top:1rem; padding:.85rem 1rem; border-radius:10px; background:#fff3f3; border:1px solid #ffcdd2}
+    .emergency b{color:#c62828}
+    .toast{
+      position:fixed; left:50%; bottom:20px; transform:translateX(-50%);
+      background:#1b5e20; color:#fff; padding:.7rem 1rem; border-radius:999px; box-shadow:0 6px 20px rgba(0,0,0,.18);
+      font-size:.95rem; display:none; z-index:2000
+    }
+
+    /* Footer */
+    footer{background:#fff; padding:.7rem; text-align:center; margin-top:auto; font-size:.9rem; color:#555; border-top:1px solid var(--line)}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="Imagens/Aldeia.png" alt="Logo">
+      <h1>Aldeias Seguras Pessoas Seguras</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="compreender.html">Compreender</a></li>
+        <li><a href="explorar.html">Explorar</a></li>
+        <li><a href="reduzir.html">Reduzir</a></li>
+        <li><a href="aldeias.html">Aldeias Seguras</a></li>
+        <li><a href="Incendio.html">Fogo à Vista</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Contacto</h2>
+    <p>Fala connosco — dúvidas, sugestões, parcerias ou reporte de risco.</p>
+  </section>
+
+  <main class="wrap">
+    <div class="grid">
+
+      <!-- Coluna: Informação -->
+      <section class="card">
+        <div class="head"><h3>Contactos úteis</h3></div>
+        <div class="body">
+          <ul class="info">
+            <li>
+              <span class="badge">📍</span>
+              <div>
+                <b>Morada</b><br>
+                <span>Edifício Municipal, 4970-000 Arcos de Valdevez</span><br>
+                <a href="https://maps.google.com/?q=Arcos+de+Valdevez" target="_blank" rel="noopener" style="color:#2e7d32;text-decoration:underline">Ver no Google Maps</a>
+              </div>
+            </li>
+            <li>
+              <span class="badge">✉️</span>
+              <div>
+                <b>E-mail</b><br>
+                <a href="mailto:contacto@aldeiasseguras.pt" style="color:#2e7d32;text-decoration:underline">contacto@aldeiasseguras.pt</a>
+              </div>
+            </li>
+            <li>
+              <span class="badge">📞</span>
+              <div>
+                <b>Telefone</b><br>
+                <span>+351 000 000 000</span>
+              </div>
+            </li>
+            <li>
+              <span class="badge">🕘</span>
+              <div>
+                <b>Horário</b><br>
+                <span>Seg–Sex · 09:00–17:30</span>
+              </div>
+            </li>
+          </ul>
+
+          <div class="emergency" style="margin-top:1rem">
+            <p><b>Emergência:</b> 112 · <b>Floresta/Incêndios:</b> 117 · <b>SOS Ambiente (GNR):</b> 808 200 520</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Coluna: Formulário -->
+      <section class="card">
+        <div class="head"><h3>Envia-nos uma mensagem</h3></div>
+        <div class="body">
+          <form id="contactForm">
+            <div class="row">
+              <div>
+                <label for="nome">Nome</label>
+                <input id="nome" name="nome" type="text" autocomplete="name" required />
+              </div>
+              <div>
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label for="assunto">Assunto</label>
+                <select id="assunto" name="assunto" required>
+                  <option value="" selected disabled>— Selecionar —</option>
+                  <option>Informação geral</option>
+                  <option>Sugestão</option>
+                  <option>Reportar risco</option>
+                  <option>Parcerias/voluntariado (OSL)</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+              <div>
+                <label for="telefone">Telefone (opcional)</label>
+                <input id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+351 ..." />
+              </div>
+            </div>
+
+            <div>
+              <label for="mensagem">Mensagem</label>
+              <textarea id="mensagem" name="mensagem" required placeholder="Escreve aqui a tua mensagem..."></textarea>
+            </div>
+
+            <div class="actions">
+              <button type="submit">Enviar</button>
+              <button type="button" class="ghost" id="mailtoBtn">Abrir no e-mail</button>
+            </div>
+            <p class="hint">Sem servidor? O botão “Abrir no e-mail” compõe uma mensagem no teu cliente de e-mail.</p>
+
+            <p class="hint" style="margin-top:.6rem">
+              <small><b>Privacidade:</b> os dados serão usados apenas para responder ao teu pedido.</small>
+            </p>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="toast" class="toast">A abrir o teu e-mail…</div>
+
+  <footer>
+    © 2025 Ruben Sousa · Todos os direitos reservados
+  </footer>
+
+  <script>
+    // === Configura o e-mail de destino (altera para o teu) ===
+    const CONTACT_EMAIL = 'contacto@aldeiasseguras.pt';
+
+    function buildMailto(){
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const assunto = document.getElementById('assunto').value || 'Contacto';
+      const telefone = document.getElementById('telefone').value.trim();
+      const mensagem = document.getElementById('mensagem').value.trim();
+
+      const subject = `[Site] ${assunto} — ${nome || 'Sem nome'}`;
+      const body =
+`Nome: ${nome}
+E-mail: ${email}
+Telefone: ${telefone || '—'}
+Assunto: ${assunto}
+
+Mensagem:
+${mensagem}
+
+— Enviado via página de contacto`;
+
+      return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function toast(msg){
+      const t = document.getElementById('toast');
+      t.textContent = msg || 'A abrir…';
+      t.style.display = 'block';
+      setTimeout(()=> t.style.display = 'none', 2000);
+    }
+
+    // Botão “Abrir no e-mail”
+    document.getElementById('mailtoBtn').addEventListener('click', ()=>{
+      const link = buildMailto();
+      toast('A abrir o teu e-mail…');
+      window.location.href = link;
+    });
+
+    // Submeter formulário (também via mailto, para sites estáticos)
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const link = buildMailto();
+      toast('A abrir o teu e-mail…');
+      window.location.href = link;
+    });
+  </script>
+</body>
+</html>

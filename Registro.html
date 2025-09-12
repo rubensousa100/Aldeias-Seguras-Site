@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registar — Aldeias Seguras Pessoas Seguras</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --green:#3a7d44;
+      --green-2:#2e7d32;
+      --line:#e7e7e7;
+      --shadow:0 8px 24px rgba(0,0,0,.10);
+      --bg-grad: radial-gradient(1100px 500px at 10% -10%, #eaf7ee 0%, transparent 60%),
+                 radial-gradient(1000px 500px at 110% 0%, #eef5ff 0%, transparent 55%),
+                 linear-gradient(#fafafa, #f5f7f6);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:'Roboto',sans-serif; color:#333; line-height:1.6;
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background:var(--bg-grad);
+    }
+
+    a{text-decoration:none; color:var(--green)}
+    a:hover{text-decoration:underline}
+
+    /* Cartão */
+    .auth-card{
+      width:100%; max-width:520px;
+      background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); overflow:hidden;
+    }
+    .auth-head{
+      padding:1rem 1.25rem; display:flex; align-items:center; gap:.6rem;
+      border-bottom:1px solid var(--line); background:#f9fbf9;
+    }
+    .auth-head img{width:34px;height:34px}
+    .auth-head h1{margin:0;font-size:1rem;color:var(--green);font-weight:700}
+
+    .auth-body{ padding:1.25rem 1.25rem 1rem }
+    .title{ margin:.2rem 0 .2rem; font-size:1.35rem; font-weight:700; color:#1b5e20 }
+    .subtitle{ margin:0 0 .8rem; color:#4c6b50; font-size:.95rem }
+
+    label{ display:block; font-weight:600; color:#1f3b22; margin:.25rem 0 .25rem }
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:.8rem }
+    @media (max-width:560px){ .row{grid-template-columns:1fr} }
+
+    .input-wrap{ position:relative }
+    input{
+      width:100%; padding:.8rem .85rem;
+      border:1px solid #cfd9cf; border-radius:10px; outline:none; font:inherit; background:#fff;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
+    }
+    input:focus{ border-color:#9acd9e; box-shadow:0 0 0 3px rgba(58,125,68,.12), inset 0 1px 2px rgba(0,0,0,.02) }
+
+    .toggle-pass{
+      position:absolute; right:.4rem; top:50%; transform:translateY(-50%);
+      border:0; background:#eef7ef; color:var(--green-2);
+      padding:.35rem .55rem; border-radius:8px; cursor:pointer;
+      border:1px solid #d5ead7; font-weight:600;
+    }
+
+    /* Força da password */
+    .meter{margin:.35rem 0 .1rem; height:8px; background:#f0f2f0; border-radius:999px; overflow:hidden; border:1px solid #e6ece6}
+    .meter > span{display:block; height:100%; width:0; transition:width .25s ease; background:linear-gradient(90deg,#ff6b6b,#ffd166,#9be15d)}
+
+    .error{display:none; margin:.35rem 0 0; font-size:.9rem; color:#c62828}
+
+    .terms{display:flex; align-items:flex-start; gap:.5rem; margin-top:.4rem; font-size:.95rem}
+    .terms input{width:auto; margin-top:.25rem}
+
+    .btn{
+      display:inline-block; width:100%;
+      padding:.85rem 1rem; border:0; border-radius:10px; font-weight:700; cursor:pointer;
+      background:linear-gradient(180deg,#2e7d32,#256b2a); color:#fff; box-shadow:0 3px 10px rgba(46,125,50,.25);
+      margin-top:.8rem;
+    }
+    .btn:hover{filter:brightness(1.03)}
+    .muted{ text-align:center; font-size:.95rem; color:#566; margin:.6rem 0 0 }
+
+    /* Voltar */
+    .back-link{
+      position:fixed; top:14px; left:16px; font-weight:600; padding:.35rem .55rem;
+      background:#eef7ef; border:1px solid #d5ead7; color:var(--green-2); border-radius:999px;
+    }
+
+    @media (max-width: 520px){
+      .auth-card{ margin: 0 12px; }
+      .back-link{ top:10px; left:10px }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-link">← Voltar</a>
+
+  <main class="auth-card" role="main">
+    <div class="auth-head">
+      <img src="Imagens/Aldeia.png" alt="Logótipo">
+      <h1>Aldeias Seguras Pessoas Seguras</h1>
+    </div>
+
+    <div class="auth-body">
+      <h2 class="title">Criar conta</h2>
+      <p class="subtitle">Regista-te para aceder à tua área.</p>
+
+      <form id="registerForm" novalidate>
+        <div class="row">
+          <div>
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" type="text" autocomplete="name" required />
+            <div id="nomeErr" class="error">Indica o teu nome.</div>
+          </div>
+          <div>
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
+            <div id="emailErr" class="error">Introduz um e-mail válido.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="password">Palavra-passe</label>
+            <div class="input-wrap">
+              <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8" />
+              <button type="button" class="toggle-pass" data-target="password">Mostrar</button>
+            </div>
+            <div class="meter" aria-hidden="true"><span id="meterFill"></span></div>
+            <div id="passErr" class="error">Mínimo 8 caracteres (usa letras maiúsculas e minúsculas, números e símbolos).</div>
+          </div>
+          <div>
+            <label for="confirm">Confirmar palavra-passe</label>
+            <div class="input-wrap">
+              <input id="confirm" name="confirm" type="password" autocomplete="new-password" required />
+              <button type="button" class="toggle-pass" data-target="confirm">Mostrar</button>
+            </div>
+            <div id="confirmErr" class="error">As palavras-passe não coincidem.</div>
+          </div>
+        </div>
+
+        <label class="terms">
+          <input id="terms" type="checkbox" required />
+          <span>Li e aceito os <a href="privacidade.html" target="_blank" rel="noopener">termos e a política de privacidade</a>.</span>
+        </label>
+        <div id="termsErr" class="error" style="margin-top:.3rem">Tens de aceitar os termos para continuar.</div>
+
+        <button type="submit" class="btn">Registar</button>
+        <p class="muted">Já tens conta? <a href="login.html">Entrar</a></p>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    // Botões mostrar/ocultar password (ambos os campos)
+    document.querySelectorAll('.toggle-pass').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const targetId = btn.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        const show = input.type === 'password';
+        input.type = show ? 'text' : 'password';
+        btn.textContent = show ? 'Ocultar' : 'Mostrar';
+        btn.setAttribute('aria-pressed', show ? 'true' : 'false');
+        input.focus();
+      });
+    });
+
+    // Indicador de força da password
+    const passInput = document.getElementById('password');
+    const meterFill = document.getElementById('meterFill');
+    function scorePassword(p){
+      let s = 0;
+      if(!p) return 0;
+      if(p.length >= 8) s++;
+      if(/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
+      if(/\d/.test(p)) s++;
+      if(/[^\w\s]/.test(p)) s++;
+      return s; // 0..4
+    }
+    passInput.addEventListener('input', ()=>{
+      const s = scorePassword(passInput.value);
+      meterFill.style.width = (s*25)+'%';
+    });
+
+    // Validação simples (cliente)
+    const form = document.getElementById('registerForm');
+    const nomeErr = document.getElementById('nomeErr');
+    const emailErr = document.getElementById('emailErr');
+    const passErr  = document.getElementById('passErr');
+    const confirmErr = document.getElementById('confirmErr');
+    const termsErr = document.getElementById('termsErr');
+
+    function validate(){
+      let ok = true;
+
+      // Nome
+      if(!form.nome.value.trim()){
+        nomeErr.style.display = 'block'; ok = false;
+      } else nomeErr.style.display = 'none';
+
+      // E-mail
+      if(!form.email.checkValidity()){
+        emailErr.style.display = 'block'; ok = false;
+      } else emailErr.style.display = 'none';
+
+      // Password regras mínimas
+      const p = form.password.value;
+      const passOk = p.length >= 8;
+      if(!passOk){ passErr.style.display = 'block'; ok = false; }
+      else passErr.style.display = 'none';
+
+      // Confirm
+      if(form.confirm.value !== p || !form.confirm.value){
+        confirmErr.style.display = 'block'; ok = false;
+      } else confirmErr.style.display = 'none';
+
+      // Termos
+      if(!form.terms.checked){
+        termsErr.style.display = 'block'; ok = false;
+      } else termsErr.style.display = 'none';
+
+      return ok;
+    }
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      if(!validate()) return;
+
+      // Sem backend — apenas aviso. Integra com a tua API/Firebase/Supabase aqui.
+      alert('Registo válido! Integração com backend necessária para criar a conta.');
+    });
+
+    // Limpar erros ao escrever
+    ['nome','email','password','confirm'].forEach(id=>{
+      document.getElementById(id).addEventListener('input', ()=> {
+        if(id==='nome') nomeErr.style.display='none';
+        if(id==='email') emailErr.style.display='none';
+        if(id==='password') passErr.style.display='none';
+        if(id==='confirm') confirmErr.style.display='none';
+      });
+    });
+    document.getElementById('terms').addEventListener('change', ()=> termsErr.style.display='none');
+  </script>
+</body>
+</html>
+
