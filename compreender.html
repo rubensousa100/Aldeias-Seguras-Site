@@ -91,25 +91,151 @@
       .hero h2{font-size:1.6rem}
       nav ul{flex-direction:column;align-items:center}
     }
+    /* === Mobile Nav (drop-in) ================================== */
+.burger{
+  display:none; width:40px; height:40px; border:1px solid #cfe7d0;
+  border-radius:10px; background:#fff; cursor:pointer;
+  align-items:center; justify-content:center;
+}
+.burger span{
+  display:block; width:18px; height:2px; background:#2e7d32; position:relative;
+}
+.burger span::before,.burger span::after{
+  content:""; position:absolute; left:0; width:18px; height:2px; background:#2e7d32;
+}
+.burger span::before{ top:-6px } .burger span::after{ top:6px }
+
+.mobile-nav{
+  position:fixed; inset:64px 0 0 0; /* abaixo do header sticky */
+  background:#fff; border-top:1px solid var(--line);
+  padding:1rem 1.25rem 2rem; overflow:auto; display:none; z-index:999;
+}
+.mobile-nav.open{ display:block }
+.mobile-nav a{
+  display:block; padding:.85rem 0; font-weight:700; color:var(--green);
+  font-size:1.18rem; text-decoration:none;
+}
+.mobile-nav a:hover{ text-decoration:underline }
+.mobile-nav .actions{ display:flex; gap:.6rem; align-items:center; margin-top:.6rem }
+body.no-scroll{ overflow:hidden }
+
+@media (max-width:900px){
+  header{ padding:.8rem 1rem }
+  nav ul{ display:none }        /* esconde os links do desktop */
+  #langSwitch, .login-btn{ display:none }  /* escondidos no topo em mobile */
+  .burger{ display:flex }       /* mostra o botão hamburger */
+}
+
+/* opcional: header mais baixo em telefones muito pequenos */
+@media (max-width:600px){
+  .mobile-nav{ inset:56px 0 0 0 }
+}
   </style>
 </head>
+<script>
+  // === Mobile nav toggle ===
+  (function(){
+    const burger   = document.querySelector('.burger');
+    const panel    = document.getElementById('mobileNav');
+    const body     = document.body;
+
+    function closeNav(){
+      panel.classList.remove('open');
+      body.classList.remove('no-scroll');
+      burger.setAttribute('aria-expanded', 'false');
+      panel.setAttribute('aria-hidden', 'true');
+    }
+    function openNav(){
+      panel.classList.add('open');
+      body.classList.add('no-scroll');
+      burger.setAttribute('aria-expanded', 'true');
+      panel.setAttribute('aria-hidden', 'false');
+    }
+
+    burger.addEventListener('click', () => {
+      const isOpen = panel.classList.contains('open');
+      isOpen ? closeNav() : openNav();
+    });
+
+    // fecha ao clicar num link
+    panel.addEventListener('click', e => {
+      if (e.target.closest('a')) closeNav();
+    });
+
+    // fecha com ESC
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeNav();
+    });
+
+    // === Sincronizar os selects de idioma (desktop <-> mobile) ===
+    const lang1 = document.getElementById('langSwitch');
+    const lang2 = document.getElementById('langSwitch2');
+
+    if (lang1 && lang2) {
+      // ao carregar a página, replica o valor atual
+      lang2.value = lang1.value;
+
+      lang1.addEventListener('change', e => { lang2.value = e.target.value; });
+      lang2.addEventListener('change', e => {
+        lang1.value = e.target.value;
+        // se o teu i18n usa setLang(value), chama-o aqui:
+        if (typeof setLang === 'function') setLang(e.target.value);
+      });
+    }
+  })();
+</script>
 <body>
   <header>
-    <div class="logo">
-      <img src="Imagens/Aldeia.png" alt="Logo" />
-      <h1>Aldeia Segura Pessoas Seguras</h1>
-    </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Início</a></li>
-        <li><a href="compreender.html" aria-current="page">Compreender</a></li>
-        <li><a href="explorar.html">Explorar</a></li>
-        <li><a href="reduzir.html">Reduzir</a></li>
-        <li><a href="aldeias.html">Aldeias Seguras</a></li>
-        <li><a href="Incendio.html">Fogo à Vista</a></li>
-        <li><a href="contacto.html">Contacto</a></li>
-      </ul>
-    </nav>
+<header>
+  <div class="logo">
+    <img src="Imagens/Aldeia.png" alt="Logo">
+    <h1 data-i18n="site.title">Aldeia Segura Pessoas Seguras</h1>
+  </div>
+
+  <nav aria-label="Principal">
+    <ul>
+      <li><a href="index.html"        data-i18n="nav.home">Início</a></li>
+      <li><a href="compreender.html"  data-i18n="nav.understand">Compreender</a></li>
+      <li><a href="explorar.html"     data-i18n="nav.explore">Explorar</a></li>
+      <li><a href="reduzir.html"      data-i18n="nav.reduce">Reduzir</a></li>
+      <li><a href="aldeias.html"      data-i18n="nav.villages">Aldeias Seguras</a></li>
+      <li><a href="Incendio.html">Fogo à Vista</a></li>
+      <li><a href="contacto.html"     data-i18n="nav.contact">Contacto</a></li>
+    </ul>
+
+    <!-- selecionador de idioma + login (visíveis no desktop) -->
+    <select id="langSwitch" aria-label="Idioma">
+      <option value="pt">PT</option>
+      <option value="en">EN</option>
+    </select>
+    <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+
+    <!-- botão hamburger (só aparece em mobile via CSS) -->
+    <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+      <span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- painel mobile (aparece ao clicar no hamburger) -->
+<aside id="mobileNav" class="mobile-nav" aria-hidden="true">
+  <a href="index.html"        data-i18n="nav.home">Início</a>
+  <a href="compreender.html"  data-i18n="nav.understand">Compreender</a>
+  <a href="explorar.html"     data-i18n="nav.explore">Explorar</a>
+  <a href="reduzir.html"      data-i18n="nav.reduce">Reduzir</a>
+  <a href="aldeias.html"      data-i18n="nav.villages">Aldeias Seguras</a>
+  <a href="Incendio.html">Fogo à Vista</a>
+  <a href="contacto.html"     data-i18n="nav.contact">Contacto</a>
+
+  <div class="actions">
+    <!-- segundo seletor para mobile; sincronizamos via JS -->
+    <select id="langSwitch2" aria-label="Idioma">
+      <option value="pt">PT</option>
+      <option value="en">EN</option>
+    </select>
+    <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+  </div>
+</aside>
   </header>
 
   <section class="hero">
@@ -346,6 +472,3 @@
   </script>
 </body>
 </html>
-
-
-
