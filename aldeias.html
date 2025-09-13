@@ -9,7 +9,7 @@
 
 <style>
   :root{
-    --green:#3a7d44; --green-2:#2e7d32; --line:#e7e7e7; --shadow:0 2px 6px rgba(0,0,0,.08);
+    --green:#2e7d32; --green-2:#2e7d32; --line:#e7e7e7; --shadow:0 2px 6px rgba(0,0,0,.08);
     --space-xs:.4rem; --space-sm:.6rem; --space-md:.9rem; --space-lg:1.2rem;
   }
 
@@ -19,20 +19,57 @@
     display:flex; flex-direction:column; min-height:100vh;
   }
 
-  /* Header / navegação */
+  /* Header / navegação (desktop) */
   header.site{
     background:#fff; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;
-    box-shadow:0 2px 5px rgba(0,0,0,.1); position:sticky; top:0; z-index:5000;
+    box-shadow:0 2px 5px rgba(0,0,0,.1); position:sticky; top:0; z-index:5000; gap:1rem;
   }
-  .logo{ display:flex; align-items:center; gap:10px; }
+  .logo{ display:flex; align-items:center; gap:10px; min-width:0; }
   .logo img{ width:35px; height:35px; }
-  .logo h1{ font-size:1.2rem; color:var(--green); margin:0; }
-  nav ul{ list-style:none; display:flex; gap:1.2rem; margin:0; padding:0; }
-  nav a{ text-decoration:none; color:var(--green); font-weight:500; font-size:.95rem; }
+  .logo h1{ font-size:1.1rem; color:var(--green); margin:0; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  nav.nav ul{ list-style:none; display:flex; gap:1.2rem; margin:0; padding:0; }
+  nav.nav a{ text-decoration:none; color:var(--green); font-weight:500; font-size:.95rem; }
+  nav.nav a.active{ font-weight:600; }
+  #langSwitch{
+    border:1px solid #cfe7d0; border-radius:20px; padding:.25rem .6rem; color:#2e7d32; background:#fff; font-weight:600;
+  }
+  .login-btn{
+    background:#2e7d32; color:#fff !important; padding:.45rem .95rem; border-radius:25px;
+    font-weight:700; border:1px solid #2e6b39; text-decoration:none; transition:background .2s, transform .1s;
+  }
+  .login-btn:hover{ background:#2a6f2d; transform:translateY(-1px); }
+  .login-btn:active{ transform:translateY(0); }
+
+  /* Botão burger (aparece só em mobile) */
+  .burger{
+    display:none; width:40px; height:40px; border:1px solid #cfe7d0; border-radius:10px;
+    background:#fff; cursor:pointer; align-items:center; justify-content:center; z-index:6002;
+  }
+  .burger span, .burger span::before, .burger span::after{
+    content:""; display:block; width:18px; height:2px; background:#2e7d32; position:relative;
+  }
+  .burger span::before{ position:absolute; top:-6px; left:0; width:18px; height:2px; background:#2e7d32; content:""; }
+  .burger span::after{ position:absolute; top:6px; left:0; width:18px; height:2px; background:#2e7d32; content:""; }
+
+  /* Overlay do menu mobile (igual à 1.ª imagem) */
+  .scrim{
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:5500;
+  }
+  aside.mobile-nav{
+    position:fixed; top:0; right:0; height:100%; width:75%; max-width:360px; background:#fff;
+    box-shadow:-2px 0 8px rgba(0,0,0,.1); transform:translateX(100%); transition:transform .3s ease;
+    z-index:6001; padding:2rem 1.5rem; display:flex; flex-direction:column; gap:1.2rem;
+  }
+  aside.mobile-nav.open{ transform:translateX(0); }
+  aside.mobile-nav ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:1rem; }
+  aside.mobile-nav a{ color:var(--green); font-weight:700; text-decoration:none; font-size:1.4rem; padding:.9rem 0; }
+  aside.mobile-nav select{ margin-top:.5rem; }
+  aside.mobile-nav .login-btn{ width:100%; border-radius:28px; }
 
   /* Hero */
   .hero{
-    background:url('Imagens/Incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
+    background:url('Imagens/incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
   }
   .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.5); }
   .hero h2{ position:relative; z-index:1; font-size:2rem; margin:0; }
@@ -65,6 +102,7 @@
     background:#ffe9e9; color:#a33; border:1px solid #f5b5b5; border-radius:10px;
     padding:.6rem .9rem; box-shadow:var(--shadow); z-index:10000; display:none;
   }
+  #toast{ background:#e7f6ea !important; color:#2e7d32 !important; border:1px solid #cfe7d0 !important; }
 
   /* Stats */
   .stats{
@@ -136,45 +174,30 @@
   }
 
   /* --------- Tabelas clean ---------- */
-  table.clean{
-    width:100%; border-collapse:collapse; table-layout:fixed;
-  }
-  table.clean th, table.clean td{
-    border:1px solid #eee; padding:.6rem .7rem; font-size:.95rem; vertical-align:top; background:#fff;
-  }
-  table.clean thead th{
-    background:#f3f8f3; color:#222; font-weight:700; line-height:1.2; white-space:nowrap;
-  }
+  table.clean{ width:100%; border-collapse:collapse; table-layout:fixed; }
+  table.clean th, table.clean td{ border:1px solid #eee; padding:.6rem .7rem; font-size:.95rem; vertical-align:top; background:#fff; }
+  table.clean thead th{ background:#f3f8f3; color:#222; font-weight:700; line-height:1.2; white-space:nowrap; }
   table.clean td input, table.clean td select, table.clean td textarea{ margin:0; min-height:38px; }
 
-  /* Coluna AÇÕES (Remover) — largura fixa suficiente e botão lá dentro */
-  table.clean th:last-child,
-  table.clean td:last-child{
-    width:12rem; min-width:12rem; text-align:right;
-  }
-  table.clean td:last-child .btn{
-    min-width:8.8rem; padding:.46rem .85rem; width:auto;
-  }
+  /* Coluna AÇÕES */
+  table.clean th:last-child, table.clean td:last-child{ width:12rem; min-width:12rem; text-align:right; }
+  table.clean td:last-child .btn{ min-width:8.8rem; padding:.46rem .85rem; width:auto; }
 
-  /* ---------- Larguras por tabela ---------- */
-  /* POP: Casa | Nº | Idade | Incapacidades | Observações | Ações */
+  /* Larguras por tabela */
   table.clean[id$="-pop"] th:nth-child(1), table.clean[id$="-pop"] td:nth-child(1){ width:18%; }
   table.clean[id$="-pop"] th:nth-child(2), table.clean[id$="-pop"] td:nth-child(2){ width:10%; }
   table.clean[id$="-pop"] th:nth-child(3), table.clean[id$="-pop"] td:nth-child(3){ width:12%; }
   table.clean[id$="-pop"] th:nth-child(4), table.clean[id$="-pop"] td:nth-child(4){ width:26%; }
-  table.clean[id$="-pop"] th:nth-child(5), table.clean[id$="-pop"] td:nth-child(5){ width:22%; } /* espaço extra para Ações */
+  table.clean[id$="-pop"] th:nth-child(5), table.clean[id$="-pop"] td:nth-child(5){ width:22%; }
 
-  /* OSL: Nome | Contacto | Ações */
   table.clean[id$="-osl"] th:nth-child(1), table.clean[id$="-osl"] td:nth-child(1){ width:44%; }
   table.clean[id$="-osl"] th:nth-child(2), table.clean[id$="-osl"] td:nth-child(2){ width:44%; }
 
-  /* PREV: Data | Organizador | Participantes | Faixas | Ações */
   table.clean[id$="-prev"] th:nth-child(1), table.clean[id$="-prev"] td:nth-child(1){ width:16%; }
   table.clean[id$="-prev"] th:nth-child(2), table.clean[id$="-prev"] td:nth-child(2){ width:26%; }
   table.clean[id$="-prev"] th:nth-child(3), table.clean[id$="-prev"] td:nth-child(3){ width:18%; }
   table.clean[id$="-prev"] th:nth-child(4), table.clean[id$="-prev"] td:nth-child(4){ width:28%; }
 
-  /* SIM: Data | Lições | Participantes | Ações */
   table.clean[id$="-sim"] th:nth-child(1), table.clean[id$="-sim"] td:nth-child(1){ width:18%; }
   table.clean[id$="-sim"] th:nth-child(2), table.clean[id$="-sim"] td:nth-child(2){ width:48%; }
   table.clean[id$="-sim"] th:nth-child(3), table.clean[id$="-sim"] td:nth-child(3){ width:24%; }
@@ -210,7 +233,7 @@
   .emergency p{ font-size:.95rem; margin:.2rem 0; }
   footer{ background:#fff; padding:.5rem; text-align:center; margin-top:auto; font-size:.9rem; color:#555; }
 
-  /* Comentários/Problemas */
+  /* Helpers / Leaflet tweaks */
   .info-comments{ display:grid; grid-template-columns:1.2fr 1fr; gap:1.1rem; }
   .comment-form{ display:grid; gap:.6rem; }
   .comment-form .row{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
@@ -226,447 +249,82 @@
   .comment-body{ margin:.35rem 0; white-space:pre-wrap; }
   .comment-meta{ font-size:.85rem; color:#666; }
   .comment-actions .btn{ border-color:#ddd; color:#444; }
-
-  /* Quando “Adicionar informação” está aberto, esconder Comentários/Problemas dessa ficha */
   .info-comments > details[open] ~ details.comments-wrap{ display:none; }
 
-  /* Leaflet tweaks */
-  .leaflet-control-layers-base{ display:none!important; }
-  .leaflet-control-layers-separator{ display:none!important; }
-
-  /* Helpers */
+  .leaflet-control-layers-base, .leaflet-control-layers-separator{ display:none!important; }
   .small{ font-size:.86rem; color:#666; }
   .muted{ color:#777; }
   .pulse{ box-shadow:0 0 0 3px rgba(58,125,68,.25) inset; }
 
-  /* --------- Responsivo ---------- */
-  @media (max-width:1200px){
-    .grid{ grid-template-columns:1fr; }
-  }
+  /* Responsivo */
+  @media (max-width:1200px){ .grid{ grid-template-columns:1fr; } }
   @media (max-width:900px){
     .fichas, .faq-wrap{ width:92%; }
     .info-comments{ grid-template-columns:1fr; }
-    table.clean thead th{ white-space:normal; } /* títulos podem quebrar */
+    header.site{ padding:.8rem 1rem; }
+  }
+  @media (max-width:820px){
+    nav.nav{ display:none; }
+    .burger{ display:flex; }
   }
   @media (max-width:768px){
     .hero h2{ font-size:1.5rem; }
-    nav ul{ flex-direction:column; align-items:center; }
     #map{ width:95%; }
     table.clean th:last-child, table.clean td:last-child{ width:10.5rem; min-width:10.5rem; }
   }
-  @media (min-width:1440px){
-    .fichas{ width:1320px; }
-  }
+  @media (min-width:1440px){ .fichas{ width:1320px; } }
 
-  /* 1) Aumentar a “caixa de fora” do formulário */
-.fichas{
-  /* usa mais da largura do ecrã e aumenta o limite máximo */
-  width: min(200vw, 1400px);   /* se precisares ainda mais, troca 98vw por 99vw */
-  max-width: 1400px;
-}
+  /* ==== FIX HEADER: igual às outras páginas (altura/alinhamento) ==== */
 
-/* (opcional) em ecrãs muito largos mantém uma largura elegante */
-@media (min-width: 1440px){
-  .fichas{ width: 1380px; }
-}
-
-/* 2) Alargar a coluna do botão “Remover” em todas as tabelas do formulário */
-.box table.clean th:last-child,
-.box table.clean td:last-child{
-  width: 25rem;        /* aumenta/baixa este valor conforme precisares */
-  min-width: 25rem;
-  text-align: right;   /* botão encostado à direita dentro da célula */
-  padding-right: 14rem;
-}
-
-/* Botão com largura mínima confortável */
-.box table.clean td:last-child .btn{
-  min-width: 8.8rem;   /* cabe “Remover” folgado */
-  padding: .45rem .85rem;
-}
-
-/* deixa o toast com verde de sucesso */
-#toast{
-  background: #e7f6ea !important;   /* fundo verde-claro */
-  color: #2e7d32 !important;         /* texto verde */
-  border: 1px solid #cfe7d0 !important;
-}
-
-/* ==== AJUSTES DO HEADER PARA IGUALAR AO INDEX (append-only) ==== */
-
-/* Cores/base iguais às do index */
-:root{
-  --green:#2e7d32;
-  --green-2:#2e7d32;
-}
-
-/* Header desktop – mantém a tua estrutura mas uniformiza medidas/cores */
+/* altura da “barra branca” */
 header.site{
-  background:#fff;
-  padding:1rem 2rem;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 2px 5px rgba(0,0,0,.1);
-  position:sticky;
-  top:0;
-  z-index:5000;
-  gap:1rem;
-}
-header.site .logo{ display:flex; align-items:center; gap:10px; min-width:0; }
-header.site .logo img{ width:35px; height:35px; }
-header.site .logo h1{
-  margin:0; color:var(--green); font-weight:700; font-size:1.1rem;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  padding: .9rem 2rem; /* mesma altura do index */
 }
 
-/* Navegação desktop */
-header.site .nav ul{
-  list-style:none; display:flex; gap:1.2rem; margin:0; padding:0;
-}
-header.site .nav a,
-header.site nav a{
-  color:var(--green);
-  font-weight:500;
-  font-size:.95rem;
-  text-decoration:none;         /* sem sublinhado */
-}
-/* garantir que nenhum “active” sublinha ou coloca barra */
-header.site .nav a.active,
-header.site nav a.active{
-  font-weight:500;
-  border:0;
-  text-decoration:none;
-}
-
-/* Se existir seletor de idioma igual ao index */
-#langSwitch, #langSwitch2{
-  border:1px solid #cfe7d0; border-radius:20px; padding:.25rem .6rem;
-  color:#2e7d32; background:#fff; font-weight:600;
-}
-
-/* Botão Login igual ao index (não interfere com os teus .btn) */
-.login-btn{
-  background:#2e7d32; color:#fff !important; padding:.45rem .95rem; border-radius:25px;
-  font-weight:700; border:1px solid #2e6b39; text-decoration:none;
-  transition:background .2s, transform .1s;
-}
-.login-btn:hover{ background:#2a6f2d; transform:translateY(-1px); }
-.login-btn:active{ transform:translateY(0); }
-
-/* ===== MENU MOBILE ===== */
-/* Estiliza o teu botão existente (.menu-toggle) como o “hamburger” do index */
-.menu-toggle{
-  display:none; width:40px; height:40px; border:1px solid #cfe7d0; border-radius:10px;
-  background:#fff; cursor:pointer; align-items:center; justify-content:center; font-size:0;
-}
-.menu-toggle::before, .menu-toggle::after{
-  content:""; display:block; width:18px; height:2px; background:#2e7d32;
-}
-.menu-toggle span{ display:block; width:18px; height:2px; background:#2e7d32; position:relative; }
-.menu-toggle span::before, .menu-toggle span::after{
-  content:""; position:absolute; left:0; width:18px; height:2px; background:#2e7d32;
-}
-.menu-toggle span::before{ top:-6px; } .menu-toggle span::after{ top:6px; }
-
-/* Painel lateral mobile já é .nav no teu HTML — só afinamos dimensões */
-@media (max-width: 820px){
-  .menu-toggle{ display:flex; }
-  header.site .nav{
-    position:fixed; top:0; right:0; height:100%;
-    width:70%; max-width:420px; background:#fff;
-    box-shadow:-2px 0 8px rgba(0,0,0,.1);
-    transform:translateX(100%); transition:.3s ease;
-    padding:2rem 1.5rem; display:flex; flex-direction:column; align-items:flex-start;
-  }
-  header.site .nav.open{ transform:translateX(0); }
-  header.site .nav ul{ flex-direction:column; gap:1rem; }
-}
-
-/* Pequenos ajustes responsivos do header */
-@media (max-width:900px){
-  header.site{ padding:.8rem 1rem; }
-}
-
-/* === FIX HEADER (não deixar o select ocupar 100% e impedir quebra) === */
-header.site { flex-wrap: nowrap; }
+/* nav em linha e centrado verticalmente */
 header.site .nav{
   display:flex;
   align-items:center;
   gap:1rem;
-  flex-wrap: nowrap;        /* tudo numa linha */
-  white-space: nowrap;
+  flex-wrap:nowrap;
 }
 
-/* menu desktop na mesma linha */
+/* itens do menu alinhados ao centro */
 header.site .nav ul{
-  list-style:none;
   display:flex;
+  align-items:center;   /* importante p/ alinhar com o logo */
   gap:1.2rem;
-  margin:0;
-  padding:0;
-  flex-wrap: nowrap;
+  margin:0 0 0 .5rem;
 }
 
-/* Override à regra global dos formulários */
-header.site select,
+/* NÃO deixar o select ocupar 100% (override à regra global dos inputs) */
 header.site .nav select#langSwitch{
-  width: auto !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  display: inline-block;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:none !important;
+  display:inline-block !important;
+  height:36px;
+  line-height:36px;
+  padding:.25rem .75rem;
+  border:1px solid #cfe7d0;
+  border-radius:20px;
+  background:#fff;
+  color:#2e7d32;
+  font-weight:600;
 }
 
-/* Botão de login sem partir linha */
+/* botão de login com altura alinhada ao select */
 header.site .login-btn{
-  white-space: nowrap;
-  display: inline-block;
+  display:inline-block;
+  white-space:nowrap;
+  padding:.45rem .95rem;
+  border-radius:25px;
+  line-height:1; /* evita crescer demais */
 }
 
-/* (opcional) dar um espacinho entre o menu e os controlos à direita */
-@media (min-width: 901px){
-  header.site .nav ul { margin-right: .5rem; }
-}
-
-    :root {
-      --green:#2e7d32;
-      --line:#e7e7e7;
-      --shadow:0 2px 6px rgba(0,0,0,.08);
-    }
-    body {
-      margin:0;
-      font-family:"Roboto",sans-serif;
-      color:#333;
-      line-height:1.6;
-      display:flex;
-      flex-direction:column;
-      min-height:100vh;
-    }
-
-    /* ===== Header desktop ===== */
-    header.site {
-      background:#fff;
-      padding:1rem 2rem;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      box-shadow:0 2px 5px rgba(0,0,0,.1);
-      position:sticky;
-      top:0;
-      z-index:5000;
-    }
-    .logo { display:flex; align-items:center; gap:10px; }
-    .logo img { width:35px; height:35px; }
-    .logo h1 { margin:0; font-size:1.1rem; color:var(--green); font-weight:700; white-space:nowrap; }
-
-    nav.nav ul {
-      list-style:none;
-      display:flex;
-      gap:1.2rem;
-      margin:0;
-      padding:0;
-    }
-    nav.nav a {
-      color:var(--green);
-      font-weight:500;
-      text-decoration:none;
-    }
-    nav.nav a.active { font-weight:600; }
-    #langSwitch {
-      border:1px solid #cfe7d0;
-      border-radius:20px;
-      padding:.25rem .6rem;
-      color:#2e7d32;
-      background:#fff;
-      font-weight:600;
-    }
-    .login-btn {
-      background:#2e7d32;
-      color:#fff !important;
-      padding:.45rem .95rem;
-      border-radius:25px;
-      font-weight:700;
-      border:1px solid #2e6b39;
-      text-decoration:none;
-    }
-
-    /* ===== Mobile menu ===== */
-    .burger {
-      display:none;
-      width:40px;
-      height:40px;
-      border:1px solid #cfe7d0;
-      border-radius:10px;
-      background:#fff;
-      cursor:pointer;
-      align-items:center;
-      justify-content:center;
-      z-index:6000;
-    }
-    .burger span,
-    .burger span::before,
-    .burger span::after {
-      content:"";
-      display:block;
-      width:18px;
-      height:2px;
-      background:#2e7d32;
-      position:relative;
-    }
-    .burger span::before { position:absolute; top:-6px; }
-    .burger span::after { position:absolute; top:6px; }
-
-    .scrim {
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.4);
-      z-index:5500;
-    }
-    aside.mobile-nav {
-      position:fixed;
-      top:0; right:0;
-      height:100%;
-      width:75%;
-      max-width:360px;
-      background:#fff;
-      box-shadow:-2px 0 8px rgba(0,0,0,.1);
-      transform:translateX(100%);
-      transition:transform .3s ease;
-      z-index:6001;
-      padding:2rem 1.5rem;
-      display:flex;
-      flex-direction:column;
-      gap:1.2rem;
-    }
-    aside.mobile-nav.open { transform:translateX(0); }
-    aside.mobile-nav ul {
-      list-style:none;
-      padding:0;
-      margin:0;
-      display:flex;
-      flex-direction:column;
-      gap:1rem;
-    }
-    aside.mobile-nav a { color:var(--green); font-weight:500; text-decoration:none; }
-
-    aside.mobile-nav select,
-    aside.mobile-nav .login-btn {
-      margin-top:1rem;
-      width:100%;
-    }
-
-    @media (max-width:820px){
-      nav.nav { display:none; }
-      .burger { display:flex; }
-    }
-
-    /* ==== MOBILE: menu aberto por baixo do header (igual à 2.ª imagem) ==== */
-@media (max-width: 900px){
-  /* o painel deixa de ser “fixed overlay” e passa a bloco normal */
-  .mobile-nav{
-    position: relative !important;
-    inset: auto !important;
-    top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
-    display: none !important;              /* fechado por omissão */
-    border-top: 1px solid var(--line);
-    box-shadow: none !important;
-    padding: 1rem 1.25rem 1.25rem;
-  }
-  .mobile-nav.open{                        /* abre como bloco abaixo do header */
-    display: block !important;
-  }
-
-  /* não precisamos de “scrim”/escurecimento do fundo */
-  .scrim{ display:none !important; }
-  .scrim.open{ display:none !important; }
-
-  /* não bloquear o scroll da página quando o menu abre */
-  body.no-scroll{
-    position: static !important;
-    width: auto !important;
-    overflow: visible !important;
-    overscroll-behavior: auto !important;
-    touch-action: auto !important;
-  }
-
-  /* tipografia/espacamentos como na 2.ª imagem */
-  .mobile-nav a{
-    font-size: 1.6rem;
-    font-weight: 700;
-    padding: 1.1rem 0;
-  }
-  .mobile-nav .actions{
-    margin-top: .8rem;
-  }
-
-  /* pill do idioma compacto, igual ao desktop */
-  #langSwitch2{
-    width:auto !important; min-width:0 !important; max-width:none !important;
-    height:36px; line-height:36px; padding:.25rem .75rem;
-    border:1px solid #cfe7d0; border-radius:20px; background:#fff; color:#2e7d32; font-weight:600;
-  }
-
-  /* botão grande e fluido */
-  .mobile-nav .login-btn{
-    display:block;
-    width:100%;
-    max-width:520px;
-    margin-top: .6rem;
-  }
-}
-
-/* === UNIFICAR MENU MOBILE COM AS OUTRAS PÁGINAS === */
-/* Links do menu (mesmo tamanho/espacamento do index & reduzir) */
-@media (max-width: 900px){
-  header.site .nav.open a{
-    display:block;
-    padding:.85rem 0;
-    font-weight:700;
-    font-size:1.18rem;   /* igual às outras páginas */
-    text-decoration:none;
-  }
-  /* linha de ações (select + botão) dentro do painel mobile */
-  header.site .nav.open .actions{
-    display:flex;
-    gap:.6rem;
-    align-items:center;
-    margin-top:.6rem;
-    width:auto;
-  }
-  /* garantir que o <select> NÃO fica a 100% (override ao form global) */
-  header.site .nav.open select{
-    width:auto !important;
-    min-width:0 !important;
-    max-width:none !important;
-    display:inline-block;
-  }
-  /* botão de login do mobile igual ao das outras páginas (não ocupar a largura toda) */
-  header.site .nav.open .login-btn{
-    display:inline-block;
-    width:auto !important;
-    padding:.45rem .95rem;
-    border-radius:25px;
-    font-weight:700;
-  }
-}
-
-/* === UNIFICAR TAMANHO DO TEXTO NO MENU MOBILE (igual às outras páginas) === */
-@media (max-width: 900px){
-  /* links do menu dentro do painel mobile e dentro do nav aberto */
-  .mobile-nav a,
-  header.site .nav.open a{
-    font-size: 1.18rem;   /* antes 1.6rem */
-    padding: .85rem 0;    /* antes 1.1rem 0 */
-    font-weight: 700;
-  }
-
-  /* botão login no mobile com proporção igual às outras páginas (opcional) */
-  .mobile-nav .login-btn,
-  header.site .nav.open .login-btn{
-    font-size: 1rem;
-    padding: .45rem .95rem;
-  }
+/* em desktop garantir que o menu NÃO vira painel lateral */
+@media (min-width: 821px){
+  nav.nav{ display:flex !important; }
 }
 
 </style>
@@ -705,7 +363,7 @@ header.site .login-btn{
   </nav>
 </header>
 
-<!-- Scrim + Mobile Nav -->
+<!-- Scrim + Mobile Nav (overlay) -->
 <div class="scrim"></div>
 <aside class="mobile-nav" aria-label="Menu Mobile">
   <ul>
@@ -730,45 +388,35 @@ header.site .login-btn{
     const scrim = document.querySelector(".scrim");
     const mobileNav = document.querySelector(".mobile-nav");
 
-    function closeMenu(){
+    const closeMenu = () => {
       mobileNav.classList.remove("open");
-      scrim.style.display="none";
-      document.body.style.overflow="";
-      burger.setAttribute("aria-expanded","false");
-    }
-    function openMenu(){
+      scrim.style.display = "none";
+      document.body.style.overflow = "";
+      burger.setAttribute("aria-expanded", "false");
+    };
+    const openMenu = () => {
       mobileNav.classList.add("open");
-      scrim.style.display="block";
-      document.body.style.overflow="hidden";
-      burger.setAttribute("aria-expanded","true");
-    }
+      scrim.style.display = "block";
+      document.body.style.overflow = "hidden";
+      burger.setAttribute("aria-expanded", "true");
+    };
 
     burger.addEventListener("click", () => {
-      if(mobileNav.classList.contains("open")) closeMenu();
-      else openMenu();
+      mobileNav.classList.contains("open") ? closeMenu() : openMenu();
     });
     scrim.addEventListener("click", closeMenu);
-    document.addEventListener("keydown", e => {
-      if(e.key==="Escape") closeMenu();
-    });
-    mobileNav.querySelectorAll("a").forEach(link=>{
-      link.addEventListener("click", closeMenu);
-    });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+    mobileNav.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
 
-    // Marcar link ativo
+    // Link ativo
     const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
     document.querySelectorAll("nav.nav a, aside.mobile-nav a").forEach(a=>{
-      if(a.getAttribute("href").toLowerCase() === current){
-        a.classList.add("active");
-      }
+      if(a.getAttribute("href").toLowerCase() === current){ a.classList.add("active"); }
     });
   });
 </script>
 
-<!-- ===== resto do conteúdo (mapa, fichas, etc.) fica igual ao teu ficheiro ===== -->
-
-</body>
-
+<!-- ===== resto do conteúdo (mapa, fichas, etc.) ===== -->
 
 <section class="hero"><h2>Localização das Aldeias Seguras</h2></section>
 
@@ -840,6 +488,7 @@ header.site .login-btn{
 <script src="https://unpkg.com/proj4@2.11.0/dist/proj4.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
 <script>
+
 window.addEventListener('DOMContentLoaded', function(){
   function showToast(msg){
     var t=document.getElementById('toast'); if(!t) return;
