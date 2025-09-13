@@ -32,7 +32,7 @@
 
   /* Hero */
   .hero{
-    background:url('Imagens/incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
+    background:url('Imagens/Incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
   }
   .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.5); }
   .hero h2{ position:relative; z-index:1; font-size:2rem; margin:0; }
@@ -648,6 +648,24 @@ header.site .login-btn{
     padding:.45rem .95rem;
     border-radius:25px;
     font-weight:700;
+  }
+}
+
+/* === UNIFICAR TAMANHO DO TEXTO NO MENU MOBILE (igual às outras páginas) === */
+@media (max-width: 900px){
+  /* links do menu dentro do painel mobile e dentro do nav aberto */
+  .mobile-nav a,
+  header.site .nav.open a{
+    font-size: 1.18rem;   /* antes 1.6rem */
+    padding: .85rem 0;    /* antes 1.1rem 0 */
+    font-weight: 700;
+  }
+
+  /* botão login no mobile com proporção igual às outras páginas (opcional) */
+  .mobile-nav .login-btn,
+  header.site .nav.open .login-btn{
+    font-size: 1rem;
+    padding: .45rem .95rem;
   }
 }
 
