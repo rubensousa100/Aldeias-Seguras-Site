@@ -7,29 +7,59 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
   <style>
     :root{
-      --green:#2e7d32;--green-d:#1f5d24;--mint:#e8f5e9;--mint-2:#f1fbf2;--line:#e7e7e7;--shadow:0 2px 6px rgba(0,0,0,.08);--text:#333;--ink:#111
+      --green:#2e7d32;--green-d:#1f5d24;
+      --mint:#e8f5e9;--mint-2:#f1fbf2;
+      --line:#e7e7e7;--shadow:0 2px 6px rgba(0,0,0,.08);
+      --text:#333;--ink:#111;
+      --header-h: 72px; /* altura header em desktop */
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{margin:0;font-family:'Roboto',sans-serif;background:#f6f7f6;color:var(--text);line-height:1.65;display:flex;flex-direction:column;min-height:100vh}
 
-    /* HEADER */
-    header{background:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,.08);position:sticky;top:0;z-index:1000}
-    .logo{display:flex;align-items:center;gap:10px}
+    /* ===== HEADER (desktop) ===== */
+    header{
+      background:#fff;
+      padding:1rem 2rem;
+      display:flex;justify-content:space-between;align-items:center;
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
+      position:sticky;top:0;z-index:1000;
+    }
+    .logo{display:flex;align-items:center;gap:10px;min-width:0}
     .logo img{width:35px;height:35px}
-    .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem}
+    .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* nav em linha + ações à direita (select + login) */
+    nav{display:flex;align-items:center;gap:1rem}
     nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
     nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
 
-    /* HERO */
-    .hero{background:url('Imagens/incendio20.jpg') center/cover no-repeat;color:#fff;text-align:center;padding:3.2rem 1rem;position:relative}
+    /* === estilos que faltavam (iguais aos da home) === */
+    #langSwitch{
+      border:1px solid #cfe7d0;border-radius:20px;
+      padding:.25rem .6rem;color:#2e7d32;background:#fff;font-weight:600;
+    }
+    .login-btn{
+      background:var(--green);color:#fff !important;
+      padding:.45rem .95rem;border-radius:25px;font-weight:700;
+      border:1px solid #2e6b39;text-decoration:none;
+      transition:background .2s, transform .1s;
+    }
+    .login-btn:hover{ background:#2a6f2d; transform:translateY(-1px) }
+    .login-btn:active{ transform:translateY(0) }
+
+    /* ===== HERO ===== */
+    .hero{
+      background:url('Imagens/incendio20.jpg') center/cover no-repeat;
+      color:#fff;text-align:center;padding:3.2rem 1rem;position:relative
+    }
     .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
     .hero > *{position:relative;z-index:1}
     .hero h2{font-size:2rem;margin:.2rem 0}
     .hero p{max-width:860px;margin:.4rem auto 0;opacity:.95}
 
-    /* SUBNAV LOCAL */
-    .subnav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:64px;z-index:999}
+    /* ===== SUBNAV ===== */
+    .subnav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:var(--header-h);z-index:999}
     .subnav .wrap{max-width:1060px;margin:0 auto;padding:.4rem 1rem;display:flex;gap:.6rem;flex-wrap:wrap}
     .pill{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .8rem;border:1px solid var(--line);border-radius:999px;background:#fff;color:#2d4733;font-size:.92rem;text-decoration:none;box-shadow:0 1px 2px rgba(0,0,0,.04)}
     .pill.active{background:var(--mint);border-color:#cfe8d3}
@@ -82,7 +112,7 @@
 
     footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
 
-    /* === Mobile Nav (menu) ================================== */
+    /* ===== Mobile Nav (apenas <900px) ===== */
     .burger{
       display:none; width:40px; height:40px; border:1px solid #cfe7d0;
       border-radius:10px; background:#fff; cursor:pointer;
@@ -96,43 +126,36 @@
     }
     .burger span::before{ top:-6px } .burger span::after{ top:6px }
 
-    .mobile-nav{
-      position:fixed; inset:64px 0 0 0;     /* abaixo do header sticky */
-      background:#fff; border-top:1px solid var(--line);
-      padding:1rem 1.25rem 2rem; overflow:auto; display:none;
-      z-index:2000;                          /* à frente de tudo */
-    }
+    .mobile-nav{ position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid var(--line); padding:1rem 1.25rem 2rem; overflow:auto; display:none; z-index:2000; }
     .mobile-nav.open{ display:block }
-
-    /* SCRIM (fundo por trás do menu) */
-    .scrim{
-      position:fixed; inset:64px 0 0 0;
-      background:rgba(0,0,0,.28);
-      backdrop-filter:saturate(120%) blur(2px);
-      display:none; z-index:1500;
-    }
+    .scrim{ position:fixed; inset:var(--header-h) 0 0 0; background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px); display:none; z-index:1500; }
     .scrim.open{ display:block }
 
-    /* bloquear o scroll (iOS-friendly) quando o menu abre */
-    body.no-scroll{
-      position:fixed; width:100%;
-      overflow:hidden;
-      overscroll-behavior:none;
-      touch-action:none;
+    body.no-scroll{ position:fixed; width:100%; overflow:hidden; overscroll-behavior:none; touch-action:none; }
+
+    /* Desktop seguro: nada do mobile aparece */
+    @media (min-width:901px){
+      .mobile-nav,.scrim{ display:none !important; }
+      .burger{ display:none !important; }
+    }
+    /* Tablet/Telemóvel */
+    @media (max-width:900px){
+      :root{ --header-h: 64px; }
+      header{ padding:.8rem 1rem }
+      nav ul{ display:none }
+      #langSwitch, .login-btn{ display:none }
+      .burger{ display:flex }
+      .subnav{ top:var(--header-h) }
+    }
+    /* Telemóveis pequenos */
+    @media (max-width:600px){
+      :root{ --header-h: 56px; }
+      .mobile-nav, .scrim{ inset:var(--header-h) 0 0 0; }
     }
 
-    @media (max-width:900px){
-      header{ padding:.8rem 1rem }
-      nav ul{ display:none }                 /* esconde links desktop */
-      #langSwitch, .login-btn{ display:none }/* esconde ações desktop */
-      .burger{ display:flex }                /* mostra o hamburger */
-    }
-    @media (max-width:980px){.grid-3{grid-template-columns:1fr 1fr}.subnav{top:56px}}
+    /* Conteúdos responsivos */
+    @media (max-width:980px){.grid-3{grid-template-columns:1fr 1fr}}
     @media (max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr}.hero h2{font-size:1.6rem}}
-    @media (max-width:600px){
-      .mobile-nav{ inset:56px 0 0 0 }
-      .scrim{ inset:56px 0 0 0 }
-    }
   </style>
 </head>
 <body>
@@ -160,17 +183,15 @@
       </select>
       <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
 
-      <!-- botão hamburger (mostra em mobile) -->
+      <!-- hamburger (mostra só em mobile) -->
       <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
         <span></span>
       </button>
     </nav>
   </header>
 
-  <!-- SCRIM (fundo escuro por trás do menu) -->
+  <!-- SCRIM + MENU MOBILE -->
   <div id="scrim" class="scrim" aria-hidden="true"></div>
-
-  <!-- PAINEL MOBILE -->
   <aside id="mobileNav" class="mobile-nav" aria-hidden="true">
     <a href="index.html"        data-i18n="nav.home">Início</a>
     <a href="compreender.html"  data-i18n="nav.understand">Compreender</a>
@@ -354,7 +375,7 @@
   <!-- JS: acordeão + subnav + mobile nav -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      /* === Mobile nav toggle (com scrim e scroll lock) === */
+      /* === Mobile nav toggle (com scrim e scroll lock) — só mobile === */
       (function(){
         const burger = document.querySelector('.burger');
         const panel  = document.getElementById('mobileNav');
@@ -364,21 +385,21 @@
 
         function closeNav(){
           panel.classList.remove('open');
-          scrim && scrim.classList.remove('open');
+          if (scrim) scrim.classList.remove('open');
           body.classList.remove('no-scroll');
           body.style.top = '';
           window.scrollTo(0, scrollLockY);
-          burger && burger.setAttribute('aria-expanded', 'false');
-          panel && panel.setAttribute('aria-hidden', 'true');
+          if (burger){ burger.setAttribute('aria-expanded', 'false'); }
+          panel.setAttribute('aria-hidden', 'true');
         }
         function openNav(){
           scrollLockY = window.scrollY || window.pageYOffset || 0;
           body.style.top = `-${scrollLockY}px`;
           body.classList.add('no-scroll');
           panel.classList.add('open');
-          scrim && scrim.classList.add('open');
-          burger && burger.setAttribute('aria-expanded', 'true');
-          panel && panel.setAttribute('aria-hidden', 'false');
+          if (scrim) scrim.classList.add('open');
+          if (burger){ burger.setAttribute('aria-expanded', 'true'); }
+          panel.setAttribute('aria-hidden', 'false');
         }
 
         if (burger && panel) {
@@ -386,7 +407,7 @@
             panel.classList.contains('open') ? closeNav() : openNav();
           });
           panel.addEventListener('click', e => { if (e.target.closest('a')) closeNav(); });
-          scrim && scrim.addEventListener('click', closeNav);
+          if (scrim) scrim.addEventListener('click', closeNav);
           window.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
         }
 
@@ -424,7 +445,7 @@
         sections.forEach(s=>obs.observe(s));
       }
 
-      /* — Limpeza de text nodes “fantasma” (se existirem) — */
+      /* limpeza de text nodes “fantasma”, se existirem */
       try {
         var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
         var del = [], n;
@@ -433,7 +454,7 @@
           if (s === 'ection>' || s === '$1') del.push(n);
         }
         del.forEach(function (t) { if (t && t.parentNode) t.parentNode.removeChild(t); });
-      } catch (e) { /* ignore */ }
+      } catch (e) {}
     });
   </script>
 </body>
