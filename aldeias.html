@@ -32,7 +32,7 @@
 
   /* Hero */
   .hero{
-    background:url('Imagens/Incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
+    background:url('Imagens/incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
   }
   .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.5); }
   .hero h2{ position:relative; z-index:1; font-size:2rem; margin:0; }
@@ -615,6 +615,42 @@ header.site .login-btn{
     margin-top: .6rem;
   }
 }
+
+/* === UNIFICAR MENU MOBILE COM AS OUTRAS PÁGINAS === */
+/* Links do menu (mesmo tamanho/espacamento do index & reduzir) */
+@media (max-width: 900px){
+  header.site .nav.open a{
+    display:block;
+    padding:.85rem 0;
+    font-weight:700;
+    font-size:1.18rem;   /* igual às outras páginas */
+    text-decoration:none;
+  }
+  /* linha de ações (select + botão) dentro do painel mobile */
+  header.site .nav.open .actions{
+    display:flex;
+    gap:.6rem;
+    align-items:center;
+    margin-top:.6rem;
+    width:auto;
+  }
+  /* garantir que o <select> NÃO fica a 100% (override ao form global) */
+  header.site .nav.open select{
+    width:auto !important;
+    min-width:0 !important;
+    max-width:none !important;
+    display:inline-block;
+  }
+  /* botão de login do mobile igual ao das outras páginas (não ocupar a largura toda) */
+  header.site .nav.open .login-btn{
+    display:inline-block;
+    width:auto !important;
+    padding:.45rem .95rem;
+    border-radius:25px;
+    font-weight:700;
+  }
+}
+
 </style>
 
 </head>
