@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#2e7d32" />
   <title>Registar — Aldeias Seguras Pessoas Seguras</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
   <style>
@@ -17,13 +18,10 @@
       --text:#222;
       --muted:#4b5b4f;
     }
-
     @media (prefers-color-scheme: dark){
       :root{
         --bg-grad: linear-gradient(180deg,#0f1512,#0b120e);
-        --text:#e8f1eb;
-        --muted:#a8b6ad;
-        --line:#1f2a24;
+        --text:#e8f1eb; --muted:#a8b6ad; --line:#1f2a24;
         --shadow:0 8px 24px rgba(0,0,0,.45);
       }
     }
@@ -33,13 +31,14 @@
     body{
       margin:0;
       font-family:'Roboto',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
-      line-height:1.6;
-      min-height:100dvh; /* lida melhor com teclado móvel */
+      color:var(--text); line-height:1.6;
+      min-height:100dvh; /* corrige vh em iOS */
       display:flex; align-items:center; justify-content:center;
       background:var(--bg-grad);
-      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
-               max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      padding: max(12px, env(safe-area-inset-top))
+               max(12px, env(safe-area-inset-right))
+               max(12px, env(safe-area-inset-bottom))
+               max(12px, env(safe-area-inset-left));
     }
 
     a{ color:var(--green); text-decoration:none }
@@ -48,20 +47,30 @@
     /* Cartão */
     .auth-card{
       width:min(100%, 560px);
-      background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); overflow:hidden;
+      background:#fff; border:1px solid var(--line);
+      border-radius:16px; box-shadow:var(--shadow); overflow:hidden;
       transform:translateZ(0);
+      /* quando fica mais alto que o viewport, que role por dentro */
+      max-height:calc(100dvh - max(24px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+      display:flex; flex-direction:column;
     }
     @media (prefers-color-scheme: dark){ .auth-card{ background:#0f1713 } }
 
     .auth-head{
       padding:.9rem 1rem; display:flex; align-items:center; gap:.6rem;
-      border-bottom:1px solid var(--line); background:#f9fbf9;
+      border-bottom:1px solid var(--line); background:#f9fbf9; flex:0 0 auto;
     }
     @media (prefers-color-scheme: dark){ .auth-head{ background:#0c140f } }
     .auth-head img{ width:34px; height:34px }
     .auth-head h1{ margin:0; font-size:clamp(.95rem, 2.2vw, 1.05rem); color:var(--green); font-weight:700 }
 
-    .auth-body{ padding:1rem 1rem .9rem }
+    .auth-body{
+      padding:1rem 1rem .9rem;
+      overflow:auto; /* rolagem interna se necessário */
+      -webkit-overflow-scrolling:touch;
+      scroll-padding-bottom: 80px;
+      flex:1 1 auto;
+    }
     .title{ margin:.1rem 0 .2rem; font-size:clamp(1.25rem, 5vw, 1.6rem); font-weight:700; color:#1b5e20 }
     .subtitle{ margin:0 0 .8rem; color:var(--muted); font-size:clamp(.95rem, 3.5vw, 1rem) }
 
@@ -75,9 +84,8 @@
     input{
       width:100%; padding: .95rem 1rem;
       border:1px solid #cfd9cf; border-radius:12px; outline:none; background:#fff;
-      font:16px/1.2 inherit; /* 16px evita zoom do iOS */
-      min-height:44px;       /* toque confortável */
-      box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
+      font:16px/1.2 inherit; /* evita zoom automático iOS */
+      min-height:44px; box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
       transition: box-shadow .15s ease, border-color .15s ease;
     }
     @media (prefers-color-scheme: dark){ input{ background:#0f1512; border-color:#2a3a32; color:#e8f1eb } }
@@ -94,16 +102,14 @@
       border:1px solid #d5ead7; font-weight:800; line-height:1;
       min-width:44px; min-height:36px;
     }
-    @media (prefers-color-scheme: dark){
-      .toggle-pass{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 }
-    }
+    @media (prefers-color-scheme: dark){ .toggle-pass{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 } }
 
     /* Força da password */
     .meter{margin:.4rem 0 .1rem; height:9px; background:#f0f2f0; border-radius:999px; overflow:hidden; border:1px solid #e6ece6}
     .meter > span{display:block; height:100%; width:0; transition:width .25s ease; background:linear-gradient(90deg,#ff6b6b,#ffd166,#9be15d)}
 
     .error{ display:none; margin:.35rem 0 0; font-size:.9rem; color:#c62828 }
-    .error[aria-live]{ display:block } /* ativado via JS */
+    .error[aria-live]{ display:block } /* JS ativa quando há erro */
 
     .terms{ display:flex; align-items:flex-start; gap:.55rem; margin-top:.4rem; font-size:.98rem }
     .terms input{ width:auto; margin-top:.25rem; inline-size:1.05rem; block-size:1.05rem }
@@ -120,23 +126,25 @@
     .muted{ text-align:center; font-size:.98rem; color:#566; margin:.7rem 0 0 }
     @media (prefers-color-scheme: dark){ .muted{ color:#90a49a } }
 
-    /* Voltar */
+    /* Voltar fixo com safe-area e z-index */
     .back-link{
-      position:fixed; top:14px; left:16px; font-weight:800; padding:.55rem .75rem;
+      position:fixed; z-index:5;
+      top: max(12px, calc(env(safe-area-inset-top) + 6px));
+      left:max(12px, calc(env(safe-area-inset-left) + 6px));
+      font-weight:800; padding:.55rem .75rem;
       background:#eef7ef; border:1px solid #d5ead7; color:var(--green-2); border-radius:999px;
       text-wrap:nowrap;
+      box-shadow: var(--shadow);
     }
     @media (prefers-color-scheme: dark){ .back-link{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 } }
 
     /* Ajustes ecrã estreito */
     @media (max-width: 560px){
-      .auth-card{ margin:0 }
       .auth-head{ padding:.8rem .9rem }
-      .auth-body{ padding:.9rem .9rem .8rem }
-      .back-link{ top:10px; left:10px }
+      .auth-body{ padding:.9rem .9rem .9rem }
     }
 
-    /* Tablet/desktop ligeiramente mais largo */
+    /* Tablet/desktop um pouco mais largo */
     @media (min-width: 760px){
       body{ padding:24px }
       .auth-card{ width:min(100%, 600px) }
@@ -240,7 +248,7 @@
       meterFill.style.width = (s*25)+'%';
     });
 
-    // Validação acessível (lado cliente)
+    // Validação acessível
     const form = document.getElementById('registerForm');
     const nomeErr = document.getElementById('nomeErr');
     const emailErr = document.getElementById('emailErr');
@@ -248,58 +256,26 @@
     const confirmErr = document.getElementById('confirmErr');
     const termsErr = document.getElementById('termsErr');
 
-    function showErr(el, msg){
-      el.textContent = msg;
-      el.setAttribute('aria-live','polite');
-      el.style.display = 'block';
-    }
-    function hideErr(el){
-      el.textContent = '';
-      el.removeAttribute('aria-live');
-      el.style.display = 'none';
-    }
+    function showErr(el, msg){ el.textContent = msg; el.setAttribute('aria-live','polite'); el.style.display = 'block'; }
+    function hideErr(el){ el.textContent = ''; el.removeAttribute('aria-live'); el.style.display = 'none'; }
 
     function validate(){
       let ok = true;
-
-      if(!form.nome.value.trim()){
-        showErr(nomeErr, 'Indica o teu nome.');
-        ok = false;
-      } else hideErr(nomeErr);
-
-      if(!form.email.checkValidity()){
-        showErr(emailErr, 'Introduz um e-mail válido.');
-        ok = false;
-      } else hideErr(emailErr);
-
+      if(!form.nome.value.trim()){ showErr(nomeErr,'Indica o teu nome.'); ok=false } else hideErr(nomeErr);
+      if(!form.email.checkValidity()){ showErr(emailErr,'Introduz um e-mail válido.'); ok=false } else hideErr(emailErr);
       const p = form.password.value;
-      const passOk = p.length >= 8;
-      if(!passOk){
-        showErr(passErr, 'Mínimo 8 caracteres (usa maiúsculas/minúsculas, números e símbolos).');
-        ok = false;
-      } else hideErr(passErr);
-
-      if(form.confirm.value !== p || !form.confirm.value){
-        showErr(confirmErr, 'As palavras-passe não coincidem.');
-        ok = false;
-      } else hideErr(confirmErr);
-
-      if(!form.terms.checked){
-        showErr(termsErr, 'Tens de aceitar os termos para continuar.');
-        ok = false;
-      } else hideErr(termsErr);
-
+      if(p.length < 8){ showErr(passErr,'Mínimo 8 caracteres (usa maiúsculas/minúsculas, números e símbolos).'); ok=false } else hideErr(passErr);
+      if(form.confirm.value !== p || !form.confirm.value){ showErr(confirmErr,'As palavras-passe não coincidem.'); ok=false } else hideErr(confirmErr);
+      if(!form.terms.checked){ showErr(termsErr,'Tens de aceitar os termos para continuar.'); ok=false } else hideErr(termsErr);
       return ok;
     }
 
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
       if(!validate()) return;
-
       alert('Registo válido! Integração com backend necessária para criar a conta.');
     });
 
-    // Limpar erros ao escrever
     ['nome','email','password','confirm'].forEach(id=>{
       document.getElementById(id).addEventListener('input', ()=>{
         if(id==='nome') hideErr(nomeErr);
@@ -310,16 +286,17 @@
     });
     document.getElementById('terms').addEventListener('change', ()=> hideErr(termsErr));
 
-    // Minimizar "saltos" com o teclado móvel
+    // Evitar cortar conteúdo quando o teclado abre (iOS/Android)
     const card = document.querySelector('.auth-card');
-    function fixViewportHeight(){
-      card.style.maxHeight = window.visualViewport
-        ? `${Math.max(540, window.visualViewport.height - 24)}px`
-        : '';
+    function adjustMaxHeight(){
+      if(window.visualViewport){
+        const h = Math.max(540, window.visualViewport.height - 24); // 24px = padding aproximado
+        card.style.maxHeight = h + 'px';
+      }
     }
     if(window.visualViewport){
-      fixViewportHeight();
-      window.visualViewport.addEventListener('resize', fixViewportHeight);
+      adjustMaxHeight();
+      window.visualViewport.addEventListener('resize', adjustMaxHeight);
     }
   </script>
 </body>
