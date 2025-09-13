@@ -14,11 +14,18 @@
       --shadow:0 2px 6px rgba(0,0,0,.08);
     }
     body{margin:0;font-family:'Roboto',sans-serif;color:#333;line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
-    /* Header */
-    header{background:#fff;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);position:sticky;top:0;z-index:1000;gap:1rem}
+
+    /* Header (desktop) */
+    header{
+      background:#fff;display:flex;align-items:center;justify-content:space-between;
+      padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);
+      position:sticky;top:0;z-index:1000;gap:1rem
+    }
     header .logo{display:flex;align-items:center;gap:10px;min-width:0}
     header .logo img{width:35px;height:35px}
     header .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* NAV (desktop) */
     nav{display:flex;align-items:center;gap:1rem}
     nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
     nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
@@ -26,49 +33,64 @@
     .login-btn{background:var(--green);color:#fff !important;padding:.35rem .8rem;border-radius:25px;font-weight:700;border:1px solid #2e6b39;transition:background .3s,transform .2s;text-decoration:none;font-size:.9rem}
     .login-btn:hover{background:#2e6b39;transform:scale(1.05)}
 
+    /* Botão do menu: escondido em desktop */
+    .menu-toggle{
+      display:none;
+      border:1px solid #cfe7d0;
+      background:#fff;
+      color:var(--green);
+      padding:.45rem .7rem;
+      border-radius:10px;
+      font-weight:700;
+      line-height:1;
+      cursor:pointer;
+    }
+
     /* Hero */
-    .hero{background:url('Imagens/Incendio20.jpg') center/cover no-repeat;color:#fff;height:35vh;text-align:center;display:flex;flex-direction:column;justify-content:center;position:relative}
+    .hero{
+      background:url('Imagens/incendio20.jpg') center/cover no-repeat;
+      color:#fff;height:35vh;text-align:center;display:flex;flex-direction:column;justify-content:center;position:relative
+    }
     .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
     .hero-content{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 1rem}
     .hero h2{font-size:2rem;margin:.6rem 0 .2rem}
     .hero p{font-size:1.05rem;margin:0}
 
-/* CTA: relatar incêndio (home) — versão limpa */
-.cta-report{
-  max-width:1100px;
-  margin:1.5rem auto 0;        /* ↓ sem negativo = nada cortado */
-  padding:0 1rem;
-  position:relative;
-  z-index:3;
-}
-.cta-report .cta-card{
-  display:grid;
-  grid-template-columns: 1fr auto;
-  align-items:center;
-  gap:1rem;
-  background:#fff;
-  border:1px solid #ffd8b5;
-  border-radius:18px;
-  padding:1.2rem 1.4rem;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-  background-image: radial-gradient(50% 60% at 10% 0%, #fff5e6 0%, rgba(255,245,230,0) 60%);
-}
-.cta-report h2{margin:0;color:#d84315;font-size:1.4rem}
-.cta-report p{margin:.3rem 0 0;color:#6b4b3a}
-.cta-report .cta-btn{
-  display:inline-flex;align-items:center;gap:.55rem;
-  background:#ff9800;color:#fff;text-decoration:none;font-weight:800;
-  padding:.8rem 1.15rem;border-radius:999px;border:1px solid #ef6c00;
-  box-shadow:0 2px 10px rgba(239,108,0,.25);
-  transition:filter .15s, transform .05s
-}
-.cta-report .cta-btn:hover{filter:brightness(.97)}
-.cta-report .cta-btn:active{transform:translateY(1px)}
-@media (max-width:700px){
-  .cta-report .cta-card{grid-template-columns:1fr;align-items:flex-start}
-  .cta-report .cta-btn{width:100%;text-align:center}
-}
-
+    /* CTA: relatar incêndio (home) — versão limpa */
+    .cta-report{
+      max-width:1100px;
+      margin:1.5rem auto 0;
+      padding:0 1rem;
+      position:relative;
+      z-index:3;
+    }
+    .cta-report .cta-card{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      align-items:center;
+      gap:1rem;
+      background:#fff;
+      border:1px solid #ffd8b5;
+      border-radius:18px;
+      padding:1.2rem 1.4rem;
+      box-shadow:0 10px 30px rgba(0,0,0,.08);
+      background-image: radial-gradient(50% 60% at 10% 0%, #fff5e6 0%, rgba(255,245,230,0) 60%);
+    }
+    .cta-report h2{margin:0;color:#d84315;font-size:1.4rem}
+    .cta-report p{margin:.3rem 0 0;color:#6b4b3a}
+    .cta-report .cta-btn{
+      display:inline-flex;align-items:center;gap:.55rem;
+      background:#ff9800;color:#fff;text-decoration:none;font-weight:800;
+      padding:.8rem 1.15rem;border-radius:999px;border:1px solid #ef6c00;
+      box-shadow:0 2px 10px rgba(239,108,0,.25);
+      transition:filter .15s, transform .05s
+    }
+    .cta-report .cta-btn:hover{filter:brightness(.97)}
+    .cta-report .cta-btn:active{transform:translateY(1px)}
+    @media (max-width:700px){
+      .cta-report .cta-card{grid-template-columns:1fr;align-items:flex-start}
+      .cta-report .cta-btn{width:100%;text-align:center}
+    }
 
     /* Cards principais */
     .sections{display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;padding:3rem 2rem}
@@ -121,7 +143,7 @@
     .emergency p{font-size:.95rem;margin:.2rem 0}
     footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
 
-    /* Responsivo */
+    /* Responsivo básico que já tinhas */
     @media (max-width:900px){
       .hero h2{font-size:1.6rem}
       nav ul{flex-wrap:wrap;justify-content:center}
@@ -137,6 +159,49 @@
       .btn{width:100%;text-align:center}
       .how-grid{grid-template-columns:1fr}
     }
+
+    /* ==== MENU MOBILE (só afeta <900px) ==== */
+    @media (max-width: 900px){
+      header{ padding:.7rem 1rem; gap:.6rem; }
+      .menu-toggle{ display:inline-flex; align-items:center; gap:.4rem; }
+
+      /* painel do menu em mobile */
+      #site-menu{
+        position:fixed;
+        top:60px;             /* ~altura do header */
+        left:0; right:0;
+        background:#fff;
+        box-shadow:0 10px 30px rgba(0,0,0,.15);
+        border-top:1px solid var(--line);
+        transform:translateY(-120%);
+        transition:transform .18s ease-out;
+        z-index:1200;
+        padding:.8rem 1rem 1rem;
+        display:block;        /* sobrepõe display:flex do desktop */
+      }
+      /* quando o header tiver .open, o painel desce */
+      header.open #site-menu{ transform:translateY(0); }
+
+      /* lista vertical, centrada e com boa tocabilidade */
+      #site-menu ul{
+        display:flex;
+        flex-direction:column;
+        justify-content:flex-start;
+        align-items:center;
+        gap:.9rem;
+        margin:0 0 .6rem 0;
+        padding:0;
+        list-style:none;
+      }
+      #site-menu a{ font-size:1.1rem; }
+
+      /* controlos dentro do painel */
+      #site-menu #langSwitch{ width:100%; margin:.4rem 0; }
+      #site-menu .login-btn{ width:100%; text-align:center; margin-top:.2rem; }
+
+      /* garantir que não “parte” linhas em mobile */
+      nav ul{ flex-wrap:nowrap !important; }
+    }
   </style>
 </head>
 <body>
@@ -145,7 +210,12 @@
       <img src="Imagens/Aldeia.png" alt="Logo">
       <h1 data-i18n="site.title">Aldeia Segura Pessoas Seguras</h1>
     </div>
-    <nav>
+
+    <!-- Botão hamburguer (mobile) -->
+    <button class="menu-toggle" aria-controls="site-menu" aria-expanded="false" aria-label="Abrir menu">☰</button>
+
+    <!-- IMPORTANTE: id="site-menu" para JS -->
+    <nav id="site-menu">
       <ul>
         <li><a href="index.html" data-i18n="nav.home">Início</a></li>
         <li><a href="compreender.html" data-i18n="nav.understand">Compreender</a></li>
@@ -298,8 +368,28 @@
     <span data-i18n="footer.copy">© 2025 Ruben Sousa · Todos os direitos reservados</span>
   </footer>
 
+  <!-- Toggle do menu mobile (independente do i18n) -->
   <script>
-    /* i18n simples */
+    (function(){
+      const header = document.querySelector('header');
+      const toggle = document.querySelector('.menu-toggle');
+      const links  = document.querySelectorAll('#site-menu a');
+
+      function setOpen(open){
+        header.classList.toggle('open', open);
+        if (toggle) toggle.setAttribute('aria-expanded', String(open));
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+
+      toggle?.addEventListener('click', ()=> setOpen(!header.classList.contains('open')));
+      links.forEach(a => a.addEventListener('click', ()=> setOpen(false))); // fechar ao clicar num link
+      window.addEventListener('resize', ()=> { if (window.innerWidth > 900) setOpen(false); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+    })();
+  </script>
+
+  <!-- i18n simples -->
+  <script>
     const LS_KEY='lang'; const langSwitch=document.getElementById('langSwitch');
     const fallback={pt:{
       "site.title":"Aldeia Segura Pessoas Seguras",
@@ -399,6 +489,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
