@@ -88,7 +88,7 @@
 
   /* ===== HERO (igual em estilo às outras) ===== */
   .hero{
-    background:url('Imagens/Incendio20.jpg') center/cover no-repeat;
+    background:url('Imagens/incendio20.jpg') center/cover no-repeat;
     color:#fff;text-align:center;padding:3rem 1rem;position:relative
   }
   .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
@@ -133,6 +133,36 @@
   .emergency b{color:#c62828}
 
   footer{background:#fff;padding:.7rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555;border-top:1px solid var(--line)}
+
+  /* ====== FIXES HEADER & MOBILE MENU ====== */
+
+/* 1) Header nunca quebra para 2 linhas em desktop */
+header, header nav, header nav ul{ flex-wrap:nowrap; white-space:nowrap }
+
+/* 2) Ícone do hambúrguer sem “cortes” (corrige o seletor e centraliza as linhas) */
+.burger{ width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+.burger span{ position:relative; width:18px; height:2px; background:#2e7d32; display:block; border-radius:2px; }
+.burger span::before,
+.burger span::after{                    /* << o ponto antes de .burger é ESSENCIAL */
+  content:""; position:absolute; left:0; width:18px; height:2px; background:#2e7d32; border-radius:2px;
+}
+.burger span::before{ top:-6px }
+.burger span::after{  top: 6px }
+
+/* 3) Mobile: PT/EN em “chip” pequeno e ao lado do botão, numa só linha */
+.mobile-nav .actions{ display:flex; gap:.6rem; align-items:center; flex-wrap:nowrap; }
+#langSwitch2{
+  -webkit-appearance:none; appearance:none;
+  height:36px; line-height:36px; padding:0 .75rem;
+  border-radius:18px; border:1px solid #cfe7d0;
+  background:#fff; color:#2e7d32; font-weight:700;
+  width:auto !important; max-width:fit-content; min-width:0;  /* anula o width:100% global */
+  flex:0 0 auto;                                             /* não estica em flex */
+}
+.mobile-nav .login-btn{
+  height:52px; padding:0 18px; border-radius:28px;
+  flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
 </style>
 </head>
 <body>
