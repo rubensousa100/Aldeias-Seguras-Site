@@ -3,49 +3,163 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Explorar | Aldeias Seguras Pessoas Seguras</title>
+<title>Explorar | Aldeia Segura Pessoas Seguras</title>
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
+
 <style>
-  :root{ --green:#3a7d44; --green-2:#2e7d32; --line:#e7e7e7; --blue:#1f78b4; }
+  :root{
+    --green:#2e7d32; --green-2:#2e7d32;
+    --line:#e7e7e7; --text:#333;
+    --header-h:72px; /* altura do header em desktop */
+  }
   *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;background:#f6f7f6;color:#333}
-  header.site{background:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,.08);position:sticky;top:0;z-index:5000}
-  .logo{display:flex;gap:10px;align-items:center}.logo img{width:35px;height:35px}.logo h1{margin:0;color:var(--green);font-size:1.1rem}
-  nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0} nav a{text-decoration:none;color:var(--green);font-weight:500}
-  .hero{background:url('Imagens/Incendio20.jpg') center/cover no-repeat;color:#fff;text-align:center;padding:3rem 1rem;position:relative}
-  .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)} .hero h2{position:relative;z-index:1;margin:0;font-size:2rem}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Roboto',system-ui,-apple-system,Segoe UI,Ubuntu,"Helvetica Neue",Arial;background:#f6f7f6;color:var(--text);line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
+
+  /* ===== HEADER (igual ao index) ===== */
+  header{
+    background:#fff;display:flex;align-items:center;justify-content:space-between;
+    padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);
+    position:sticky;top:0;z-index:5000;gap:1rem
+  }
+  .logo{display:flex;align-items:center;gap:10px;min-width:0}
+  .logo img{width:35px;height:35px}
+  .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  nav{display:flex;align-items:center;gap:1rem}
+  nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
+  nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
+
+  #langSwitch{
+    border:1px solid #cfe7d0;border-radius:20px;padding:.25rem .6rem;
+    color:#2e7d32;background:#fff;font-weight:600
+  }
+  .login-btn{
+    background:var(--green);color:#fff !important;padding:.45rem .95rem;border-radius:25px;
+    font-weight:700;border:1px solid #2e6b39;transition:background .2s,transform .1s;text-decoration:none
+  }
+  .login-btn:hover{background:#2a6f2d;transform:translateY(-1px)}
+  .login-btn:active{transform:translateY(0)}
+
+  /* ===== MENU MOBILE (igual ao index) ===== */
+  .burger{
+    display:none;width:40px;height:40px;border:1px solid #cfe7d0;border-radius:10px;background:#fff;cursor:pointer;
+    align-items:center;justify-content:center
+  }
+  .burger span{display:block;width:18px;height:2px;background:#2e7d32;position:relative}
+  .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:#2e7d32}
+  .burger span::before{top:-6px}.burger span::after{top:6px}
+
+  .mobile-nav{
+    position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid var(--line);
+    padding:1rem 1.25rem 2rem; overflow:auto; display:none !important; z-index:2000;
+  }
+  .mobile-nav.open{display:block !important}
+  .mobile-nav a{display:block;padding:.85rem 0;font-weight:700;font-size:1.18rem}
+  .mobile-nav a:link,.mobile-nav a:visited{color:var(--green);text-decoration:none}
+  .mobile-nav a:hover{text-decoration:underline}
+  .mobile-nav .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+
+  .scrim{
+    position:fixed; inset:var(--header-h) 0 0 0; background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px);
+    display:none !important; z-index:1500;
+  }
+  .scrim.open{display:block !important}
+  body.no-scroll{position:fixed;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
+
+  @media (min-width:901px){
+    .mobile-nav,.scrim{display:none !important}
+    .burger{display:none !important}
+  }
+  @media (max-width:900px){
+    :root{ --header-h:64px; }
+    header{padding:.8rem 1rem}
+    nav ul{display:none}
+    #langSwitch,.login-btn{display:none}
+    .burger{display:flex}
+  }
+  @media (max-width:600px){
+    :root{ --header-h:56px; }
+    .mobile-nav,.scrim{inset:var(--header-h) 0 0 0}
+  }
+
+  /* ===== HERO ===== */
+  .hero{background:url('Imagens/incendio20.jpg') center/cover no-repeat;color:#fff;text-align:center;padding:3rem 1rem;position:relative}
+  .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
+  .hero h2{position:relative;z-index:1;margin:0;font-size:2rem}
+
+  /* ===== MAPA ===== */
   #map{height:560px;width:80%;margin:1.25rem auto;border:2px solid #ccc;border-radius:10px;background:#fff}
   #map .leaflet-top{top:14px} #map .leaflet-left{left:14px} #map .leaflet-right{right:14px}
   #map .leaflet-control{box-shadow:0 2px 6px rgba(0,0,0,.12)}
+
   .legend{background:#fff;border:1px solid #ddd;border-radius:12px;padding:.6rem .8rem;box-shadow:0 2px 6px rgba(0,0,0,.1)}
   .legend b{display:block;margin:.1rem 0 .4rem}
-  /* texto da fonte por baixo da legenda */
   .legend .src{margin-top:.45rem;padding-top:.35rem;border-top:1px solid #eee;font-size:.85rem;color:#555}
+
   .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#ffe9e9;color:#a33;border:1px solid #f5b5b5;border-radius:10px;padding:.5rem .8rem;display:none;z-index:9999}
+
   .emergency{background:#e1f8e4;padding:.5rem 1rem;width:100%;margin:2rem auto;border-top:2px solid var(--green-2);border-bottom:2px solid var(--green-2);border-radius:8px;display:flex;flex-direction:column;align-items:center}
   .emergency h3{color:#c0392b;font-size:1.2rem;margin:.2rem 0}.emergency p{font-size:.95rem;margin:.2rem 0}
+
   footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
-  @media (max-width:992px){ #map{width:95%} nav ul{flex-direction:column;align-items:center} .hero h2{font-size:1.6rem} }
+
+  @media (max-width:992px){ #map{width:95%} .hero h2{font-size:1.6rem} }
 </style>
 </head>
 <body>
-<header class="site">
-  <div class="logo"><img src="Imagens/Aldeia.png" alt="Logo"><h1>Aldeias Seguras Pessoas Seguras</h1></div>
-  <nav>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="logo">
+    <img src="Imagens/Aldeia.png" alt="Logo">
+    <h1 data-i18n="site.title">Aldeia Segura Pessoas Seguras</h1>
+  </div>
+
+  <nav aria-label="Principal">
     <ul>
-      <li><a href="index.html">Início</a></li>
-      <li><a href="compreender.html">Compreender</a></li>
-      <li><a href="explorar.html">Explorar</a></li>
-      <li><a href="reduzir.html">Reduzir</a></li>
-      <li><a href="aldeias.html">Aldeias Seguras</a></li>
+      <li><a href="index.html" data-i18n="nav.home">Início</a></li>
+      <li><a href="compreender.html" data-i18n="nav.understand">Compreender</a></li>
+      <li><a href="explorar.html" data-i18n="nav.explore">Explorar</a></li>
+      <li><a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a></li>
+      <li><a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a></li>
       <li><a href="Incendio.html">Fogo à Vista</a></li>
-      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="contacto.html" data-i18n="nav.contact">Contacto</a></li>
     </ul>
+    <select id="langSwitch" aria-label="Idioma">
+      <option value="pt">PT</option>
+      <option value="en">EN</option>
+    </select>
+    <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+    <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
   </nav>
 </header>
 
+<!-- SCRIM + MENU MOBILE -->
+<div id="scrim" class="scrim" aria-hidden="true"></div>
+<aside id="mobileNav" class="mobile-nav" aria-hidden="true">
+  <a href="index.html" data-i18n="nav.home">Início</a>
+  <a href="compreender.html" data-i18n="nav.understand">Compreender</a>
+  <a href="explorar.html" data-i18n="nav.explore">Explorar</a>
+  <a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a>
+  <a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a>
+  <a href="Incendio.html">Fogo à Vista</a>
+  <a href="contacto.html" data-i18n="nav.contact">Contacto</a>
+  <div class="actions">
+    <select id="langSwitch2" aria-label="Idioma">
+      <option value="pt">PT</option>
+      <option value="en">EN</option>
+    </select>
+    <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+  </div>
+</aside>
+
+<!-- ===== HERO ===== -->
 <section class="hero"><h2>Explorar – Mapas de Caracterização</h2></section>
 
+<!-- ===== MAPA ===== -->
 <div id="map"></div>
 <div class="toast" id="toast"></div>
 
@@ -57,6 +171,73 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/proj4@2.11.0/dist/proj4.js"></script>
+
+<script>
+  /* ====== MENU MOBILE + i18n (igual ao index) ====== */
+  (function(){
+    const burger = document.querySelector('.burger');
+    const panel  = document.getElementById('mobileNav');
+    const scrim  = document.getElementById('scrim');
+    const body   = document.body;
+    let scrollLockY = 0;
+
+    function closeNav(){
+      panel.classList.remove('open'); scrim.classList.remove('open');
+      body.classList.remove('no-scroll'); body.style.top=''; window.scrollTo(0, scrollLockY);
+      burger.setAttribute('aria-expanded','false'); panel.setAttribute('aria-hidden','true');
+    }
+    function openNav(){
+      scrollLockY = window.scrollY || window.pageYOffset || 0;
+      body.style.top = `-${scrollLockY}px`;
+      body.classList.add('no-scroll'); panel.classList.add('open'); scrim.classList.add('open');
+      burger.setAttribute('aria-expanded','true'); panel.setAttribute('aria-hidden','false');
+    }
+    if (burger && panel){
+      burger.addEventListener('click', ()=> panel.classList.contains('open')? closeNav(): openNav());
+      panel.addEventListener('click', e=>{ if(e.target.closest('a')) closeNav(); });
+      scrim.addEventListener('click', closeNav);
+      window.addEventListener('keydown', e=>{ if(e.key==='Escape') closeNav(); });
+    }
+
+    const LS_KEY='lang';
+    const lang1=document.getElementById('langSwitch');
+    const lang2=document.getElementById('langSwitch2');
+
+    function applyI18n(dict){
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const k=el.dataset.i18n;
+        if(dict[k]!=null) el.innerHTML=dict[k];
+      });
+      document.documentElement.lang=(dict===fallback.en?'en':'pt');
+    }
+    async function fetchDict(l){
+      try{
+        const r=await fetch(`i18n/${l}.json`,{cache:'no-cache'});
+        if(!r.ok) throw 0;
+        return await r.json();
+      }catch(_){ return fallback[l]||fallback.pt; }
+    }
+    async function setLang(l){
+      const d=await fetchDict(l); applyI18n(d); localStorage.setItem(LS_KEY,l);
+      if (lang1) lang1.value=l; if (lang2) lang2.value=l;
+    }
+    const urlLang=new URLSearchParams(location.search).get('lang');
+    const initial=(localStorage.getItem(LS_KEY)||urlLang||'pt').toLowerCase();
+    if (lang1) lang1.value=initial; if (lang2) lang2.value=initial; setLang(initial);
+    lang1?.addEventListener('change',e=>setLang(e.target.value));
+    lang2?.addEventListener('change',e=>setLang(e.target.value));
+
+    // fallback mínimo
+    const fallback={pt:{
+      "site.title":"Aldeia Segura Pessoas Seguras",
+      "nav.home":"Início","nav.understand":"Compreender","nav.explore":"Explorar","nav.reduce":"Reduzir","nav.villages":"Aldeias Seguras","nav.contact":"Contacto","nav.login":"Login / Registar"
+    }, en:{
+      "site.title":"Safe Village Safe People",
+      "nav.home":"Home","nav.understand":"Understand","nav.explore":"Explore","nav.reduce":"Reduce","nav.villages":"Safe Villages","nav.contact":"Contact","nav.login":"Login / Sign up"
+    }};
+  })();
+</script>
+
 <script>
   // ====== FICHEIROS ======
   const PATH_FREG = 'Shapfiles/FreguesiasArcos.json';
@@ -64,7 +245,7 @@
   const PATH_ALT  = 'Shapfiles/altitude.json';
   const PATH_ARD  = 'Shapfiles/AreaArdida.json';
   const PATH_SLP  = 'Shapfiles/Declives.json';
-  const PATH_PERI = 'Shapfiles/Perigosidade.json';   // NOVO
+  const PATH_PERI = 'Shapfiles/Perigosidade.json';
 
   // ====== CAMPOS ======
   const KEY_FREG    = 'Freguesia';
@@ -73,9 +254,9 @@
   const KEY_ALT_CD  = 'gridcode';
   const KEY_SLP_TXT = 'declive_cl';
   const KEY_SLP_CD  = 'gridcode';
-  const KEY_PERI_CD = 'gridcode';                    // Perigosidade: usa gridcode 0..5
+  const KEY_PERI_CD = 'gridcode';
 
-  // ====== CORES ======
+  // ====== CORES / TABELAS (apenas uma vez!) ======
   const OCUP_COLORS = {
     "Territórios artificializados": "#ff0000",
     "Agricultura": "#ffff00",
@@ -87,64 +268,27 @@
   };
 
   const ALT_LABELS = ["<250","250 - 500","500 - 750","750 - 1000",">1000"];
-  const ALT_COLORS = {
-    "<250":       "#006400",
-    "250 - 500":  "#4daf4a",
-    "500 - 750":  "#ffff66",
-    "750 - 1000": "#ff9900",
-    ">1000":      "#e31a1c"
-  };
+  const ALT_COLORS = {"<250":"#006400","250 - 500":"#4daf4a","500 - 750":"#ffff66","750 - 1000":"#ff9900",">1000":"#e31a1c"};
   const ALT_CODE_TO_LABEL = {1:"<250",2:"250 - 500",3:"500 - 750",4:"750 - 1000",5:">1000"};
 
   const SLP_LABELS = ['<3','3,1 - 8','8,1 - 15','15,1 - 25','25,1 - 35','>35'];
-  const SLP_COLORS = {
-    '<3':        '#006400',
-    '3,1 - 8':   '#2E7D32',
-    '8,1 - 15':  '#7FFF00',
-    '15,1 - 25': '#FFD700',
-    '25,1 - 35': '#FFA500',
-    '>35':       '#FF0000'
-  };
+  const SLP_COLORS = {'<3':'#006400','3,1 - 8':'#2E7D32','8,1 - 15':'#7FFF00','15,1 - 25':'#FFD700','25,1 - 35':'#FFA500','>35':'#FF0000'};
   const SLP_CODE_TO_LABEL = {1:'<3',2:'3,1 - 8',3:'8,1 - 15',4:'15,1 - 25',5:'25,1 - 35',6:'>35'};
 
-  // Perigosidade: cores por gridcode 0..5 (0 = Nula)
-  const PERI_COLORS = {
-    0: '#FFFFFF', // Nula
-    1: '#2E7D32', // Muito Baixo
-    2: '#FFFF00', // Baixo
-    3: '#FFA500', // Médio
-    4: '#FF0000', // Alto
-    5: '#8B0000'  // Muito Alto
-  };
-  const PERI_CLASS_NAME = {
-    0: 'Nula',
-    1: 'Muito Baixo',
-    2: 'Baixo',
-    3: 'Médio',
-    4: 'Alto',
-    5: 'Muito Alto'
-  };
+  const PERI_COLORS = {0:'#FFFFFF',1:'#2E7D32',2:'#FFFF00',3:'#FFA500',4:'#FF0000',5:'#8B0000'};
+  const PERI_CLASS_NAME = {0:'Nula',1:'Muito Baixo',2:'Baixo',3:'Médio',4:'Alto',5:'Muito Alto'};
 
   // ====== HELPERS ======
   const toast = (msg)=>{ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; clearTimeout(t._to); t._to=setTimeout(()=>t.style.display='none',4000); };
   function popupAll(p){ let h=''; for (const k in p) h += `<b>${k}</b>: ${p[k]}<br>`; return h||'Sem atributos'; }
-
-  // Normalizador de rótulos do declive
   function normalizeSlpLabel(lbl){
     if (!lbl) return null;
     const s = String(lbl).trim();
-    const map = {
-      '<3%':'<3','<3':'<3',
-      '3.1–8%':'3,1 - 8','3.1 - 8':'3,1 - 8','3,1–8':'3,1 - 8',
-      '8.1–15%':'8,1 - 15','8.1 - 15':'8,1 - 15',
-      '15.1–25%':'15,1 - 25','15.1 - 25':'15,1 - 25',
-      '25.1–35%':'25,1 - 35','25.1 - 35':'25,1 - 35',
-      '>35%':'>35','> 35':'>35'
-    };
+    const map = {'<3%':'<3','<3':'<3','3.1–8%':'3,1 - 8','3.1 - 8':'3,1 - 8','3,1–8':'3,1 - 8','8.1–15%':'8,1 - 15','8.1 - 15':'8,1 - 15','15.1–25%':'15,1 - 25','15.1 - 25':'15,1 - 25','25.1–35%':'25,1 - 35','25.1 - 35':'25,1 - 35','>35%':'>35','> 35':'>35'};
     return map[s] || s;
   }
 
-  // reprojeção automática se algum GeoJSON vier em EPSG:3763
+  // reprojeção 3763 -> 4326
   proj4.defs('EPSG:3763','+proj=tmerc +lat_0=39.66825833333333 +lon_0=-8.13310833333333 +k=1 +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs');
   function looksProjected(gj){
     let c=null;
@@ -187,14 +331,11 @@
 
   // ====== MAPA ======
   const map = L.map('map').setView([41.9, -8.4], 10);
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19, attribution: '© OpenStreetMap'
-  }).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {maxZoom:19, attribution:'© OpenStreetMap'}).addTo(map);
 
-  // ====== CAMADAS ======
   let layerFreg, layerOcup, layerAlt, layerArd, layerSlp, layerPeri;
 
-  // Freguesias
   const pFreg = loadFix(PATH_FREG).then(gj=>{
     layerFreg = L.geoJSON(gj, {
       style:{ color:'#1f78b4', weight:2, fillOpacity:0.1 },
@@ -205,7 +346,6 @@
     }).addTo(map);
   });
 
-  // Ocupação do Solo
   const pOcup = loadFix(PATH_OCUP).then(gj=>{
     layerOcup = L.geoJSON(gj, {
       style:(feat)=>{
@@ -220,7 +360,6 @@
     });
   });
 
-  // Altitude
   const pAlt = loadFix(PATH_ALT).then(gj=>{
     layerAlt = L.geoJSON(gj, {
       style:(feat)=>{
@@ -237,7 +376,6 @@
     });
   });
 
-  // Área Ardida
   const pArd = loadFix(PATH_ARD).then(gj=>{
     layerArd = L.geoJSON(gj, {
       style:{ stroke:false, fillColor:'#ff0000', fillOpacity:0.6 },
@@ -245,7 +383,6 @@
     });
   });
 
-  // Declive
   const pSlp = loadFix(PATH_SLP).then(gj=>{
     layerSlp = L.geoJSON(gj, {
       style:(feat)=>{
@@ -262,12 +399,11 @@
     });
   });
 
-  // Perigosidade (gridcode 0..5)
   const pPeri = loadFix(PATH_PERI).then(gj=>{
     layerPeri = L.geoJSON(gj, {
       style:(feat)=>{
         const code = Number(feat.properties?.[KEY_PERI_CD]);
-        const clr  = PERI_COLORS.hasOwnProperty(code) ? PERI_COLORS[code] : PERI_COLORS[0]; // 0/Nula p/ ausentes
+        const clr  = PERI_COLORS.hasOwnProperty(code) ? PERI_COLORS[code] : PERI_COLORS[0];
         return { stroke:false, fillColor: clr, fillOpacity: (code===0||isNaN(code)) ? 0.85 : 0.55 };
       },
       onEachFeature:(f,l)=>{
@@ -278,7 +414,6 @@
     });
   });
 
-  // Quando tudo carregar
   Promise.all([pFreg,pOcup,pAlt,pArd,pSlp,pPeri]).then(()=>{
     const overlays = {
       'Freguesias (Arcos de Valdevez)': layerFreg,
@@ -288,73 +423,36 @@
       'Declive (classes)': layerSlp,
       'Perigosidade 2020-2030': layerPeri
     };
-
-    // sem baseLayers no controlo (OSM mantém-se visível)
     L.control.layers(null, overlays, { collapsed:false }).addTo(map);
-
     if (layerFreg) layerFreg.addTo(map);
 
-    // Legendas + fonte
+    // Legendas
     const legendOcup = L.control({ position:'bottomright' });
-    legendOcup.onAdd = function(){
-      const div = L.DomUtil.create('div','legend'); div.innerHTML = '<b>Ocupação do solo</b>';
+    legendOcup.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Ocupação do solo</b>';
       Object.entries(OCUP_COLORS).forEach(([lbl,clr])=>{
-        div.innerHTML += `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
-          <span style="width:18px;height:12px;background:${clr};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}
-        </div>`;
+        div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:${clr};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}</div>`;
       });
-      div.innerHTML += `<div class="src">Fonte: Dados provenientes da COS2018</div>`;
-      return div;
-    };
+      div.innerHTML+=`<div class="src">Fonte: Dados provenientes da COS2018</div>`; return div; };
 
     const legendAlt = L.control({ position:'bottomright' });
-    legendAlt.onAdd = function(){
-      const div = L.DomUtil.create('div','legend'); div.innerHTML = '<b>Altitude (m)</b>';
-      ALT_LABELS.forEach(lbl=>{
-        div.innerHTML += `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
-          <span style="width:18px;height:12px;background:${ALT_COLORS[lbl]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}
-        </div>`;
-      });
-      div.innerHTML += `<div class="src">Fonte: Dados provenientes do CIGeoE</div>`;
-      return div;
-    };
+    legendAlt.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Altitude (m)</b>';
+      ALT_LABELS.forEach(lbl=>{ div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:${ALT_COLORS[lbl]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}</div>`; });
+      div.innerHTML+=`<div class="src">Fonte: Dados provenientes do CIGeoE</div>`; return div; };
 
     const legendArd = L.control({ position:'bottomright' });
-    legendArd.onAdd = function(){
-      const div = L.DomUtil.create('div','legend'); 
-      div.innerHTML = '<b>Área ardida (1975–2024)</b>';
-      div.innerHTML += `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
-        <span style="width:18px;height:12px;background:#ff0000;display:inline-block;border:1px solid #555;border-radius:2px;"></span> Área ardida
-      </div>`;
-      div.innerHTML += `<div class="src">Fonte: Dados provenientes do ICNF</div>`;
-      return div;
-    };
+    legendArd.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Área ardida (1975–2024)</b>';
+      div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:#ff0000;display:inline-block;border:1px solid #555;border-radius:2px;"></span> Área ardida</div>`;
+      div.innerHTML+=`<div class="src">Fonte: Dados provenientes do ICNF</div>`; return div; };
 
     const legendSlp = L.control({ position:'bottomright' });
-    legendSlp.onAdd = function(){
-      const div = L.DomUtil.create('div','legend'); div.innerHTML = '<b>Declive (%)</b>';
-      SLP_LABELS.forEach(lbl=>{
-        div.innerHTML += `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
-          <span style="width:18px;height:12px;background:${SLP_COLORS[lbl]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}
-        </div>`;
-      });
-      div.innerHTML += `<div class="src">Fonte: Dados provenientes do CIGeoE</div>`;
-      return div;
-    };
+    legendSlp.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Declive (%)</b>';
+      SLP_LABELS.forEach(lbl=>{ div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:${SLP_COLORS[lbl]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}</div>`; });
+      div.innerHTML+=`<div class="src">Fonte: Dados provenientes do CIGeoE</div>`; return div; };
 
     const legendPeri = L.control({ position:'bottomright' });
-    legendPeri.onAdd = function(){
-      const div = L.DomUtil.create('div','legend'); 
-      div.innerHTML = '<b>Classe de Perigosidade</b>';
-      [0,1,2,3,4,5].forEach(code=>{
-        const clr = PERI_COLORS[code], nome = PERI_CLASS_NAME[code];
-        div.innerHTML += `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
-          <span style="width:18px;height:12px;background:${clr};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${nome}
-        </div>`;
-      });
-      div.innerHTML += `<div class="src">Fonte: Dados provenientes do ICNF</div>`;
-      return div;
-    };
+    legendPeri.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Classe de Perigosidade</b>';
+      [0,1,2,3,4,5].forEach(code=>{ div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:${PERI_COLORS[code]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${PERI_CLASS_NAME[code]}</div>`; });
+      div.innerHTML+=`<div class="src">Fonte: Dados provenientes do ICNF</div>`; return div; };
 
     function refreshLegends(){
       if (map.hasLayer(layerOcup)) legendOcup.addTo(map); else legendOcup.remove();
@@ -375,4 +473,3 @@
 </script>
 </body>
 </html>
-
