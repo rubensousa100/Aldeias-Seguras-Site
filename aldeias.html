@@ -560,6 +560,61 @@ header.site .login-btn{
       nav.nav { display:none; }
       .burger { display:flex; }
     }
+
+    /* ==== MOBILE: menu aberto por baixo do header (igual à 2.ª imagem) ==== */
+@media (max-width: 900px){
+  /* o painel deixa de ser “fixed overlay” e passa a bloco normal */
+  .mobile-nav{
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
+    display: none !important;              /* fechado por omissão */
+    border-top: 1px solid var(--line);
+    box-shadow: none !important;
+    padding: 1rem 1.25rem 1.25rem;
+  }
+  .mobile-nav.open{                        /* abre como bloco abaixo do header */
+    display: block !important;
+  }
+
+  /* não precisamos de “scrim”/escurecimento do fundo */
+  .scrim{ display:none !important; }
+  .scrim.open{ display:none !important; }
+
+  /* não bloquear o scroll da página quando o menu abre */
+  body.no-scroll{
+    position: static !important;
+    width: auto !important;
+    overflow: visible !important;
+    overscroll-behavior: auto !important;
+    touch-action: auto !important;
+  }
+
+  /* tipografia/espacamentos como na 2.ª imagem */
+  .mobile-nav a{
+    font-size: 1.6rem;
+    font-weight: 700;
+    padding: 1.1rem 0;
+  }
+  .mobile-nav .actions{
+    margin-top: .8rem;
+  }
+
+  /* pill do idioma compacto, igual ao desktop */
+  #langSwitch2{
+    width:auto !important; min-width:0 !important; max-width:none !important;
+    height:36px; line-height:36px; padding:.25rem .75rem;
+    border:1px solid #cfe7d0; border-radius:20px; background:#fff; color:#2e7d32; font-weight:600;
+  }
+
+  /* botão grande e fluido */
+  .mobile-nav .login-btn{
+    display:block;
+    width:100%;
+    max-width:520px;
+    margin-top: .6rem;
+  }
+}
 </style>
 
 </head>
@@ -1633,4 +1688,3 @@ window.addEventListener('DOMContentLoaded', function(){
 
 </body>
 </html>
-
