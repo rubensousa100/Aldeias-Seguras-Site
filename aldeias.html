@@ -32,7 +32,7 @@
 
   /* Hero */
   .hero{
-    background:url('Imagens/incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
+    background:url('Imagens/Incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
   }
   .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.5); }
   .hero h2{ position:relative; z-index:1; font-size:2rem; margin:0; }
@@ -292,126 +292,205 @@
   border: 1px solid #cfe7d0 !important;
 }
 
-/* ===== HEADER & MENU ===== */
+/* ==== AJUSTES DO HEADER PARA IGUALAR AO INDEX (append-only) ==== */
+
+/* Cores/base iguais às do index */
+:root{
+  --green:#2e7d32;
+  --green-2:#2e7d32;
+}
+
+/* Header desktop – mantém a tua estrutura mas uniformiza medidas/cores */
 header.site{
   background:#fff;
   padding:1rem 2rem;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  box-shadow:0 2px 5px rgba(0,0,0,.08);
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
   position:sticky;
   top:0;
   z-index:5000;
+  gap:1rem;
+}
+header.site .logo{ display:flex; align-items:center; gap:10px; min-width:0; }
+header.site .logo img{ width:35px; height:35px; }
+header.site .logo h1{
+  margin:0; color:var(--green); font-weight:700; font-size:1.1rem;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 
-.logo{
+/* Navegação desktop */
+header.site .nav ul{
+  list-style:none; display:flex; gap:1.2rem; margin:0; padding:0;
+}
+header.site .nav a,
+header.site nav a{
+  color:var(--green);
+  font-weight:500;
+  font-size:.95rem;
+  text-decoration:none;         /* sem sublinhado */
+}
+/* garantir que nenhum “active” sublinha ou coloca barra */
+header.site .nav a.active,
+header.site nav a.active{
+  font-weight:500;
+  border:0;
+  text-decoration:none;
+}
+
+/* Se existir seletor de idioma igual ao index */
+#langSwitch, #langSwitch2{
+  border:1px solid #cfe7d0; border-radius:20px; padding:.25rem .6rem;
+  color:#2e7d32; background:#fff; font-weight:600;
+}
+
+/* Botão Login igual ao index (não interfere com os teus .btn) */
+.login-btn{
+  background:#2e7d32; color:#fff !important; padding:.45rem .95rem; border-radius:25px;
+  font-weight:700; border:1px solid #2e6b39; text-decoration:none;
+  transition:background .2s, transform .1s;
+}
+.login-btn:hover{ background:#2a6f2d; transform:translateY(-1px); }
+.login-btn:active{ transform:translateY(0); }
+
+/* ===== MENU MOBILE ===== */
+/* Estiliza o teu botão existente (.menu-toggle) como o “hamburger” do index */
+.menu-toggle{
+  display:none; width:40px; height:40px; border:1px solid #cfe7d0; border-radius:10px;
+  background:#fff; cursor:pointer; align-items:center; justify-content:center; font-size:0;
+}
+.menu-toggle::before, .menu-toggle::after{
+  content:""; display:block; width:18px; height:2px; background:#2e7d32;
+}
+.menu-toggle span{ display:block; width:18px; height:2px; background:#2e7d32; position:relative; }
+.menu-toggle span::before, .menu-toggle span::after{
+  content:""; position:absolute; left:0; width:18px; height:2px; background:#2e7d32;
+}
+.menu-toggle span::before{ top:-6px; } .menu-toggle span::after{ top:6px; }
+
+/* Painel lateral mobile já é .nav no teu HTML — só afinamos dimensões */
+@media (max-width: 820px){
+  .menu-toggle{ display:flex; }
+  header.site .nav{
+    position:fixed; top:0; right:0; height:100%;
+    width:70%; max-width:420px; background:#fff;
+    box-shadow:-2px 0 8px rgba(0,0,0,.1);
+    transform:translateX(100%); transition:.3s ease;
+    padding:2rem 1.5rem; display:flex; flex-direction:column; align-items:flex-start;
+  }
+  header.site .nav.open{ transform:translateX(0); }
+  header.site .nav ul{ flex-direction:column; gap:1rem; }
+}
+
+/* Pequenos ajustes responsivos do header */
+@media (max-width:900px){
+  header.site{ padding:.8rem 1rem; }
+}
+
+/* === FIX HEADER (não deixar o select ocupar 100% e impedir quebra) === */
+header.site { flex-wrap: nowrap; }
+header.site .nav{
   display:flex;
-  gap:10px;
   align-items:center;
+  gap:1rem;
+  flex-wrap: nowrap;        /* tudo numa linha */
+  white-space: nowrap;
 }
-.logo img{ width:35px; height:35px; }
-.logo h1{ margin:0; color:var(--green); font-size:1.1rem; }
 
-.nav ul{
+/* menu desktop na mesma linha */
+header.site .nav ul{
   list-style:none;
   display:flex;
   gap:1.2rem;
   margin:0;
   padding:0;
-}
-.nav a{
-  text-decoration:none;
-  color:var(--green);
-  font-weight:500;
-}
-.nav a.active{
-  font-weight:700;
-  border-bottom:2px solid var(--green);
+  flex-wrap: nowrap;
 }
 
-/* ===== MOBILE MENU ===== */
-.menu-toggle{
-  display:none;
-  background:none;
-  border:0;
-  font-size:1.6rem;
-  cursor:pointer;
+/* Override à regra global dos formulários */
+header.site select,
+header.site .nav select#langSwitch{
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  display: inline-block;
 }
 
-@media (max-width: 820px){
-  .menu-toggle{ display:block; }
-  .nav{
-    position:fixed;
-    top:0; right:0;
-    width:70%;
-    height:100%;
-    background:#fff;
-    box-shadow:-2px 0 8px rgba(0,0,0,.1);
-    transform:translateX(100%);
-    transition:.3s ease;
-    padding:2rem 1.5rem;
-    display:flex;
-    justify-content:flex-start;
-    align-items:flex-start;
-    flex-direction:column;
-  }
-  .nav.open{ transform:translateX(0); }
-  .nav ul{
-    flex-direction:column;
-    gap:1rem;
-  }
+/* Botão de login sem partir linha */
+header.site .login-btn{
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* (opcional) dar um espacinho entre o menu e os controlos à direita */
+@media (min-width: 901px){
+  header.site .nav ul { margin-right: .5rem; }
 }
 
 </style>
-<script>
-  // Toggle do menu no telemóvel
-  document.addEventListener("DOMContentLoaded", ()=>{
-    const btn = document.querySelector(".menu-toggle");
-    const nav = document.querySelector(".nav");
-
-    btn.addEventListener("click", ()=>{
-      nav.classList.toggle("open");
-    });
-
-    // Fecha menu ao clicar num link
-    nav.querySelectorAll("a").forEach(a=>{
-      a.addEventListener("click", ()=> nav.classList.remove("open"));
-    });
-
-    // Destacar item ativo
-    const current = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-    document.querySelectorAll("nav a").forEach(a=>{
-      if(a.getAttribute("href").toLowerCase() === current){
-        a.classList.add("active");
-      }
-    });
-  });
-</script>
 
 </head>
 <body>
 
+<!-- HEADER (igual ao index) -->
 <header class="site">
   <div class="logo">
     <img src="Imagens/Aldeia.png" alt="Logo" />
-    <h1>Aldeias Seguras Pessoas Seguras</h1>
+    <h1>Aldeia Segura Pessoas Seguras</h1>
   </div>
 
-  <button class="menu-toggle" aria-label="Abrir menu">☰</button>
+  <!-- Botão hamburger (mobile) -->
+  <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+    <span></span>
+  </button>
 
-  <nav class="nav">
+  <!-- Navegação -->
+  <nav class="nav" aria-label="Principal">
     <ul>
       <li><a href="index.html">Início</a></li>
-      <li><a href="Compreender.html">Compreender</a></li>
-      <li><a href="Explorar.html">Explorar</a></li>
-      <li><a href="Reduzir.html">Reduzir</a></li>
-      <li><a href="Aldeias.html">Aldeias Seguras</a></li>
+      <li><a href="compreender.html">Compreender</a></li>
+      <li><a href="explorar.html">Explorar</a></li>
+      <li><a href="reduzir.html">Reduzir</a></li>
+      <li><a href="aldeias.html">Aldeias Seguras</a></li>
       <li><a href="Incendio.html">Fogo à Vista</a></li>
-      <li><a href="Contacto.html">Contacto</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
     </ul>
+
+    <!-- Idioma + Login iguais ao index (desktop) -->
+    <select id="langSwitch" aria-label="Idioma">
+      <option value="pt" selected>PT</option>
+      <option value="en">EN</option>
+    </select>
+    <a href="login.html" class="login-btn">Login / Registar</a>
   </nav>
 </header>
+
+<script>
+  // JS mínimo: toggle do menu mobile + destacar link atual
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('header.site .nav');
+
+    if (btn && nav) {
+      btn.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      // Fechar menu ao clicar num item
+      nav.querySelectorAll('a').forEach(a =>
+        a.addEventListener('click', () => nav.classList.remove('open'))
+      );
+    }
+
+    // Marcar link ativo (sem sublinhado, só mesma cor/peso)
+    const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    document.querySelectorAll('header.site .nav a').forEach(a => {
+      if (a.getAttribute('href').toLowerCase() === current) a.classList.add('active');
+    });
+  });
+</script>
+
 
 <section class="hero"><h2>Localização das Aldeias Seguras</h2></section>
 
