@@ -379,6 +379,22 @@ header select#langSwitch,
   color: #2e7d32;
   font-weight: 600;
 }
+/* === FIX: header acima do painel de camadas + pill PT igual às outras páginas === */
+header{ z-index:5000; }                   /* header fica por cima de tudo */
+
+/* “PT” com o mesmo tamanho das outras páginas (não herda width:100% dos formulários) */
+#langSwitch, #langSwitch2{
+  width:auto !important; min-width:0 !important; display:inline-block;
+  height:36px; padding:.25rem .6rem; border-radius:20px;
+  border:1px solid #cfe7d0; background:#fff; color:#2e7d32; font-weight:600;
+}
+
+/* camadas do Leaflet com z-index mais baixo que o header */
+#map .leaflet-control-container{ z-index:900; }
+
+/* esconder “base layers” no controlo (retira o item OpenStreetMap) */
+.leaflet-control-layers-base,
+.leaflet-control-layers-separator{ display:none !important; }
 
   </style>
 </head>
