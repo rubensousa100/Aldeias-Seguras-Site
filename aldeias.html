@@ -105,7 +105,7 @@
 
     /* ===== HERO ===== */
     .hero{
-      background:url('Imagens/incendio20.jpg') center/cover no-repeat;
+      background:url('Imagens/Incendio20.jpg') center/cover no-repeat;
       color:#fff;text-align:center;padding:3rem 1rem;position:relative
     }
     .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
@@ -363,54 +363,25 @@ body.no-scroll{ position:fixed; width:100%; overflow:hidden; overscroll-behavior
   .mobile-nav, .scrim{ inset:var(--header-h) 0 0 0; }
 }
 
+/* --- FIX: Select do header igual às outras páginas --- */
+header select#langSwitch,
+.mobile-nav select#langSwitch2{
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  height: 36px;                 /* igual às outras páginas */
+  line-height: 36px;
+  padding: .25rem .75rem;       /* “pílula” equilibrada */
+  border: 1px solid #cfe7d0;
+  border-radius: 20px;
+  background: #fff;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
   </style>
 </head>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const burger = document.querySelector('.burger');
-  const panel  = document.getElementById('mobileNav');
-  const scrim  = document.getElementById('scrim');
-  const body   = document.body;
-  let scrollLockY = 0;
-
-  function closeNav(){
-    panel.classList.remove('open');
-    if (scrim) scrim.classList.remove('open');
-    body.classList.remove('no-scroll');
-    body.style.top = '';
-    window.scrollTo(0, scrollLockY);
-    if (burger){ burger.setAttribute('aria-expanded', 'false'); }
-    panel.setAttribute('aria-hidden', 'true');
-  }
-  function openNav(){
-    scrollLockY = window.scrollY || window.pageYOffset || 0;
-    body.style.top = `-${scrollLockY}px`;
-    body.classList.add('no-scroll');
-    panel.classList.add('open');
-    if (scrim) scrim.classList.add('open');
-    if (burger){ burger.setAttribute('aria-expanded', 'true'); }
-    panel.setAttribute('aria-hidden', 'false');
-  }
-
-  if (burger && panel) {
-    burger.addEventListener('click', () => {
-      panel.classList.contains('open') ? closeNav() : openNav();
-    });
-    panel.addEventListener('click', e => { if (e.target.closest('a')) closeNav(); });
-    if (scrim) scrim.addEventListener('click', closeNav);
-    window.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
-  }
-
-  // sincronizar selects de idioma (se existirem)
-  const lang1 = document.getElementById('langSwitch');
-  const lang2 = document.getElementById('langSwitch2');
-  if (lang1 && lang2) {
-    lang2.value = lang1.value;
-    lang1.addEventListener('change', e => { lang2.value = e.target.value; if (typeof setLang==='function') setLang(e.target.value); });
-    lang2.addEventListener('change', e => { lang1.value = e.target.value; if (typeof setLang==='function') setLang(e.target.value); });
-  }
-});
-</script>
 <body>
 
   <!-- HEADER uniformizado -->
