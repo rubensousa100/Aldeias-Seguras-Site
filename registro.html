@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#2e7d32" />
   <title>Registar — Aldeias Seguras Pessoas Seguras</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
   <style>
     :root{
+      /* mesmas cores do LOGIN */
       --green:#2e7d32;
       --green-2:#256b2a;
       --line:#e7e7e7;
@@ -21,7 +21,9 @@
     @media (prefers-color-scheme: dark){
       :root{
         --bg-grad: linear-gradient(180deg,#0f1512,#0b120e);
-        --text:#e8f1eb; --muted:#a8b6ad; --line:#1f2a24;
+        --text:#e8f1eb;
+        --muted:#a8b6ad;
+        --line:#1f2a24;
         --shadow:0 8px 24px rgba(0,0,0,.45);
       }
     }
@@ -32,33 +34,35 @@
       margin:0;
       font-family:'Roboto',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text); line-height:1.6;
-      min-height:100dvh; /* corrige vh em iOS */
+      min-height:100dvh; /* consistente com login */
       display:flex; align-items:center; justify-content:center;
       background:var(--bg-grad);
-      padding: max(12px, env(safe-area-inset-top))
-               max(12px, env(safe-area-inset-right))
-               max(12px, env(safe-area-inset-bottom))
-               max(12px, env(safe-area-inset-left));
+      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+               max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
     }
 
     a{ color:var(--green); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Cartão */
+    /* Cartão (igual ao login) */
     .auth-card{
-      width:min(100%, 560px);
-      background:#fff; border:1px solid var(--line);
-      border-radius:16px; box-shadow:var(--shadow); overflow:hidden;
-      transform:translateZ(0);
-      /* quando fica mais alto que o viewport, que role por dentro */
-      max-height:calc(100dvh - max(24px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+      width:min(100%, 440px);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
       display:flex; flex-direction:column;
+      max-height:calc(100dvh - max(24px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
     }
     @media (prefers-color-scheme: dark){ .auth-card{ background:#0f1713 } }
 
     .auth-head{
-      padding:.9rem 1rem; display:flex; align-items:center; gap:.6rem;
-      border-bottom:1px solid var(--line); background:#f9fbf9; flex:0 0 auto;
+      padding:.9rem 1rem;
+      display:flex; align-items:center; gap:.6rem;
+      border-bottom:1px solid var(--line);
+      background:#f9fbf9;
+      flex:0 0 auto;
     }
     @media (prefers-color-scheme: dark){ .auth-head{ background:#0c140f } }
     .auth-head img{ width:34px; height:34px }
@@ -66,26 +70,30 @@
 
     .auth-body{
       padding:1rem 1rem .9rem;
-      overflow:auto; /* rolagem interna se necessário */
-      -webkit-overflow-scrolling:touch;
-      scroll-padding-bottom: 80px;
       flex:1 1 auto;
+      overflow:auto; -webkit-overflow-scrolling:touch;
+      scroll-padding-bottom: 96px;
     }
-    .title{ margin:.1rem 0 .2rem; font-size:clamp(1.25rem, 5vw, 1.6rem); font-weight:700; color:#1b5e20 }
+
+    .title{ margin:.1rem 0 .2rem; font-size:clamp(1.25rem, 5vw, 1.5rem); font-weight:700; color:#1b5e20 }
     .subtitle{ margin:0 0 .8rem; color:var(--muted); font-size:clamp(.95rem, 3.5vw, 1rem) }
 
     label{ display:block; font-weight:600; color:#1f3b22; margin:.25rem 0 .25rem }
     @media (prefers-color-scheme: dark){ label{ color:#cfe4d5 } }
 
-    .row{ display:grid; grid-template-columns:1fr 1fr; gap:.85rem }
-    @media (max-width:600px){ .row{ grid-template-columns:1fr } }
+    .row{ display:grid; grid-template-columns:1fr; gap:.85rem }
 
     .input-wrap{ position:relative }
     input{
-      width:100%; padding: .95rem 1rem;
-      border:1px solid #cfd9cf; border-radius:12px; outline:none; background:#fff;
-      font:16px/1.2 inherit; /* evita zoom automático iOS */
-      min-height:44px; box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
+      width:100%;
+      padding: .9rem .95rem;
+      border:1px solid #cfd9cf;
+      border-radius:12px;
+      outline:none;
+      background:#fff;
+      font:16px/1.2 inherit;        /* evita zoom iOS */
+      min-height:44px;               /* alvo de toque */
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
       transition: box-shadow .15s ease, border-color .15s ease;
     }
     @media (prefers-color-scheme: dark){ input{ background:#0f1512; border-color:#2a3a32; color:#e8f1eb } }
@@ -94,31 +102,35 @@
       box-shadow:0 0 0 3px color-mix(in srgb, #3a7d44 20%, transparent), inset 0 1px 2px rgba(0,0,0,.02);
     }
 
-    /* Mostrar/ocultar password */
+    /* Mostrar/ocultar password — igual ao login */
     .toggle-pass{
       position:absolute; right:.45rem; top:50%; transform:translateY(-50%);
       border:0; background:#eef7ef; color:var(--green-2);
-      padding:.55rem .75rem; border-radius:10px; cursor:pointer;
-      border:1px solid #d5ead7; font-weight:800; line-height:1;
+      padding:.5rem .7rem; border-radius:10px; cursor:pointer;
+      border:1px solid #d5ead7; font-weight:700; line-height:1;
       min-width:44px; min-height:36px;
     }
-    @media (prefers-color-scheme: dark){ .toggle-pass{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 } }
+    @media (prefers-color-scheme: dark){
+      .toggle-pass{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 }
+    }
 
-    /* Força da password */
-    .meter{margin:.4rem 0 .1rem; height:9px; background:#f0f2f0; border-radius:999px; overflow:hidden; border:1px solid #e6ece6}
+    /* Medidor de força — fino */
+    .meter{margin:.35rem 0 .1rem; height:8px; background:#f0f2f0; border-radius:999px; overflow:hidden; border:1px solid #e6ece6}
     .meter > span{display:block; height:100%; width:0; transition:width .25s ease; background:linear-gradient(90deg,#ff6b6b,#ffd166,#9be15d)}
 
-    .error{ display:none; margin:.35rem 0 0; font-size:.9rem; color:#c62828 }
-    .error[aria-live]{ display:block } /* JS ativa quando há erro */
+    .actions{
+      display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-top:.3rem;
+      flex-wrap:wrap;
+    }
 
     .terms{ display:flex; align-items:flex-start; gap:.55rem; margin-top:.4rem; font-size:.98rem }
     .terms input{ width:auto; margin-top:.25rem; inline-size:1.05rem; block-size:1.05rem }
 
     .btn{
       display:inline-block; width:100%;
-      padding:1rem 1rem; border:0; border-radius:12px; font-weight:900; cursor:pointer;
+      padding:1rem 1rem; border:0; border-radius:12px; font-weight:800; cursor:pointer;
       background:linear-gradient(180deg,#2e7d32,#256b2a); color:#fff; box-shadow:0 3px 10px rgba(46,125,50,.25);
-      margin-top:.85rem; min-height:48px;
+      margin-top:.7rem; min-height:48px;
     }
     .btn:hover{ filter:brightness(1.03) }
     .btn:active{ transform: translateY(1px) }
@@ -126,33 +138,33 @@
     .muted{ text-align:center; font-size:.98rem; color:#566; margin:.7rem 0 0 }
     @media (prefers-color-scheme: dark){ .muted{ color:#90a49a } }
 
-    /* Voltar fixo com safe-area e z-index */
+    /* Voltar — igual ao login mas com z-index e safe-area */
     .back-link{
       position:fixed; z-index:5;
-      top: max(12px, calc(env(safe-area-inset-top) + 6px));
-      left:max(12px, calc(env(safe-area-inset-left) + 6px));
-      font-weight:800; padding:.55rem .75rem;
+      top:max(10px, calc(env(safe-area-inset-top) + 6px));
+      left:max(10px, calc(env(safe-area-inset-left) + 6px));
+      font-weight:700; padding:.5rem .7rem;
       background:#eef7ef; border:1px solid #d5ead7; color:var(--green-2); border-radius:999px;
-      text-wrap:nowrap;
-      box-shadow: var(--shadow);
+      text-wrap:nowrap; box-shadow:var(--shadow);
     }
-    @media (prefers-color-scheme: dark){ .back-link{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 } }
+    @media (prefers-color-scheme: dark){
+      .back-link{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 }
+    }
 
-    /* Ajustes ecrã estreito */
-    @media (max-width: 560px){
+    /* Ecrãs estreitos — tal como no login */
+    @media (max-width: 520px){
+      .auth-card{ margin:0 }
       .auth-head{ padding:.8rem .9rem }
-      .auth-body{ padding:.9rem .9rem .9rem }
+      .auth-body{ padding:.9rem .9rem .8rem }
     }
 
-    /* Tablet/desktop um pouco mais largo */
-    @media (min-width: 760px){
+    @media (min-width: 720px){
       body{ padding:24px }
-      .auth-card{ width:min(100%, 600px) }
+      .auth-card{ width:min(100%, 520px) }
     }
 
-    /* Acessibilidade motion */
     @media (prefers-reduced-motion: reduce){
-      *{ animation:none!important; transition:none!important }
+      * { animation:none!important; transition:none!important }
     }
   </style>
 </head>
@@ -211,13 +223,14 @@
         <div id="termsErr" class="error" role="status" aria-live="polite" style="margin-top:.3rem"></div>
 
         <button type="submit" class="btn">Registar</button>
+
         <p class="muted">Já tens conta? <a href="login.html">Entrar</a></p>
       </form>
     </div>
   </main>
 
   <script>
-    // Mostrar/ocultar palavra-passe
+    // Mostrar/ocultar password (mesmo comportamento do login)
     document.querySelectorAll('.toggle-pass').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const targetId = btn.getAttribute('data-target');
@@ -231,24 +244,23 @@
       });
     });
 
-    // Indicador de força da password
+    // Indicador de força simples
     const passInput = document.getElementById('password');
     const meterFill = document.getElementById('meterFill');
     function scorePassword(p){
-      let s = 0;
-      if(!p) return 0;
+      let s = 0; if(!p) return 0;
       if(p.length >= 8) s++;
       if(/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
       if(/\d/.test(p)) s++;
       if(/[^\w\s]/.test(p)) s++;
-      return s; // 0..4
+      return s;
     }
-    passInput.addEventListener('input', ()=>{
+    passInput?.addEventListener('input', ()=>{
       const s = scorePassword(passInput.value);
       meterFill.style.width = (s*25)+'%';
     });
 
-    // Validação acessível
+    // Validação acessível (igual ao login)
     const form = document.getElementById('registerForm');
     const nomeErr = document.getElementById('nomeErr');
     const emailErr = document.getElementById('emailErr');
@@ -256,8 +268,8 @@
     const confirmErr = document.getElementById('confirmErr');
     const termsErr = document.getElementById('termsErr');
 
-    function showErr(el, msg){ el.textContent = msg; el.setAttribute('aria-live','polite'); el.style.display = 'block'; }
-    function hideErr(el){ el.textContent = ''; el.removeAttribute('aria-live'); el.style.display = 'none'; }
+    const showErr = (el,msg)=>{ el.textContent=msg; el.setAttribute('aria-live','polite'); el.style.display='block'; }
+    const hideErr = (el)=>{ el.textContent=''; el.removeAttribute('aria-live'); el.style.display='none'; }
 
     function validate(){
       let ok = true;
@@ -273,7 +285,7 @@
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
       if(!validate()) return;
-      alert('Registo válido! Integração com backend necessária para criar a conta.');
+      alert('Registo válido. Integração com backend necessária para criar a conta.');
     });
 
     ['nome','email','password','confirm'].forEach(id=>{
@@ -286,17 +298,17 @@
     });
     document.getElementById('terms').addEventListener('change', ()=> hideErr(termsErr));
 
-    // Evitar cortar conteúdo quando o teclado abre (iOS/Android)
+    // Fix de altura quando o teclado abre (mesmo do login)
     const card = document.querySelector('.auth-card');
-    function adjustMaxHeight(){
+    function fixViewportHeight(){
       if(window.visualViewport){
-        const h = Math.max(540, window.visualViewport.height - 24); // 24px = padding aproximado
+        const h = Math.max(480, window.visualViewport.height - 24);
         card.style.maxHeight = h + 'px';
       }
     }
     if(window.visualViewport){
-      adjustMaxHeight();
-      window.visualViewport.addEventListener('resize', adjustMaxHeight);
+      fixViewportHeight();
+      window.visualViewport.addEventListener('resize', fixViewportHeight);
     }
   </script>
 </body>
