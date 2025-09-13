@@ -3,210 +3,203 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contacto | Aldeia Segura Pessoas Seguras</title>
+  <title>Contacto — Aldeia Segura Pessoas Seguras</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
   <style>
     :root{
-      --green:#2e7d32; --line:#e7e7e7; --text:#333;
-      --shadow:0 2px 6px rgba(0,0,0,.08);
-      --header-h:72px;
+      --green:#2e7d32; --green-2:#2e7d32;
+      --line:#e7e7e7; --text:#333;
+      --header-h:72px; /* altura header desktop */
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{margin:0;font-family:'Roboto',system-ui,-apple-system,Segoe UI,Ubuntu,"Helvetica Neue",Arial;color:var(--text);line-height:1.6;display:flex;flex-direction:column;min-height:100vh;background:#fff}
+    body{margin:0;font-family:'Roboto',system-ui,-apple-system,Segoe UI,Ubuntu,"Helvetica Neue",Arial;background:#f6f7f6;color:var(--text);line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
 
-    /* ================= HEADER (desktop) ================= */
+    /* ===== HEADER (igual às outras páginas) ===== */
     header{
-      background:#fff; position:sticky; top:0; z-index:1000;
-      display:flex; align-items:center; justify-content:space-between; gap:16px;
-      padding:14px 20px; box-shadow:var(--shadow); white-space:nowrap;
+      background:#fff;display:flex;align-items:center;justify-content:space-between;
+      padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);
+      position:sticky;top:0;z-index:5000;gap:1rem
     }
-    header nav, header nav ul{flex-wrap:nowrap; white-space:nowrap}
-    .logo{display:flex; align-items:center; gap:10px; min-width:0}
-    .logo img{width:35px; height:35px}
-    .logo h1{margin:0; color:var(--green); font-weight:700; font-size:1.1rem; overflow:hidden; text-overflow:ellipsis}
-    nav{display:flex; align-items:center; gap:16px; min-width:0}
-    nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0}
-    nav a{text-decoration:none; color:var(--green); font-weight:500; font-size:.95rem}
+    .logo{display:flex;align-items:center;gap:10px;min-width:0}
+    .logo img{width:35px;height:35px}
+    .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    nav{display:flex;align-items:center;gap:1rem;flex-wrap:nowrap}
+    nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0;white-space:nowrap}
+    nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
 
     #langSwitch{
-      height:40px; padding:0 12px; border-radius:20px;
-      border:1px solid #cfe7d0; background:#fff; color:#2e7d32; font-weight:600;
+      border:1px solid #cfe7d0;border-radius:20px;padding:.25rem .6rem;
+      color:#2e7d32;background:#fff;font-weight:600
     }
     .login-btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      height:40px; padding:0 16px; border-radius:22px;
-      border:1px solid #2a6d35; background:var(--green); color:#fff !important; font-weight:700; text-decoration:none; line-height:1;
-      transition:background .2s, transform .1s;
+      background:var(--green);color:#fff !important;padding:.45rem .95rem;border-radius:25px;
+      font-weight:700;border:1px solid #2e6b39;transition:background .2s,transform .1s;text-decoration:none;display:inline-block
     }
-    .login-btn:hover{background:#2a6f2d; transform:translateY(-1px)}
+    .login-btn:hover{background:#2a6f2d;transform:translateY(-1px)}
     .login-btn:active{transform:translateY(0)}
 
-    /* ================= HAMBURGUER ================= */
+    /* ===== MENU MOBILE ===== */
     .burger{
-      display:none; width:44px; height:44px; border:1px solid #cfe7d0; border-radius:12px; background:#fff; cursor:pointer;
-      align-items:center; justify-content:center; box-shadow:0 6px 14px rgba(0,0,0,.08);
-      flex:0 0 44px;
+      display:none;width:40px;height:40px;border:1px solid #cfe7d0;border-radius:10px;background:#fff;cursor:pointer;
+      align-items:center;justify-content:center
     }
-    .burger span{position:relative; display:block; width:20px; height:2px; background:#2e7d32; border-radius:2px}
-    .burger span::before,
-    .burger span::after{content:""; position:absolute; left:0; width:20px; height:2px; background:#2e7d32; border-radius:2px}
+    .burger span{display:block;width:18px;height:2px;background:#2e7d32;position:relative}
+    /* corrigido: before, after com o ponto — 3 riscas e sem “corte” */
+    .burger span::before, .burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:#2e7d32}
     .burger span::before{top:-6px}
     .burger span::after{top:6px}
 
-    /* ================= MENU MOBILE ================= */
-    .scrim{
-      position:fixed; top:var(--header-h); right:0; bottom:0; left:0;
-      background:rgba(0,0,0,.32); display:none; z-index:1500; backdrop-filter:saturate(120%) blur(2px);
-    }
-    .scrim.open{display:block}
-
     .mobile-nav{
-      position:fixed; top:var(--header-h); right:0; bottom:0; left:0;
-      background:#fff; padding:16px 18px calc(22px + env(safe-area-inset-bottom,0));
-      overflow:auto; -webkit-overflow-scrolling:touch; display:none; z-index:2000;
+      position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid var(--line);
+      padding:1rem 1.25rem 2rem; overflow:auto; display:none !important; z-index:2000;
     }
-    .mobile-nav.open{display:block}
-    .mobile-nav a{display:block; padding:14px 4px; font-weight:800; font-size:1.35rem; color:var(--green); text-decoration:none; border-radius:10px}
-    .mobile-nav a:active{background:#f1f7f1}
-    .mobile-nav .actions{display:flex; align-items:center; gap:10px; margin-top:6px; flex-wrap:nowrap}
-
-    /* PT como chip pequeno (não ocupa 100%) */
-    #langSwitch2{
-      -webkit-appearance:none; appearance:none;
-      height:36px; line-height:36px; padding:0 12px;
-      border-radius:18px; border:1px solid #cfe7d0;
-      background:#fff; color:#2e7d32; font-weight:700;
-      width:auto !important; max-width:fit-content; min-width:0; flex:0 0 auto;
+    .mobile-nav.open{display:block !important}
+    .mobile-nav a{display:block;padding:.85rem 0;font-weight:700;font-size:1.18rem}
+    .mobile-nav a:link,.mobile-nav a:visited{color:var(--green);text-decoration:none}
+    .mobile-nav a:hover{text-decoration:underline}
+    .mobile-nav .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+    /* PT pequeno + botão numa só linha (igual ao resto) */
+    .mobile-nav .actions select{
+      padding:.25rem .55rem;border-radius:18px;border:1px solid #cfe7d0;font-weight:600;font-size:.9rem
     }
-    /* botão oval, proporcional e na mesma linha do PT */
-    .mobile-nav .login-btn{
-      height:44px; padding:0 16px; border-radius:22px; font-size:1rem;
-      flex:0 0 auto; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    .mobile-nav .actions .login-btn{
+      padding:.45rem .9rem;border-radius:22px;white-space:nowrap
     }
 
-    /* breakpoints */
+    .scrim{
+      position:fixed; inset:var(--header-h) 0 0 0; background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px);
+      display:none !important; z-index:1500;
+    }
+    .scrim.open{display:block !important}
+    body.no-scroll{position:fixed;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
+
+    @media (min-width:901px){
+      .mobile-nav,.scrim{display:none !important}
+      .burger{display:none !important}
+    }
     @media (max-width:900px){
-      :root{ --header-h:64px }
-      header{padding:10px 14px}
+      :root{ --header-h:64px; }
+      header{padding:.8rem 1rem}
       nav ul{display:none}
-      #langSwitch,.login-btn{display:none}
+      #langSwitch, .login-btn{display:none}
       .burger{display:flex}
     }
     @media (max-width:600px){
-      :root{ --header-h:56px }
-      .scrim,.mobile-nav{top:var(--header-h)}
+      :root{ --header-h:56px; }
+      .mobile-nav,.scrim{inset:var(--header-h) 0 0 0}
     }
 
-    /* ================= HERO ================= */
+    /* ===== HERO (igual estilo das outras) ===== */
     .hero{
-      background:url('Imagens/Incendio20.jpg') center/cover no-repeat #111;
-      color:#fff; text-align:center; display:flex; flex-direction:column; justify-content:center;
-      height:35vh; position:relative;
+      background:url('Imagens/Incendio20.jpg') center/cover no-repeat;color:#fff;text-align:center;
+      padding:3rem 1rem;position:relative
     }
-    .hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.45)}
-    .hero-content{position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 16px}
-    .hero h2{margin:.6rem 0 .2rem; font-size:2rem}
-    .hero p{margin:0; font-size:1.05rem}
+    .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
+    .hero h2{position:relative;z-index:1;margin:0;font-size:2rem}
+    .hero p{position:relative;z-index:1;margin:.4rem 0 0;font-weight:500}
 
-    /* ================= CONTEÚDO ================= */
-    .wrap{max-width:1100px; margin:1.75rem auto 2.5rem; padding:0 1.2rem}
-    .grid{display:grid; grid-template-columns:1.1fr .9fr; gap:1.25rem}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    /* ===== CONTEÚDO ===== */
+    .wrap{max-width:1100px;margin:1.75rem auto 2.5rem;padding:0 1.2rem}
+    .grid{display:grid;grid-template-columns: 1.1fr .9fr;gap:1.25rem}
+    @media (max-width: 900px){ .grid{grid-template-columns:1fr} .hero h2{font-size:1.6rem} }
 
-    .card{background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); overflow:hidden}
-    .card .head{padding:1rem 1.25rem; border-bottom:1px solid var(--line); background:#f9fbf9}
-    .card .head h3{margin:0; color:var(--green)}
+    .card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);overflow:hidden}
+    .card .head{padding:1rem 1.25rem;border-bottom:1px solid var(--line);background:#f9fbf9}
+    .card .head h3{margin:0;color:var(--green)}
     .card .body{padding:1rem 1.25rem}
 
-    .info{display:grid; gap:.6rem; margin:0; padding:0; list-style:none}
-    .info li{display:flex; gap:.6rem; align-items:flex-start}
-    .badge{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%;
-      background:#eef7ef; color:#2e7d32; border:1px solid #d5ead7; font-size:1rem; flex:0 0 28px}
+    .info{display:grid;gap:.6rem;margin:0;padding:0;list-style:none}
+    .info li{display:flex;gap:.6rem;align-items:flex-start}
+    .badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
+      background:#eef7ef;color:var(--green-2);border:1px solid #d5ead7;font-size:1rem;flex:0 0 28px}
 
-    /* Formulário: ESCOPADO para não afetar o menu */
-    #contactForm .row{display:grid; grid-template-columns:1fr 1fr; gap:.8rem}
-    @media (max-width:640px){#contactForm .row{grid-template-columns:1fr}}
-    #contactForm label{display:block; font-weight:600; color:#1f3b22; margin:.2rem 0 .25rem}
-    #contactForm input, #contactForm select, #contactForm textarea{
-      width:100%; padding:.78rem .85rem; border:1px solid #cfd9cf; border-radius:8px; font:16px/1.4 'Roboto',sans-serif; background:#fff; outline:none; box-shadow:inset 0 1px 2px rgba(0,0,0,.02);
+    form .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    @media (max-width: 640px){ form .row{grid-template-columns:1fr} }
+    label{display:block;font-weight:600;color:#1f3b22;margin:.2rem 0 .25rem}
+    input, select, textarea{
+      width:100%;padding:.75rem .8rem;border:1px solid #cfd9cf;border-radius:8px;font:inherit;background:#fff;
+      outline:none;box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
     }
-    #contactForm input:focus, #contactForm select:focus, #contactForm textarea:focus{
-      border-color:#9acd9e; box-shadow:0 0 0 3px rgba(58,125,68,.12), inset 0 1px 2px rgba(0,0,0,.02)
+    input:focus, select:focus, textarea:focus{border-color:#9acd9e;box-shadow:0 0 0 3px rgba(58,125,68,.12), inset 0 1px 2px rgba(0,0,0,.02)}
+    textarea{min-height:140px;resize:vertical}
+    .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+
+    .btn{
+      padding:.75rem 1.1rem;border:0;border-radius:10px;font-weight:700;cursor:pointer;
+      background:linear-gradient(180deg, #2e7d32, #256b2a);color:#fff;box-shadow:0 2px 8px rgba(46,125,50,.25)
     }
-    #contactForm textarea{min-height:140px; resize:vertical}
+    .btn:hover{filter:brightness(1.03)}
+    .ghost{
+      background:#eef7ef;color:#2e7d32;border:1px solid #cfe7d2;box-shadow:none;font-weight:600;
+    }
+    .hint{font-size:.9rem;color:#566;margin:.2rem 0 0}
 
-    .actions{display:flex; gap:.6rem; align-items:center; margin-top:.6rem; flex-wrap:wrap}
-    button{padding:.85rem 1.15rem; border:0; border-radius:10px; font-weight:700; cursor:pointer; background:linear-gradient(180deg,#2e7d32,#256b2a); color:#fff; box-shadow:0 2px 8px rgba(46,125,50,.25)}
-    button:hover{filter:brightness(1.03)}
-    .ghost{background:#eef7ef; color:#2e7d32; border:1px solid #cfe7d2; box-shadow:none; font-weight:600}
-    .hint{font-size:.9rem; color:#566; margin:.2rem 0 0}
-
-    .emergency{margin-top:1rem; padding:.85rem 1rem; border-radius:10px; background:#fff3f3; border:1px solid #ffcdd2}
+    .emergency{margin-top:1rem;padding:.85rem 1rem;border-radius:10px;background:#fff3f3;border:1px solid #ffcdd2}
     .emergency b{color:#c62828}
 
-    footer{background:#fff; padding:.6rem; text-align:center; margin-top:auto; font-size:.9rem; color:#555; border-top:1px solid var(--line)}
+    /* Footer */
+    footer{background:#fff;padding:.7rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555;border-top:1px solid var(--line)}
   </style>
 </head>
 <body>
 
-  <!-- ================= HEADER ================= -->
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <img src="Imagens/Aldeia.png" alt="Logo">
-      <h1 data-i18n="site.title">Aldeia Segura Pessoas Seguras</h1>
+      <h1>Aldeia Segura Pessoas Seguras</h1>
     </div>
-
     <nav aria-label="Principal">
       <ul>
-        <li><a href="index.html" data-i18n="nav.home">Início</a></li>
-        <li><a href="compreender.html" data-i18n="nav.understand">Compreender</a></li>
-        <li><a href="explorar.html" data-i18n="nav.explore">Explorar</a></li>
-        <li><a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a></li>
-        <li><a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a></li>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="compreender.html">Compreender</a></li>
+        <li><a href="explorar.html">Explorar</a></li>
+        <li><a href="reduzir.html">Reduzir</a></li>
+        <li><a href="aldeias.html">Aldeias Seguras</a></li>
         <li><a href="Incendio.html">Fogo à Vista</a></li>
-        <li><a href="contacto.html" data-i18n="nav.contact">Contacto</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
       </ul>
 
       <select id="langSwitch" aria-label="Idioma">
         <option value="pt">PT</option>
         <option value="en">EN</option>
       </select>
+      <a href="login.html" class="login-btn">Login / Registar</a>
 
-      <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
-      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
+      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+        <span></span>
+      </button>
     </nav>
   </header>
 
-  <!-- ================= MENU MOBILE ================= -->
+  <!-- SCRIM + MENU MOBILE -->
   <div id="scrim" class="scrim" aria-hidden="true"></div>
   <aside id="mobileNav" class="mobile-nav" aria-hidden="true">
-    <a href="index.html" data-i18n="nav.home">Início</a>
-    <a href="compreender.html" data-i18n="nav.understand">Compreender</a>
-    <a href="explorar.html" data-i18n="nav.explore">Explorar</a>
-    <a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a>
-    <a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a>
+    <a href="index.html">Início</a>
+    <a href="compreender.html">Compreender</a>
+    <a href="explorar.html">Explorar</a>
+    <a href="reduzir.html">Reduzir</a>
+    <a href="aldeias.html">Aldeias Seguras</a>
     <a href="Incendio.html">Fogo à Vista</a>
-    <a href="contacto.html" data-i18n="nav.contact">Contacto</a>
-
+    <a href="contacto.html">Contacto</a>
     <div class="actions">
       <select id="langSwitch2" aria-label="Idioma">
         <option value="pt">PT</option>
         <option value="en">EN</option>
       </select>
-      <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+      <a href="login.html" class="login-btn">Login / Registar</a>
     </div>
   </aside>
 
-  <!-- ================= HERO ================= -->
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-content">
-      <h2>Contacto</h2>
-      <p>Fala connosco — dúvidas, sugestões, parcerias ou reporte de risco.</p>
-    </div>
+    <h2>Contacto</h2>
+    <p>Fala connosco — dúvidas, sugestões, parcerias ou reporte de risco.</p>
   </section>
 
-  <!-- ================= CONTEÚDO ================= -->
+  <!-- CONTEÚDO -->
   <main class="wrap">
     <div class="grid">
 
@@ -292,11 +285,14 @@
             </div>
 
             <div class="actions">
-              <button type="submit">Enviar</button>
-              <button type="button" class="ghost" id="mailtoBtn">Abrir no e-mail</button>
+              <button type="submit" class="btn">Enviar</button>
+              <button type="button" class="btn ghost" id="mailtoBtn">Abrir no e-mail</button>
             </div>
             <p class="hint">Sem servidor? O botão “Abrir no e-mail” compõe uma mensagem no teu cliente de e-mail.</p>
-            <p class="hint" style="margin-top:.6rem"><small><b>Privacidade:</b> os dados serão usados apenas para responder ao teu pedido.</small></p>
+
+            <p class="hint" style="margin-top:.6rem">
+              <small><b>Privacidade:</b> os dados serão usados apenas para responder ao teu pedido.</small>
+            </p>
           </form>
         </div>
       </section>
@@ -306,58 +302,82 @@
 
   <footer>© 2025 Ruben Sousa · Todos os direitos reservados</footer>
 
-  <!-- ================= JS ================= -->
   <script>
+    /* ===== MENU MOBILE + i18n (mesmo das outras páginas) ===== */
     (function(){
-      const burger=document.querySelector('.burger');
-      const panel=document.getElementById('mobileNav');
-      const scrim=document.getElementById('scrim');
-      const body=document.body;
-      let y=0;
+      const burger = document.querySelector('.burger');
+      const panel  = document.getElementById('mobileNav');
+      const scrim  = document.getElementById('scrim');
+      const body   = document.body;
+      let scrollLockY = 0;
 
       function closeNav(){
         panel.classList.remove('open'); scrim.classList.remove('open');
-        body.classList.remove('no-scroll'); body.style.top=''; window.scrollTo(0,y);
-        burger?.setAttribute('aria-expanded','false'); panel?.setAttribute('aria-hidden','true');
+        body.classList.remove('no-scroll'); body.style.top=''; window.scrollTo(0, scrollLockY);
+        burger.setAttribute('aria-expanded','false'); panel.setAttribute('aria-hidden','true');
       }
       function openNav(){
-        y=window.scrollY||0; body.style.top=`-${y}px`; body.classList.add('no-scroll');
-        panel.classList.add('open'); scrim.classList.add('open');
-        burger?.setAttribute('aria-expanded','true'); panel?.setAttribute('aria-hidden','false');
+        scrollLockY = window.scrollY || window.pageYOffset || 0;
+        body.style.top = `-${scrollLockY}px`;
+        body.classList.add('no-scroll'); panel.classList.add('open'); scrim.classList.add('open');
+        burger.setAttribute('aria-expanded','true'); panel.setAttribute('aria-hidden','false');
       }
-      burger?.addEventListener('click',()=>panel.classList.contains('open')?closeNav():openNav());
-      scrim?.addEventListener('click',closeNav);
-      panel?.addEventListener('click',e=>{ if(e.target.closest('a')) closeNav(); });
-      window.addEventListener('keydown',e=>{ if(e.key==='Escape') closeNav(); });
+      if (burger && panel){
+        burger.addEventListener('click', ()=> panel.classList.contains('open')? closeNav(): openNav());
+        panel.addEventListener('click', e=>{ if(e.target.closest('a')) closeNav(); });
+        scrim.addEventListener('click', closeNav);
+        window.addEventListener('keydown', e=>{ if(e.key==='Escape') closeNav(); });
+      }
 
-      /* i18n mínimo: sincroniza selects desktop<->mobile */
+      // PT/EN sincronizado (se usares i18n como nas outras páginas)
       const LS_KEY='lang';
       const lang1=document.getElementById('langSwitch');
       const lang2=document.getElementById('langSwitch2');
-      function apply(dict){document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(dict[k]!=null)el.innerHTML=dict[k];});document.documentElement.lang=(dict===fallback.en?'en':'pt');}
-      async function fetchDict(l){try{const r=await fetch(`i18n/${l}.json`,{cache:'no-cache'});if(!r.ok)throw 0;return await r.json();}catch(_){return fallback[l]||fallback.pt}}
-      async function setLang(l){const d=await fetchDict(l);apply(d);localStorage.setItem(LS_KEY,l);if(lang1)lang1.value=l;if(lang2)lang2.value=l;}
-      const qs=new URLSearchParams(location.search);const initial=(localStorage.getItem(LS_KEY)||qs.get('lang')||'pt').toLowerCase();
-      if(lang1)lang1.value=initial;if(lang2)lang2.value=initial;setLang(initial);
-      lang1?.addEventListener('change',e=>setLang(e.target.value)); lang2?.addEventListener('change',e=>setLang(e.target.value));
-      const fallback={pt:{"site.title":"Aldeia Segura Pessoas Seguras","nav.home":"Início","nav.understand":"Compreender","nav.explore":"Explorar","nav.reduce":"Reduzir","nav.villages":"Aldeias Seguras","nav.contact":"Contacto","nav.login":"Login / Registar"},
-                      en:{"site.title":"Safe Village Safe People","nav.home":"Home","nav.understand":"Understand","nav.explore":"Explore","nav.reduce":"Reduce","nav.villages":"Safe Villages","nav.contact":"Contact","nav.login":"Login / Sign up"}};
+
+      async function fetchDict(l){
+        try{ const r=await fetch(`i18n/${l}.json`,{cache:'no-cache'}); if(!r.ok) throw 0; return await r.json(); }
+        catch(_){ return { } }
+      }
+      function applyI18n(dict){
+        if(!dict) return;
+        document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.dataset.i18n; if(dict[k]!=null) el.innerHTML=dict[k]; });
+        document.documentElement.lang = (localStorage.getItem(LS_KEY)==='en'?'en':'pt');
+      }
+      async function setLang(l){ localStorage.setItem(LS_KEY,l); const d=await fetchDict(l); applyI18n(d); }
+
+      const saved = localStorage.getItem(LS_KEY) || 'pt';
+      if (lang1) lang1.value = saved;
+      if (lang2) lang2.value = saved;
+
+      if (lang1 && lang2){
+        lang1.addEventListener('change', e=>{ lang2.value=e.target.value; setLang(e.target.value); });
+        lang2.addEventListener('change', e=>{ lang1.value=e.target.value; setLang(e.target.value); });
+      }
     })();
 
-    /* ===== Form: mailto ===== */
-    const CONTACT_EMAIL='contacto@aldeiasseguras.pt';
+    /* ===== Form por mailto (como já tinhas) ===== */
+    const CONTACT_EMAIL = 'contacto@aldeiasseguras.pt';
     function buildMailto(){
-      const nome=document.getElementById('nome').value.trim();
-      const email=document.getElementById('email').value.trim();
-      const assunto=document.getElementById('assunto').value||'Contacto';
-      const telefone=document.getElementById('telefone').value.trim();
-      const mensagem=document.getElementById('mensagem').value.trim();
-      const subject=`[Site] ${assunto} — ${nome||'Sem nome'}`;
-      const body=`Nome: ${nome}\nE-mail: ${email}\nTelefone: ${telefone||'—'}\nAssunto: ${assunto}\n\nMensagem:\n${mensagem}\n\n— Enviado via página de contacto`;
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const assunto = document.getElementById('assunto').value || 'Contacto';
+      const telefone = document.getElementById('telefone').value.trim();
+      const mensagem = document.getElementById('mensagem').value.trim();
+      const subject = `[Site] ${assunto} — ${nome || 'Sem nome'}`;
+      const body =
+`Nome: ${nome}
+E-mail: ${email}
+Telefone: ${telefone || '—'}
+Assunto: ${assunto}
+
+Mensagem:
+${mensagem}
+
+— Enviado via página de contacto`;
       return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
-    document.getElementById('mailtoBtn').addEventListener('click',()=>{window.location.href=buildMailto();});
-    document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();window.location.href=buildMailto();});
+    document.getElementById('mailtoBtn').addEventListener('click', ()=>{ window.location.href = buildMailto(); });
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{ e.preventDefault(); window.location.href = buildMailto(); });
   </script>
 </body>
 </html>
