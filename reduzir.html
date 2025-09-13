@@ -7,45 +7,91 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --green:#3a7d44;
-      --green-2:#2e7d32;
-      --mint:#e8f5e9;
-      --line:#e7e7e7;
+      --green:#2e7d32; --green-2:#2e7d32;
+      --mint:#e8f5e9; --line:#e7e7e7;
       --shadow:0 2px 6px rgba(0,0,0,.08);
+      --text:#333;
+      --header-h:72px; /* altura do header (desktop) */
     }
-    body{margin:0;font-family:'Roboto',sans-serif;color:#333;line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:'Roboto',sans-serif;color:var(--text);line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
 
-    /* ===== Header unificado (igual ao index) ===== */
+    /* ===== HEADER (igual ao index) ===== */
     header{
       background:#fff;display:flex;align-items:center;justify-content:space-between;
       padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);
       position:sticky;top:0;z-index:1000;gap:1rem
     }
-    header .logo{display:flex;align-items:center;gap:10px;min-width:0}
-    header .logo img{width:35px;height:35px}
-    header .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .logo{display:flex;align-items:center;gap:10px;min-width:0}
+    .logo img{width:35px;height:35px}
+    .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    /* NAV desktop */
     nav{display:flex;align-items:center;gap:1rem}
     nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
     nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
-    #langSwitch{border:1px solid #cfe7d0;border-radius:20px;padding:.25rem .6rem;color:#2e7d32;background:#fff;font-weight:600}
-    .login-btn{background:var(--green);color:#fff !important;padding:.35rem .8rem;border-radius:25px;font-weight:700;border:1px solid #2e6b39;transition:background .3s,transform .2s;text-decoration:none;font-size:.9rem}
-    .login-btn:hover{background:#2e6b39;transform:scale(1.05)}
 
-    /* Botão menu (mobile) */
-    .menu-toggle{
-      display:none;border:1px solid #cfe7d0;background:#fff;color:var(--green);
-      padding:.45rem .7rem;border-radius:10px;font-weight:700;cursor:pointer
+    #langSwitch{
+      border:1px solid #cfe7d0;border-radius:20px;padding:.25rem .6rem;
+      color:#2e7d32;background:#fff;font-weight:600
+    }
+    .login-btn{
+      background:var(--green);color:#fff !important;padding:.45rem .95rem;border-radius:25px;
+      font-weight:700;border:1px solid #2e6b39;transition:background .2s,transform .1s;text-decoration:none
+    }
+    .login-btn:hover{background:#2a6f2d;transform:translateY(-1px)}
+    .login-btn:active{transform:translateY(0)}
+
+    /* ===== MENU MOBILE (copiado do index) ===== */
+    .burger{
+      display:none;width:40px;height:40px;border:1px solid #cfe7d0;border-radius:10px;background:#fff;cursor:pointer;
+      align-items:center;justify-content:center
+    }
+    .burger span{display:block;width:18px;height:2px;background:#2e7d32;position:relative}
+    .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:#2e7d32}
+    .burger span::before{top:-6px}.burger span::after{top:6px}
+
+    .mobile-nav{
+      position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid var(--line);
+      padding:1rem 1.25rem 2rem; overflow:auto; display:none !important; z-index:2000;
+    }
+    .mobile-nav.open{display:block !important}
+    .mobile-nav a{display:block;padding:.85rem 0;font-weight:700;font-size:1.18rem}
+    .mobile-nav a:link,.mobile-nav a:visited{color:var(--green);text-decoration:none}
+    .mobile-nav a:hover{text-decoration:underline}
+    .mobile-nav .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+
+    .scrim{
+      position:fixed; inset:var(--header-h) 0 0 0; background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px);
+      display:none !important; z-index:1500;
+    }
+    .scrim.open{display:block !important}
+
+    body.no-scroll{position:fixed;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
+
+    @media (min-width:901px){
+      .mobile-nav,.scrim{display:none !important}
+      .burger{display:none !important}
+    }
+    @media (max-width:900px){
+      :root{ --header-h:64px; }
+      header{padding:.8rem 1rem}
+      nav ul{display:none}
+      #langSwitch,.login-btn{display:none}
+      .burger{display:flex}
+    }
+    @media (max-width:600px){
+      :root{ --header-h:56px; }
+      .mobile-nav,.scrim{inset:var(--header-h) 0 0 0}
     }
 
-    /* ===== Hero ===== */
-    .hero{background:url('Imagens/incendio20.jpg') center/cover no-repeat;color:#fff;height:35vh;display:flex;justify-content:center;align-items:center;text-align:center;position:relative}
+    /* ===== HERO ===== */
+    .hero{background:url('Imagens/Incendio20.jpg') center/cover no-repeat;color:#fff;height:35vh;display:flex;justify-content:center;align-items:center;text-align:center;position:relative}
     .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
     .hero-content{position:relative;z-index:1;max-width:900px}
     .hero h2{font-size:2rem;margin:0}
 
-    /* ===== Conteúdo ===== */
+    /* ===== CONTEÚDO REDUZIR ===== */
     .content{padding:2rem;max-width:1100px;margin:0 auto}
     .content h3{color:var(--green);margin-top:2rem}
     .lead{background:#f8faf8;border-left:6px solid var(--green);padding:1rem 1.2rem;border-radius:8px;margin:1rem 0}
@@ -67,7 +113,7 @@
     .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
     .video-grid iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:10px;box-shadow:var(--shadow)}
 
-    /* ===== Acordeão (FAQ) ===== */
+    /* Acordeão (FAQ) */
     .accordion{border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
     .acc-item+.acc-item{border-top:1px solid var(--line)}
     .acc-btn{width:100%;text-align:left;padding:1rem;display:flex;justify-content:space-between;align-items:center;background:#fff;border:0;font:inherit;cursor:pointer}
@@ -79,114 +125,69 @@
 
     .inline-pill{display:inline-block;padding:.2rem .55rem;border-radius:999px;background:#eef7ef;border:1px solid #d5ead7;color:var(--green-2);font-weight:600;text-decoration:none}
 
-    /* ===== Emergência & Footer ===== */
     .emergency{background:#e1f8e4;padding:.5rem 1rem;width:100%;margin:2rem auto;border-top:2px solid var(--green-2);border-bottom:2px solid var(--green-2);border-radius:8px;display:flex;flex-direction:column;align-items:center}
     .emergency h3{color:#c0392b;font-size:1.2rem;margin:.2rem 0}
     .emergency p{font-size:.95rem;margin:.2rem 0}
+
     footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
 
-    /* ===== Recursos oficiais ===== */
-    .links-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-top:.4rem}
-    .link-card{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .12s ease}
-    .link-card:hover{box-shadow:0 4px 10px rgba(0,0,0,.08)}
-    .link-card .body{padding:.6rem .75rem}
-    .link-card .title{display:flex;align-items:center;gap:.45rem;color:var(--green);font-weight:700;font-size:.95rem;margin:0}
-    .link-card .desc{margin:.2rem 0 .4rem;color:#555;font-size:.85rem;line-height:1.4}
-    .link-card .tag{display:inline-block;font-size:.75rem;background:#eef7ef;color:var(--green-2);padding:.12rem .4rem;border-radius:999px;border:1px solid #d5ead7}
-    @media(min-width:1200px){.links-grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:640px){.links-grid{grid-template-columns:1fr}}
-
-/* ==== MENU MOBILE (igual ao index/compreender) ==== */
-@media (max-width: 900px){
-  header{ padding:.7rem 1rem; gap:.6rem; }
-  .menu-toggle{ display:inline-flex; align-items:center; gap:.4rem; }
-
-  /* Painel cobre o ecrã e pode fazer scroll */
-  #site-menu{
-    position:fixed;
-    top:60px;               /* altura do header sticky */
-    left:0; right:0; bottom:0;
-    max-height:calc(100vh - 60px);
-    overflow:auto;
-
-    background:#fff;
-    border-top:1px solid var(--line);
-    box-shadow:0 10px 30px rgba(0,0,0,.15);
-    transform:translateY(-120%);
-    transition:transform .18s ease-out;
-    z-index:1200;
-    padding:1rem 1.25rem 2rem;
-    display:block;
-  }
-  /* quando abre */
-  header.open #site-menu{ transform:translateY(0); }
-
-  /* Lista alinhada à esquerda com espaçamento grande (como no index) */
-  #site-menu ul{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;   /* <- esquerda */
-    gap:2rem;                 /* espaçamento como na 2ª imagem */
-    margin:0 0 1rem 0;
-    padding:0;
-    list-style:none;
-  }
-  #site-menu a{
-    font-size:1.6rem;         /* tamanho e peso iguais ao index */
-    font-weight:700;
-    text-decoration:none;
-    color:var(--green);
-  }
-
-  /* Controlos em mobile: alinhados à esquerda e largura “auto” */
-  #langSwitch{ width:auto; margin:.5rem 0 0 0; }
-  #site-menu .login-btn{
-    width:auto;               /* não ocupar 100% */
-    align-self:flex-start;    /* alinhar à esquerda */
-    margin-top:.8rem;
-    font-size:1.15rem;
-    padding:.6rem 1.1rem;
-  }
-
-  /* Evitar que o layout desktop interfira */
-  nav ul{ flex-wrap:nowrap !important; }
-}
+    @media(max-width:992px){.grid-3{grid-template-columns:1fr 1fr}.video-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:768px){.hero h2{font-size:1.6rem}.content{padding:1rem}.grid-2,.grid-3{grid-template-columns:1fr}.video-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <!-- ===== Header unificado ===== -->
+  <!-- HEADER -->
   <header>
     <div class="logo">
       <img src="Imagens/Aldeia.png" alt="Logo">
-      <h1>Aldeia Segura Pessoas Seguras</h1>
+      <h1 data-i18n="site.title">Aldeia Segura Pessoas Seguras</h1>
     </div>
-    <button class="menu-toggle" aria-controls="site-menu" aria-expanded="false" aria-label="Abrir menu">☰</button>
-    <nav id="site-menu">
+
+    <nav aria-label="Principal">
       <ul>
-        <li><a href="index.html">Início</a></li>
-        <li><a href="compreender.html">Compreender</a></li>
-        <li><a href="explorar.html">Explorar</a></li>
-        <li><a href="reduzir.html">Reduzir</a></li>
-        <li><a href="aldeias.html">Aldeias Seguras</a></li>
+        <li><a href="index.html" data-i18n="nav.home">Início</a></li>
+        <li><a href="compreender.html" data-i18n="nav.understand">Compreender</a></li>
+        <li><a href="explorar.html" data-i18n="nav.explore">Explorar</a></li>
+        <li><a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a></li>
+        <li><a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a></li>
         <li><a href="Incendio.html">Fogo à Vista</a></li>
-        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="contacto.html" data-i18n="nav.contact">Contacto</a></li>
       </ul>
       <select id="langSwitch" aria-label="Idioma">
         <option value="pt">PT</option>
         <option value="en">EN</option>
       </select>
-      <a href="login.html" class="login-btn">Login / Registar</a>
+      <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
     </nav>
   </header>
 
-  <!-- ===== Hero ===== -->
+  <!-- SCRIM + MENU MOBILE (igual ao index) -->
+  <div id="scrim" class="scrim" aria-hidden="true"></div>
+  <aside id="mobileNav" class="mobile-nav" aria-hidden="true">
+    <a href="index.html" data-i18n="nav.home">Início</a>
+    <a href="compreender.html" data-i18n="nav.understand">Compreender</a>
+    <a href="explorar.html" data-i18n="nav.explore">Explorar</a>
+    <a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a>
+    <a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a>
+    <a href="Incendio.html">Fogo à Vista</a>
+    <a href="contacto.html" data-i18n="nav.contact">Contacto</a>
+    <div class="actions">
+      <select id="langSwitch2" aria-label="Idioma">
+        <option value="pt">PT</option>
+        <option value="en">EN</option>
+      </select>
+      <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+    </div>
+  </aside>
+
+  <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
       <h2>Reduzir o Risco de Incêndio</h2>
     </div>
   </section>
 
-  <!-- ===== Content ===== -->
   <section class="content">
     <div class="lead">
       <strong>Objetivo:</strong> diminuir a probabilidade de ignição, travar a propagação e proteger pessoas, casas e bens.
@@ -413,52 +414,47 @@
     </div>
 
     <h3 id="recursos">Recursos oficiais</h3>
-    <div class="links-grid">
-      <a class="link-card" href="https://prociv.gov.pt/pt/home/" target="_blank" rel="noopener">
-        <div class="body">
-          <div class="title">🚨 ANEPC — Proteção Civil</div>
-          <p class="desc">Avisos à população, ocorrências e programas “Aldeia Segura / Pessoas Seguras”.</p>
-          <span class="tag">prociv.gov.pt</span>
+    <div class="links-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-top:.4rem">
+      <a class="link-card" href="https://prociv.gov.pt/pt/home/" target="_blank" rel="noopener" style="display:block;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .12s ease;">
+        <div class="body" style="padding:.6rem .75rem">
+          <div class="title" style="display:flex;align-items:center;gap:.45rem;color:var(--green);font-weight:700;font-size:.95rem;margin:0">🚨 ANEPC — Proteção Civil</div>
+          <p class="desc" style="margin:.2rem 0 .4rem;color:#555;font-size:.85rem;line-height:1.4">Avisos à população, ocorrências e programas “Aldeia Segura / Pessoas Seguras”.</p>
+          <span class="tag" style="display:inline-block;font-size:.75rem;background:#eef7ef;color:var(--green-2);padding:.12rem .4rem;border-radius:999px;border:1px solid #d5ead7">prociv.gov.pt</span>
         </div>
       </a>
-
-      <a class="link-card" href="https://www.ipma.pt/pt/riscoincendio/" target="_blank" rel="noopener">
-        <div class="body">
-          <div class="title">🌡️ IPMA — Perigo de Incêndio Rural</div>
-          <p class="desc">Mapa oficial diário do perigo por concelho e data.</p>
-          <span class="tag">ipma.pt</span>
+      <a class="link-card" href="https://www.ipma.pt/pt/riscoincendio/" target="_blank" rel="noopener" style="display:block;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .12s ease;">
+        <div class="body" style="padding:.6rem .75rem">
+          <div class="title" style="display:flex;align-items:center;gap:.45rem;color:var(--green);font-weight:700;font-size:.95rem;margin:0">🌡️ IPMA — Perigo de Incêndio Rural</div>
+          <p class="desc" style="margin:.2rem 0 .4rem;color:#555;font-size:.85rem;line-height:1.4">Mapa oficial diário do perigo por concelho e data.</p>
+          <span class="tag" style="display:inline-block;font-size:.75rem;background:#eef7ef;color:var(--green-2);padding:.12rem .4rem;border-radius:999px;border:1px solid #d5ead7">ipma.pt</span>
         </div>
       </a>
-
-      <a class="link-card" href="https://fogos.icnf.pt/rif/" target="_blank" rel="noopener">
-        <div class="body">
-          <div class="title">🔥 ICNF — Risco de Incêndio (RIF)</div>
-          <p class="desc">Indicadores e condicionantes por nível de risco.</p>
-          <span class="tag">fogos.icnf.pt</span>
+      <a class="link-card" href="https://fogos.icnf.pt/rif/" target="_blank" rel="noopener" style="display:block;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .12s ease;">
+        <div class="body" style="padding:.6rem .75rem">
+          <div class="title" style="display:flex;align-items:center;gap:.45rem;color:var(--green);font-weight:700;font-size:.95rem;margin:0">🔥 ICNF — Risco de Incêndio (RIF)</div>
+          <p class="desc" style="margin:.2rem 0 .4rem;color:#555;font-size:.85rem;line-height:1.4">Indicadores e condicionantes por nível de risco.</p>
+          <span class="tag" style="display:inline-block;font-size:.75rem;background:#eef7ef;color:var(--green-2);padding:.12rem .4rem;border-radius:999px;border:1px solid #d5ead7">fogos.icnf.pt</span>
         </div>
       </a>
-
-      <a class="link-card" href="https://www.gnr.pt/ambiente.aspx" target="_blank" rel="noopener">
-        <div class="body">
-          <div class="title">🦅 GNR — SEPNA / SOS Ambiente 808&nbsp;200&nbsp;520</div>
-          <p class="desc">Linha 24h para denúncias e informações ambientais.</p>
-          <span class="tag">gnr.pt/ambiente.aspx</span>
+      <a class="link-card" href="https://www.gnr.pt/ambiente.aspx" target="_blank" rel="noopener" style="display:block;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .12s ease;">
+        <div class="body" style="padding:.6rem .75rem">
+          <div class="title" style="display:flex;align-items:center;gap:.45rem;color:var(--green);font-weight:700;font-size:.95rem;margin:0">🦅 GNR — SEPNA / SOS Ambiente 808&nbsp;200&nbsp;520</div>
+          <p class="desc" style="margin:.2rem 0 .4rem;color:#555;font-size:.85rem;line-height:1.4">Linha 24h para denúncias e informações ambientais.</p>
+          <span class="tag" style="display:inline-block;font-size:.75rem;background:#eef7ef;color:var(--green-2);padding:.12rem .4rem;border-radius:999px;border:1px solid #d5ead7">gnr.pt/ambiente.aspx</span>
         </div>
       </a>
-
-      <a class="link-card" href="https://www.sgifr.gov.pt/" target="_blank" rel="noopener">
-        <div class="body">
-          <div class="title">🇵🇹 SGIFR — Fogos Rurais</div>
-          <p class="desc">Portal interinstitucional: prevenção, planeamento e relatórios.</p>
-          <span class="tag">sgifr.gov.pt</span>
+      <a class="link-card" href="https://www.sgifr.gov.pt/" target="_blank" rel="noopener" style="display:block;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .12s ease;">
+        <div class="body" style="padding:.6rem .75rem">
+          <div class="title" style="display:flex;align-items:center;gap:.45rem;color:var(--green);font-weight:700;font-size:.95rem;margin:0">🇵🇹 SGIFR — Fogos Rurais</div>
+          <p class="desc" style="margin:.2rem 0 .4rem;color:#555;font-size:.85rem;line-height:1.4">Portal interinstitucional: prevenção, planeamento e relatórios.</p>
+          <span class="tag" style="display:inline-block;font-size:.75rem;background:#eef7ef;color:var(--green-2);padding:.12rem .4rem;border-radius:999px;border:1px solid #d5ead7">sgifr.gov.pt</span>
         </div>
       </a>
-
-      <a class="link-card" href="https://aldeiasseguras.pt/" target="_blank" rel="noopener">
-        <div class="body">
-          <div class="title">🏘️ Aldeia Segura, Pessoas Seguras</div>
-          <p class="desc">Programa oficial para a interface urbano-florestal.</p>
-          <span class="tag">aldeiasseguras.pt</span>
+      <a class="link-card" href="https://aldeiasseguras.pt/" target="_blank" rel="noopener" style="display:block;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .12s ease;">
+        <div class="body" style="padding:.6rem .75rem">
+          <div class="title" style="display:flex;align-items:center;gap:.45rem;color:var(--green);font-weight:700;font-size:.95rem;margin:0">🏘️ Aldeia Segura, Pessoas Seguras</div>
+          <p class="desc" style="margin:.2rem 0 .4rem;color:#555;font-size:.85rem;line-height:1.4">Programa oficial para a interface urbano-florestal.</p>
+          <span class="tag" style="display:inline-block;font-size:.75rem;background:#eef7ef;color:var(--green-2);padding:.12rem .4rem;border-radius:999px;border:1px solid #d5ead7">aldeiasseguras.pt</span>
         </div>
       </a>
     </div>
@@ -469,38 +465,94 @@
     <p>Ligue imediatamente <strong>112</strong></p>
   </section>
 
-  <footer>
-    © 2025 Ruben Sousa · Todos os direitos reservados
-  </footer>
+  <footer>© 2025 Ruben Sousa · Todos os direitos reservados</footer>
 
-  <!-- ===== JS ===== -->
+  <!-- JS: burger/scrim + acordeão + i18n (mesmo do index) -->
   <script>
-    // Toggle menu mobile (igual ao index)
     (function(){
-      const header = document.querySelector('header');
-      const toggle = document.querySelector('.menu-toggle');
-      const links  = document.querySelectorAll('#site-menu a');
-      function setOpen(open){
-        header.classList.toggle('open', open);
-        if (toggle) toggle.setAttribute('aria-expanded', String(open));
-        document.body.style.overflow = open ? 'hidden' : '';
-      }
-      toggle?.addEventListener('click', ()=> setOpen(!header.classList.contains('open')));
-      links.forEach(a => a.addEventListener('click', ()=> setOpen(false)));
-      window.addEventListener('resize', ()=> { if (window.innerWidth > 900) setOpen(false); });
-      document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
-    })();
+      const burger = document.querySelector('.burger');
+      const panel  = document.getElementById('mobileNav');
+      const scrim  = document.getElementById('scrim');
+      const body   = document.body;
+      let scrollLockY = 0;
 
-    // Acordeão FAQ
-    document.querySelectorAll('.acc-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const item = btn.closest('.acc-item');
-        const isOpen = item.classList.toggle('open');
-        btn.setAttribute('aria-expanded', String(isOpen));
-        const icon = btn.querySelector('.acc-icon');
-        if(icon) icon.textContent = isOpen ? '–' : '+';
+      function closeNav(){
+        panel.classList.remove('open');
+        scrim.classList.remove('open');
+        body.classList.remove('no-scroll');
+        body.style.top = '';
+        window.scrollTo(0, scrollLockY);
+        burger.setAttribute('aria-expanded','false');
+        panel.setAttribute('aria-hidden','true');
+      }
+      function openNav(){
+        scrollLockY = window.scrollY || window.pageYOffset || 0;
+        body.style.top = `-${scrollLockY}px`;
+        body.classList.add('no-scroll');
+        panel.classList.add('open');
+        scrim.classList.add('open');
+        burger.setAttribute('aria-expanded','true');
+        panel.setAttribute('aria-hidden','false');
+      }
+      if (burger && panel) {
+        burger.addEventListener('click', ()=> panel.classList.contains('open') ? closeNav() : openNav());
+        panel.addEventListener('click', e => { if (e.target.closest('a')) closeNav(); });
+        scrim.addEventListener('click', closeNav);
+        window.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+      }
+
+      // acordeão
+      document.querySelectorAll('.acc-btn').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const item = btn.closest('.acc-item');
+          const isOpen = item.classList.toggle('open');
+          btn.setAttribute('aria-expanded', String(isOpen));
+          const icon = btn.querySelector('.acc-icon');
+          if(icon) icon.textContent = isOpen ? '–' : '+';
+        });
       });
-    });
+
+      // i18n: sincronizar selects desktop <-> mobile (texto só muda se tiveres os JSONs)
+      const LS_KEY='lang';
+      const lang1=document.getElementById('langSwitch');
+      const lang2=document.getElementById('langSwitch2');
+
+      function applyI18n(dict){
+        document.querySelectorAll('[data-i18n]').forEach(el=>{
+          const k=el.dataset.i18n;
+          if(dict[k]!=null) el.innerHTML=dict[k];
+        });
+        document.documentElement.lang=(dict===fallback.en?'en':'pt');
+      }
+      async function fetchDict(l){
+        try{
+          const r=await fetch(`i18n/${l}.json`,{cache:'no-cache'});
+          if(!r.ok) throw 0;
+          return await r.json();
+        }catch(_){ return fallback[l]||fallback.pt; }
+      }
+      async function setLang(l){
+        const d=await fetchDict(l); applyI18n(d); localStorage.setItem(LS_KEY,l);
+        if (lang1) lang1.value=l; if (lang2) lang2.value=l;
+      }
+
+      const urlLang=new URLSearchParams(location.search).get('lang');
+      const initial=(localStorage.getItem(LS_KEY)||urlLang||'pt').toLowerCase();
+      if (lang1) lang1.value=initial;
+      if (lang2) lang2.value=initial;
+      setLang(initial);
+      lang1?.addEventListener('change',e=>setLang(e.target.value));
+      lang2?.addEventListener('change',e=>setLang(e.target.value));
+
+      // fallback mínimo (igual ao index, só para o header/rodapé)
+      const fallback={pt:{
+        "site.title":"Aldeia Segura Pessoas Seguras",
+        "nav.home":"Início","nav.understand":"Compreender","nav.explore":"Explorar","nav.reduce":"Reduzir","nav.villages":"Aldeias Seguras","nav.contact":"Contacto","nav.login":"Login / Registar",
+      }, en:{
+        "site.title":"Safe Village Safe People",
+        "nav.home":"Home","nav.understand":"Understand","nav.explore":"Explore","nav.reduce":"Reduce","nav.villages":"Safe Villages","nav.contact":"Contact","nav.login":"Login / Sign up",
+      }};
+    })();
   </script>
 </body>
 </html>
