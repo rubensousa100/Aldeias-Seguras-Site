@@ -96,7 +96,7 @@
 
     /* ===== HERO ===== */
     .hero{
-      background:url('Imagens/incendio20.jpg') center/cover no-repeat #111;
+      background:url('Imagens/Incendio20.jpg') center/cover no-repeat #111;
       color:#fff;height:35vh;text-align:center;display:flex;flex-direction:column;justify-content:center;position:relative
     }
     .hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}
@@ -139,6 +139,38 @@
 
     .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1b5e20;color:#fff;padding:.7rem 1rem;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.18);font-size:.95rem;display:none;z-index:2000}
     footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
+
+    /* === Ajustes finos: menu mobile === */
+.mobile-nav{ padding:1rem 1.25rem calc(2.5rem + env(safe-area-inset-bottom, 0)) 1.25rem; }
+
+.mobile-nav .actions{
+  display:flex;
+  gap:.75rem;
+  align-items:center;
+  margin-top:1rem;
+  flex-wrap:nowrap;
+  padding-bottom:env(safe-area-inset-bottom, 0); /* evita “corte” no iPhone */
+}
+
+/* PT em formato chip, largura mínima possível */
+#langSwitch2{
+  -webkit-appearance:none; appearance:none;
+  height:36px; line-height:36px;
+  padding:0 .9rem;
+  border-radius:18px; border:1px solid #cfe7d0;
+  background:#fff; color:#2e7d32; font-weight:700;
+  display:inline-flex; align-items:center;
+  width:fit-content; max-width:fit-content; min-width:0; /* 👈 não alarga */
+}
+
+/* Botão grande/oval, mas sem ultrapassar a direita */
+.mobile-nav .login-btn{
+  height:56px; font-size:1.35rem; padding:0 22px; border-radius:32px;
+  flex:1 1 auto;                /* encolhe se for preciso */
+  min-width:0;                  /* evita overflow */
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
   </style>
 </head>
 <body>
