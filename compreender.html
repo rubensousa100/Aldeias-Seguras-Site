@@ -11,7 +11,7 @@
       --mint:#e8f5e9;--mint-2:#f1fbf2;
       --line:#e7e7e7;--shadow:0 2px 6px rgba(0,0,0,.08);
       --text:#333;--ink:#111;
-      --header-h: 72px; /* altura header em desktop */
+      --header-h: 72px; /* altura header desktop */
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -19,8 +19,7 @@
 
     /* ===== HEADER (desktop) ===== */
     header{
-      background:#fff;
-      padding:1rem 2rem;
+      background:#fff;padding:1rem 2rem;
       display:flex;justify-content:space-between;align-items:center;
       box-shadow:0 2px 5px rgba(0,0,0,.08);
       position:sticky;top:0;z-index:1000;
@@ -29,12 +28,11 @@
     .logo img{width:35px;height:35px}
     .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    /* nav em linha + ações à direita (select + login) */
     nav{display:flex;align-items:center;gap:1rem}
     nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
     nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
 
-    /* === estilos que faltavam (iguais aos da home) === */
+    /* ações (iguais à home) */
     #langSwitch{
       border:1px solid #cfe7d0;border-radius:20px;
       padding:.25rem .6rem;color:#2e7d32;background:#fff;font-weight:600;
@@ -126,11 +124,33 @@
     }
     .burger span::before{ top:-6px } .burger span::after{ top:6px }
 
-    .mobile-nav{ position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid var(--line); padding:1rem 1.25rem 2rem; overflow:auto; display:none; z-index:2000; }
-    .mobile-nav.open{ display:block }
-    .scrim{ position:fixed; inset:var(--header-h) 0 0 0; background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px); display:none; z-index:1500; }
-    .scrim.open{ display:block }
+    /* SEMPRE escondido por defeito; abre só com .open */
+    .mobile-nav{
+      position:fixed; inset:var(--header-h) 0 0 0;
+      background:#fff; border-top:1px solid var(--line);
+      padding:1rem 1.25rem 2rem; overflow:auto;
+      display:none !important; z-index:2000;
+    }
+    .mobile-nav.open{ display:block !important; }
 
+    .scrim{
+      position:fixed; inset:var(--header-h) 0 0 0;
+      background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px);
+      display:none !important; z-index:1500;
+    }
+    .scrim.open{ display:block !important; }
+
+    /* ESTILO dos links do painel mobile */
+    .mobile-nav a{
+      display:block; padding:.85rem 0;
+      font-weight:700; font-size:1.18rem;
+    }
+    .mobile-nav a:link,
+    .mobile-nav a:visited{ color:var(--green); text-decoration:none; }
+    .mobile-nav a:hover{ text-decoration:underline; }
+    .mobile-nav .actions{ display:flex; gap:.6rem; align-items:center; margin-top:.6rem }
+
+    /* bloquear scroll quando menu abre (iOS-safe) */
     body.no-scroll{ position:fixed; width:100%; overflow:hidden; overscroll-behavior:none; touch-action:none; }
 
     /* Desktop seguro: nada do mobile aparece */
@@ -143,7 +163,7 @@
       :root{ --header-h: 64px; }
       header{ padding:.8rem 1rem }
       nav ul{ display:none }
-      #langSwitch, .login-btn{ display:none }
+      #langSwitch, .login-btn{ display:none } /* ficam no painel mobile */
       .burger{ display:flex }
       .subnav{ top:var(--header-h) }
     }
@@ -183,7 +203,7 @@
       </select>
       <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
 
-      <!-- hamburger (mostra só em mobile) -->
+      <!-- hamburger (só em mobile) -->
       <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
         <span></span>
       </button>
@@ -459,4 +479,3 @@
   </script>
 </body>
 </html>
-
