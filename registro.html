@@ -7,72 +7,90 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
   <style>
     :root{
-      /* mesmas cores do LOGIN */
-      --green:#2e7d32;
-      --green-2:#256b2a;
-      --line:#e7e7e7;
+      --green:#2e7d32; --green-2:#256b2a; --line:#e7e7e7;
       --shadow:0 8px 24px rgba(0,0,0,.10);
       --bg-grad: radial-gradient(1100px 500px at 10% -10%, #eaf7ee 0%, transparent 60%),
                  radial-gradient(1000px 500px at 110% 0%, #eef5ff 0%, transparent 55%),
                  linear-gradient(#fafafa, #f5f7f6);
-      --text:#222;
-      --muted:#4b5b4f;
+      --text:#222; --muted:#4b5b4f;
     }
     @media (prefers-color-scheme: dark){
-      :root{
-        --bg-grad: linear-gradient(180deg,#0f1512,#0b120e);
-        --text:#e8f1eb;
-        --muted:#a8b6ad;
-        --line:#1f2a24;
-        --shadow:0 8px 24px rgba(0,0,0,.45);
-      }
+      :root{ --bg-grad: linear-gradient(180deg,#0f1512,#0b120e);
+             --text:#e8f1eb; --muted:#a8b6ad; --line:#1f2a24;
+             --shadow:0 8px 24px rgba(0,0,0,.45); }
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
-      font-family:'Roboto',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      margin:0; font-family:'Roboto',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text); line-height:1.6;
-      min-height:100dvh; /* consistente com login */
+      min-height:100dvh;
       display:flex; align-items:center; justify-content:center;
       background:var(--bg-grad);
-      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
-               max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      padding:max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+              max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
     }
 
     a{ color:var(--green); text-decoration:none }
     a:hover{ text-decoration:underline }
 
-    /* Cartão (igual ao login) */
+    /* Cartão */
     .auth-card{
       width:min(100%, 440px);
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:16px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      display:flex; flex-direction:column;
+      background:#fff; border:1px solid var(--line);
+      border-radius:16px; box-shadow:var(--shadow);
+      overflow:hidden; display:flex; flex-direction:column;
       max-height:calc(100dvh - max(24px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
     }
     @media (prefers-color-scheme: dark){ .auth-card{ background:#0f1713 } }
 
     .auth-head{
-      padding:.9rem 1rem;
-      display:flex; align-items:center; gap:.6rem;
-      border-bottom:1px solid var(--line);
-      background:#f9fbf9;
-      flex:0 0 auto;
+      padding:.7rem .7rem; display:flex; align-items:center; gap:.6rem;
+      border-bottom:1px solid var(--line); background:#f9fbf9; flex:0 0 auto;
     }
     @media (prefers-color-scheme: dark){ .auth-head{ background:#0c140f } }
-    .auth-head img{ width:34px; height:34px }
-    .auth-head h1{ margin:0; font-size:clamp(.95rem, 2.2vw, 1.05rem); color:var(--green); font-weight:700 }
+
+    /* Voltar DENTRO do header (mobile) */
+    .back-link-inline{
+      display:inline-flex; align-items:center; gap:.4rem;
+      font-weight:700; padding:.5rem .7rem;
+      background:#eef7ef; border:1px solid #d5ead7; color:var(--green-2);
+      border-radius:999px; text-wrap:nowrap; box-shadow:var(--shadow);
+      flex:0 0 auto;
+    }
+    .back-link-inline:hover{ text-decoration:none; filter:brightness(1.02) }
+    @media (prefers-color-scheme: dark){
+      .back-link-inline{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 }
+    }
+
+    /* Voltar FIXO (desktop) */
+    .back-link-fixed{
+      position:fixed; z-index:5; display:none;   /* escondido por defeito (mobile) */
+      top:24px; left:24px;                        /* como tinhas no desktop */
+      font-weight:700; padding:.5rem .7rem;
+      background:#eef7ef; border:1px solid #d5ead7; color:var(--green-2);
+      border-radius:999px; text-wrap:nowrap; box-shadow:var(--shadow);
+    }
+    .back-link-fixed:hover{ text-decoration:none; filter:brightness(1.02) }
+    @media (prefers-color-scheme: dark){
+      .back-link-fixed{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 }
+    }
+
+    /* A partir de 900px: mostra o fixo e esconde o inline */
+    @media (min-width:900px){
+      .back-link-fixed{ display:inline-flex }
+      .back-link-inline{ display:none }
+    }
+
+    .brand{ display:flex; align-items:center; gap:.6rem; min-width:0 }
+    .brand img{ width:34px; height:34px; flex:0 0 auto }
+    .brand h1{ margin:0; font-size:clamp(.95rem, 2.2vw, 1.05rem); color:var(--green); font-weight:700;
+               white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 
     .auth-body{
-      padding:1rem 1rem .9rem;
-      flex:1 1 auto;
-      overflow:auto; -webkit-overflow-scrolling:touch;
-      scroll-padding-bottom: 96px;
+      padding:1rem 1rem .9rem; flex:1 1 auto;
+      overflow:auto; -webkit-overflow-scrolling:touch; scroll-padding-bottom:96px;
     }
 
     .title{ margin:.1rem 0 .2rem; font-size:clamp(1.25rem, 5vw, 1.5rem); font-weight:700; color:#1b5e20 }
@@ -85,14 +103,9 @@
 
     .input-wrap{ position:relative }
     input{
-      width:100%;
-      padding: .9rem .95rem;
-      border:1px solid #cfd9cf;
-      border-radius:12px;
-      outline:none;
-      background:#fff;
-      font:16px/1.2 inherit;        /* evita zoom iOS */
-      min-height:44px;               /* alvo de toque */
+      width:100%; padding:.9rem .95rem;
+      border:1px solid #cfd9cf; border-radius:12px; outline:none; background:#fff;
+      font:16px/1.2 inherit; min-height:44px;
       box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
       transition: box-shadow .15s ease, border-color .15s ease;
     }
@@ -102,7 +115,6 @@
       box-shadow:0 0 0 3px color-mix(in srgb, #3a7d44 20%, transparent), inset 0 1px 2px rgba(0,0,0,.02);
     }
 
-    /* Mostrar/ocultar password — igual ao login */
     .toggle-pass{
       position:absolute; right:.45rem; top:50%; transform:translateY(-50%);
       border:0; background:#eef7ef; color:var(--green-2);
@@ -114,17 +126,11 @@
       .toggle-pass{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 }
     }
 
-    /* Medidor de força — fino */
     .meter{margin:.35rem 0 .1rem; height:8px; background:#f0f2f0; border-radius:999px; overflow:hidden; border:1px solid #e6ece6}
     .meter > span{display:block; height:100%; width:0; transition:width .25s ease; background:linear-gradient(90deg,#ff6b6b,#ffd166,#9be15d)}
 
-    .actions{
-      display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-top:.3rem;
-      flex-wrap:wrap;
-    }
-
     .terms{ display:flex; align-items:flex-start; gap:.55rem; margin-top:.4rem; font-size:.98rem }
-    .terms input{ width:auto; margin-top:.25rem; inline-size:1.05rem; block-size:1.05rem }
+    .terms input{ inline-size:1.05rem; block-size:1.05rem; margin-top:.25rem }
 
     .btn{
       display:inline-block; width:100%;
@@ -138,44 +144,36 @@
     .muted{ text-align:center; font-size:.98rem; color:#566; margin:.7rem 0 0 }
     @media (prefers-color-scheme: dark){ .muted{ color:#90a49a } }
 
-    /* Voltar — igual ao login mas com z-index e safe-area */
-    .back-link{
-      position:fixed; z-index:5;
-      top:max(10px, calc(env(safe-area-inset-top) + 6px));
-      left:max(10px, calc(env(safe-area-inset-left) + 6px));
-      font-weight:700; padding:.5rem .7rem;
-      background:#eef7ef; border:1px solid #d5ead7; color:var(--green-2); border-radius:999px;
-      text-wrap:nowrap; box-shadow:var(--shadow);
-    }
-    @media (prefers-color-scheme: dark){
-      .back-link{ background:#122018; border-color:#1e3b2e; color:#a9e0b6 }
-    }
-
-    /* Ecrãs estreitos — tal como no login */
-    @media (max-width: 520px){
-      .auth-card{ margin:0 }
-      .auth-head{ padding:.8rem .9rem }
+    @media (max-width:520px){
+      .auth-head{ padding:.6rem .6rem }
       .auth-body{ padding:.9rem .9rem .8rem }
+      .brand h1{ max-width:52vw }
     }
 
-    @media (min-width: 720px){
+    @media (min-width:720px){
       body{ padding:24px }
       .auth-card{ width:min(100%, 520px) }
     }
 
     @media (prefers-reduced-motion: reduce){
-      * { animation:none!important; transition:none!important }
+      *{ animation:none!important; transition:none!important }
     }
   </style>
 </head>
 <body>
 
-  <a href="index.html" class="back-link">← Voltar</a>
+  <!-- Voltar FIXO (visível só no desktop) -->
+  <a href="index.html" class="back-link-fixed">← Voltar</a>
 
   <main class="auth-card" role="main">
     <div class="auth-head">
-      <img src="Imagens/Aldeia.png" alt="Logótipo" loading="lazy" decoding="async">
-      <h1>Aldeias Seguras Pessoas Seguras</h1>
+      <!-- Voltar INLINE (visível só no mobile/tablet) -->
+      <a href="index.html" class="back-link-inline">← Voltar</a>
+
+      <div class="brand">
+        <img src="Imagens/Aldeia.png" alt="Logótipo" loading="lazy" decoding="async">
+        <h1>Aldeias Seguras Pessoas Seguras</h1>
+      </div>
     </div>
 
     <div class="auth-body">
@@ -230,7 +228,7 @@
   </main>
 
   <script>
-    // Mostrar/ocultar password (mesmo comportamento do login)
+    // Mostrar/ocultar password
     document.querySelectorAll('.toggle-pass').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const targetId = btn.getAttribute('data-target');
@@ -244,23 +242,24 @@
       });
     });
 
-    // Indicador de força simples
+    // Força da password
     const passInput = document.getElementById('password');
     const meterFill = document.getElementById('meterFill');
     function scorePassword(p){
-      let s = 0; if(!p) return 0;
+      let s = 0;
+      if(!p) return 0;
       if(p.length >= 8) s++;
       if(/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
       if(/\d/.test(p)) s++;
       if(/[^\w\s]/.test(p)) s++;
       return s;
     }
-    passInput?.addEventListener('input', ()=>{
+    passInput.addEventListener('input', ()=>{
       const s = scorePassword(passInput.value);
       meterFill.style.width = (s*25)+'%';
     });
 
-    // Validação acessível (igual ao login)
+    // Validação
     const form = document.getElementById('registerForm');
     const nomeErr = document.getElementById('nomeErr');
     const emailErr = document.getElementById('emailErr');
@@ -298,7 +297,7 @@
     });
     document.getElementById('terms').addEventListener('change', ()=> hideErr(termsErr));
 
-    // Fix de altura quando o teclado abre (mesmo do login)
+    // Ajuste quando o teclado abre (mobile)
     const card = document.querySelector('.auth-card');
     function fixViewportHeight(){
       if(window.visualViewport){
