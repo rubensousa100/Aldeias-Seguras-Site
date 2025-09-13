@@ -15,36 +15,28 @@
     html{scroll-behavior:smooth}
     body{margin:0;font-family:'Roboto',sans-serif;color:var(--text);line-height:1.6;display:flex;flex-direction:column;min-height:100vh;background:#fff}
 
-    /* ===== HEADER (forçar tudo numa linha, sem quebras) ===== */
+    /* ===== HEADER ===== */
     header{
       background:#fff;display:flex;align-items:center;justify-content:space-between;
       padding:1rem 2rem;box-shadow:var(--shadow);position:sticky;top:0;z-index:1000;gap:1rem;
-      white-space:nowrap; /* evita quebras no header inteiro */
+      white-space:nowrap;overflow:visible; /* evita quebra e corte do botão menu */
     }
     .logo{display:flex;align-items:center;gap:10px;min-width:0}
     .logo img{width:35px;height:35px}
     .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    nav{
-      display:flex;align-items:center;gap:.9rem;flex-wrap:nowrap; /* não permitir wrap */
-      min-width:0;
-    }
-    nav ul{
-      list-style:none;display:flex;gap:1.1rem;margin:0;padding:0;flex-wrap:nowrap; /* não permitir wrap */
-    }
-    nav a{
-      text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem;white-space:nowrap; /* links numa linha */
-    }
+    nav{display:flex;align-items:center;gap:.9rem;flex-wrap:nowrap;min-width:0}
+    nav ul{list-style:none;display:flex;gap:1.1rem;margin:0;padding:0;flex-wrap:nowrap}
+    nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem;white-space:nowrap}
 
-    /* select + botão login */
     #langSwitch{
       border:1px solid #cfe7d0;border-radius:22px;padding:.35rem .9rem;
-      color:#2e7d32;background:#fff;font-weight:600;white-space:nowrap;height:40px; /* altura fixa igual ao botão */
+      color:#2e7d32;background:#fff;font-weight:600;white-space:nowrap;height:40px;
     }
     .login-btn{
       display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
-      height:40px; padding:0 16px; border-radius:26px; border:1px solid #2a6d35;
-      background:var(--green);color:#fff !important;font-weight:700;text-decoration:none;white-space:nowrap;line-height:1; /* impedir “Registar” ir para baixo */
+      height:40px;padding:0 16px;border-radius:26px;border:1px solid #2a6d35;
+      background:var(--green);color:#fff !important;font-weight:700;text-decoration:none;white-space:nowrap;line-height:1;
       transition:background .2s,transform .1s;
     }
     .login-btn:hover{background:#2a6f2d;transform:translateY(-1px)}
@@ -53,7 +45,7 @@
     /* ===== MENU MOBILE ===== */
     .burger{
       display:none;width:40px;height:40px;border:1px solid #cfe7d0;border-radius:10px;background:#fff;cursor:pointer;
-      align-items:center;justify-content:center;flex:0 0 auto;
+      align-items:center;justify-content:center;flex:0 0 auto; box-shadow:0 6px 14px rgba(0,0,0,.10);
     }
     .burger span{display:block;width:18px;height:2px;background:#2e7d32;position:relative}
     .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:#2e7d32}
@@ -61,12 +53,27 @@
 
     .mobile-nav{
       position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid var(--line);
-      padding:1rem 1.25rem 2rem; overflow:auto; display:none !important; z-index:2000;
+      padding:1rem 1.25rem 2.5rem; overflow:auto; display:none !important; z-index:2000;
     }
     .mobile-nav.open{display:block !important}
-    .mobile-nav a{display:block;padding:.85rem 0;font-weight:700;font-size:1.18rem;color:var(--green);text-decoration:none}
+    .mobile-nav a{display:block;padding:.9rem 0;font-weight:800;font-size:2rem;color:var(--green);text-decoration:none}
     .mobile-nav a:hover{text-decoration:underline}
-    .mobile-nav .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+
+    /* bloco do PT + botão login, em linha no mobile */
+    .mobile-nav .actions{
+      display:flex;gap:.75rem;align-items:center;margin-top:.8rem;flex-wrap:nowrap;
+    }
+    /* PT como chip pequeno */
+    #langSwitch2{
+      -webkit-appearance:none;appearance:none;
+      height:36px;line-height:36px;padding:0 .9rem;border-radius:18px;border:1px solid #cfe7d0;
+      background:#fff;color:#2e7d32;font-weight:700;white-space:nowrap;max-width:100%; /* sem ocupar a largura toda */
+    }
+    /* botão login grande/oval no menu mobile */
+    .mobile-nav .login-btn{
+      height:56px;font-size:1.35rem;padding:0 22px;border-radius:32px;flex:0 0 auto;
+    }
+
     .scrim{position:fixed;inset:var(--header-h) 0 0 0;background:rgba(0,0,0,.28);backdrop-filter:saturate(120%) blur(2px);display:none !important;z-index:1500}
     .scrim.open{display:block !important}
     body.no-scroll{position:fixed;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
@@ -77,7 +84,7 @@
     }
     @media (max-width:900px){
       :root{ --header-h:64px }
-      header{padding:.8rem 1rem}
+      header{padding:.8rem 1.2rem}   /* +folga à direita para o botão não parecer cortado */
       nav ul{display:none}
       #langSwitch,.login-btn{display:none}
       .burger{display:flex}
@@ -112,7 +119,6 @@
     .badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
       background:#eef7ef;color:#2e7d32;border:1px solid #d5ead7;font-size:1rem;flex:0 0 28px}
 
-    /* Form */
     form .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
     @media (max-width:640px){form .row{grid-template-columns:1fr}}
     label{display:block;font-weight:600;color:#1f3b22;margin:.2rem 0 .25rem}
@@ -172,6 +178,8 @@
     <a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a>
     <a href="Incendio.html">Fogo à Vista</a>
     <a href="contacto.html" data-i18n="nav.contact">Contacto</a>
+
+    <!-- AQUI: chip PT + botão grande lado a lado -->
     <div class="actions">
       <select id="langSwitch2" aria-label="Idioma">
         <option value="pt">PT</option>
@@ -304,6 +312,7 @@
       scrim?.addEventListener('click',closeNav);
       window.addEventListener('keydown',e=>{if(e.key==='Escape')closeNav();});
 
+      // i18n mínimo
       const LS_KEY='lang';const lang1=document.getElementById('langSwitch');const lang2=document.getElementById('langSwitch2');
       function apply(dict){document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(dict[k]!=null)el.innerHTML=dict[k];});document.documentElement.lang=(dict===fallback.en?'en':'pt');}
       async function fetchDict(l){try{const r=await fetch(`i18n/${l}.json`,{cache:'no-cache'});if(!r.ok)throw 0;return await r.json();}catch(_){return fallback[l]||fallback.pt}}
