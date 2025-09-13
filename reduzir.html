@@ -14,18 +14,38 @@
       --shadow:0 2px 6px rgba(0,0,0,.08);
     }
     body{margin:0;font-family:'Roboto',sans-serif;color:#333;line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
-    header{background:#fff;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);position:sticky;top:0;z-index:1000}
-    header .logo{display:flex;align-items:center;gap:10px}
+
+    /* ===== Header unificado (igual ao index) ===== */
+    header{
+      background:#fff;display:flex;align-items:center;justify-content:space-between;
+      padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);
+      position:sticky;top:0;z-index:1000;gap:1rem
+    }
+    header .logo{display:flex;align-items:center;gap:10px;min-width:0}
     header .logo img{width:35px;height:35px}
-    header .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem}
+    header .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* NAV desktop */
+    nav{display:flex;align-items:center;gap:1rem}
     nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
     nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
+    #langSwitch{border:1px solid #cfe7d0;border-radius:20px;padding:.25rem .6rem;color:#2e7d32;background:#fff;font-weight:600}
+    .login-btn{background:var(--green);color:#fff !important;padding:.35rem .8rem;border-radius:25px;font-weight:700;border:1px solid #2e6b39;transition:background .3s,transform .2s;text-decoration:none;font-size:.9rem}
+    .login-btn:hover{background:#2e6b39;transform:scale(1.05)}
 
+    /* Botão menu (mobile) */
+    .menu-toggle{
+      display:none;border:1px solid #cfe7d0;background:#fff;color:var(--green);
+      padding:.45rem .7rem;border-radius:10px;font-weight:700;cursor:pointer
+    }
+
+    /* ===== Hero ===== */
     .hero{background:url('Imagens/Incendio20.jpg') center/cover no-repeat;color:#fff;height:35vh;display:flex;justify-content:center;align-items:center;text-align:center;position:relative}
     .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
     .hero-content{position:relative;z-index:1;max-width:900px}
     .hero h2{font-size:2rem;margin:0}
 
+    /* ===== Conteúdo ===== */
     .content{padding:2rem;max-width:1100px;margin:0 auto}
     .content h3{color:var(--green);margin-top:2rem}
     .lead{background:#f8faf8;border-left:6px solid var(--green);padding:1rem 1.2rem;border-radius:8px;margin:1rem 0}
@@ -47,72 +67,66 @@
     .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
     .video-grid iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:10px;box-shadow:var(--shadow)}
 
-    /* Acordeão (FAQ) */
+    /* ===== Acordeão (FAQ) ===== */
     .accordion{border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
     .acc-item+.acc-item{border-top:1px solid var(--line)}
-    .acc-btn{
-      width:100%;text-align:left;padding:1rem;display:flex;justify-content:space-between;align-items:center;
-      background:#fff;border:0;font:inherit;cursor:pointer
-    }
+    .acc-btn{width:100%;text-align:left;padding:1rem;display:flex;justify-content:space-between;align-items:center;background:#fff;border:0;font:inherit;cursor:pointer}
     .acc-btn span{font-weight:600;color:#222}
     .acc-icon{font-weight:700;font-size:1.2rem;line-height:1}
     .acc-panel{display:none;padding:0 1rem 1rem;background:#fff}
     .acc-item.open .acc-panel{display:block}
     .acc-item.open .acc-btn{background:#fafafa}
 
-    .inline-pill{
-      display:inline-block; padding:.2rem .55rem; border-radius:999px; background:#eef7ef; border:1px solid #d5ead7;
-      color:var(--green-2); font-weight:600; text-decoration:none;
-    }
+    .inline-pill{display:inline-block;padding:.2rem .55rem;border-radius:999px;background:#eef7ef;border:1px solid #d5ead7;color:var(--green-2);font-weight:600;text-decoration:none}
 
+    /* ===== Emergência & Footer ===== */
     .emergency{background:#e1f8e4;padding:.5rem 1rem;width:100%;margin:2rem auto;border-top:2px solid var(--green-2);border-bottom:2px solid var(--green-2);border-radius:8px;display:flex;flex-direction:column;align-items:center}
     .emergency h3{color:#c0392b;font-size:1.2rem;margin:.2rem 0}
     .emergency p{font-size:.95rem;margin:.2rem 0}
-
     footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
+
+    /* ===== Recursos oficiais ===== */
+    .links-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-top:.4rem}
+    .link-card{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .12s ease}
+    .link-card:hover{box-shadow:0 4px 10px rgba(0,0,0,.08)}
+    .link-card .body{padding:.6rem .75rem}
+    .link-card .title{display:flex;align-items:center;gap:.45rem;color:var(--green);font-weight:700;font-size:.95rem;margin:0}
+    .link-card .desc{margin:.2rem 0 .4rem;color:#555;font-size:.85rem;line-height:1.4}
+    .link-card .tag{display:inline-block;font-size:.75rem;background:#eef7ef;color:var(--green-2);padding:.12rem .4rem;border-radius:999px;border:1px solid #d5ead7}
+    @media(min-width:1200px){.links-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:640px){.links-grid{grid-template-columns:1fr}}
+
+    /* ===== Menu mobile (igual ao index) ===== */
+    @media (max-width: 900px){
+      header{padding:.7rem 1rem;gap:.6rem}
+      .menu-toggle{display:inline-flex;align-items:center;gap:.4rem}
+      #site-menu{
+        position:fixed;top:60px;left:0;right:0;background:#fff;
+        box-shadow:0 10px 30px rgba(0,0,0,.15);border-top:1px solid var(--line);
+        transform:translateY(-120%);transition:transform .18s ease-out;
+        z-index:1200;padding:.8rem 1rem 1rem;display:block
+      }
+      header.open #site-menu{transform:translateY(0)}
+      #site-menu ul{display:flex;flex-direction:column;align-items:center;gap:.9rem;margin:0 0 .6rem 0;padding:0;list-style:none}
+      #site-menu a{font-size:1.1rem}
+      #site-menu #langSwitch{width:100%;margin:.4rem 0}
+      #site-menu .login-btn{width:100%;text-align:center;margin-top:.2rem}
+      nav ul{flex-wrap:nowrap !important}
+    }
 
     @media(max-width:992px){.grid-3{grid-template-columns:1fr 1fr}.video-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:768px){.hero h2{font-size:1.5rem}.content{padding:1rem}.grid-2,.grid-3{grid-template-columns:1fr}.video-grid{grid-template-columns:1fr}}
-
-    /* --- RECURSOS OFICIAIS (versão compacta) --- */
-    .links-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:.6rem;
-      margin-top:.4rem;
-    }
-    .link-card{
-      display:block;
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:10px;
-      text-decoration:none;
-      color:inherit;
-      box-shadow:0 1px 3px rgba(0,0,0,.06);
-      transition:box-shadow .12s ease;
-    }
-    .link-card:hover{ box-shadow:0 4px 10px rgba(0,0,0,.08); }
-    .link-card .body{ padding:.6rem .75rem; }
-    .link-card .title{
-      display:flex; align-items:center; gap:.45rem;
-      color:var(--green); font-weight:700; font-size:.95rem; margin:0;
-    }
-    .link-card .desc{ margin:.2rem 0 .4rem; color:#555; font-size:.85rem; line-height:1.4; }
-    .link-card .tag{
-      display:inline-block; font-size:.75rem; background:#eef7ef; color:var(--green-2);
-      padding:.12rem .4rem; border-radius:999px; border:1px solid #d5ead7;
-    }
-    @media(min-width:1200px){ .links-grid{ grid-template-columns:repeat(3,1fr); } }
-    @media(max-width:640px){ .links-grid{ grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
+  <!-- ===== Header unificado ===== -->
   <header>
     <div class="logo">
       <img src="Imagens/Aldeia.png" alt="Logo">
       <h1>Aldeia Segura Pessoas Seguras</h1>
     </div>
-    <nav>
+    <button class="menu-toggle" aria-controls="site-menu" aria-expanded="false" aria-label="Abrir menu">☰</button>
+    <nav id="site-menu">
       <ul>
         <li><a href="index.html">Início</a></li>
         <li><a href="compreender.html">Compreender</a></li>
@@ -122,15 +136,22 @@
         <li><a href="Incendio.html">Fogo à Vista</a></li>
         <li><a href="contacto.html">Contacto</a></li>
       </ul>
+      <select id="langSwitch" aria-label="Idioma">
+        <option value="pt">PT</option>
+        <option value="en">EN</option>
+      </select>
+      <a href="login.html" class="login-btn">Login / Registar</a>
     </nav>
   </header>
 
+  <!-- ===== Hero ===== -->
   <section class="hero">
     <div class="hero-content">
       <h2>Reduzir o Risco de Incêndio</h2>
     </div>
   </section>
 
+  <!-- ===== Content ===== -->
   <section class="content">
     <div class="lead">
       <strong>Objetivo:</strong> diminuir a probabilidade de ignição, travar a propagação e proteger pessoas, casas e bens.
@@ -323,11 +344,8 @@
 
     <h3 id="videos">Vídeos explicativos</h3>
     <div class="video-grid">
-      <!-- 1º: o que pediste -->
       <iframe src="https://www.youtube.com/embed/GEmfZzHYtQU" title="Prevenção e Proteção Civil"></iframe>
-      <!-- 2º: o que estava em 1º -->
       <iframe src="https://www.youtube.com/embed/Gjm61V6NH4U" title="Vento e propagação do fogo"></iframe>
-      <!-- 3º: mantido -->
       <iframe src="https://www.youtube.com/embed/1ZyZ3v5r3Xw?rel=0" title="Como as casas ardem (brasas/IUF)"></iframe>
     </div>
 
@@ -413,15 +431,32 @@
 
   <section class="emergency">
     <h3>⚠️ Em caso de emergência ⚠️</h3>
-    <p>Ligue imediatamente <strong>112</strong> </p>
+    <p>Ligue imediatamente <strong>112</strong></p>
   </section>
 
   <footer>
     © 2025 Ruben Sousa · Todos os direitos reservados
   </footer>
 
+  <!-- ===== JS ===== -->
   <script>
-    // Acordeão: abre/fecha com ARIA e ícone +/–
+    // Toggle menu mobile (igual ao index)
+    (function(){
+      const header = document.querySelector('header');
+      const toggle = document.querySelector('.menu-toggle');
+      const links  = document.querySelectorAll('#site-menu a');
+      function setOpen(open){
+        header.classList.toggle('open', open);
+        if (toggle) toggle.setAttribute('aria-expanded', String(open));
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+      toggle?.addEventListener('click', ()=> setOpen(!header.classList.contains('open')));
+      links.forEach(a => a.addEventListener('click', ()=> setOpen(false)));
+      window.addEventListener('resize', ()=> { if (window.innerWidth > 900) setOpen(false); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+    })();
+
+    // Acordeão FAQ
     document.querySelectorAll('.acc-btn').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const item = btn.closest('.acc-item');
@@ -434,4 +469,3 @@
   </script>
 </body>
 </html>
-
