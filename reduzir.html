@@ -40,7 +40,7 @@
     }
 
     /* ===== Hero ===== */
-    .hero{background:url('Imagens/Incendio20.jpg') center/cover no-repeat;color:#fff;height:35vh;display:flex;justify-content:center;align-items:center;text-align:center;position:relative}
+    .hero{background:url('Imagens/incendio20.jpg') center/cover no-repeat;color:#fff;height:35vh;display:flex;justify-content:center;align-items:center;text-align:center;position:relative}
     .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
     .hero-content{position:relative;z-index:1;max-width:900px}
     .hero h2{font-size:2rem;margin:0}
@@ -96,26 +96,61 @@
     @media(min-width:1200px){.links-grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:640px){.links-grid{grid-template-columns:1fr}}
 
-    /* ===== Menu mobile (igual ao index) ===== */
-    @media (max-width: 900px){
-      header{padding:.7rem 1rem;gap:.6rem}
-      .menu-toggle{display:inline-flex;align-items:center;gap:.4rem}
-      #site-menu{
-        position:fixed;top:60px;left:0;right:0;background:#fff;
-        box-shadow:0 10px 30px rgba(0,0,0,.15);border-top:1px solid var(--line);
-        transform:translateY(-120%);transition:transform .18s ease-out;
-        z-index:1200;padding:.8rem 1rem 1rem;display:block
-      }
-      header.open #site-menu{transform:translateY(0)}
-      #site-menu ul{display:flex;flex-direction:column;align-items:center;gap:.9rem;margin:0 0 .6rem 0;padding:0;list-style:none}
-      #site-menu a{font-size:1.1rem}
-      #site-menu #langSwitch{width:100%;margin:.4rem 0}
-      #site-menu .login-btn{width:100%;text-align:center;margin-top:.2rem}
-      nav ul{flex-wrap:nowrap !important}
-    }
+/* ==== MENU MOBILE (igual ao index/compreender) ==== */
+@media (max-width: 900px){
+  header{ padding:.7rem 1rem; gap:.6rem; }
+  .menu-toggle{ display:inline-flex; align-items:center; gap:.4rem; }
 
-    @media(max-width:992px){.grid-3{grid-template-columns:1fr 1fr}.video-grid{grid-template-columns:1fr 1fr}}
-    @media(max-width:768px){.hero h2{font-size:1.5rem}.content{padding:1rem}.grid-2,.grid-3{grid-template-columns:1fr}.video-grid{grid-template-columns:1fr}}
+  /* Painel cobre o ecrã e pode fazer scroll */
+  #site-menu{
+    position:fixed;
+    top:60px;               /* altura do header sticky */
+    left:0; right:0; bottom:0;
+    max-height:calc(100vh - 60px);
+    overflow:auto;
+
+    background:#fff;
+    border-top:1px solid var(--line);
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+    transform:translateY(-120%);
+    transition:transform .18s ease-out;
+    z-index:1200;
+    padding:1rem 1.25rem 2rem;
+    display:block;
+  }
+  /* quando abre */
+  header.open #site-menu{ transform:translateY(0); }
+
+  /* Lista alinhada à esquerda com espaçamento grande (como no index) */
+  #site-menu ul{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;   /* <- esquerda */
+    gap:2rem;                 /* espaçamento como na 2ª imagem */
+    margin:0 0 1rem 0;
+    padding:0;
+    list-style:none;
+  }
+  #site-menu a{
+    font-size:1.6rem;         /* tamanho e peso iguais ao index */
+    font-weight:700;
+    text-decoration:none;
+    color:var(--green);
+  }
+
+  /* Controlos em mobile: alinhados à esquerda e largura “auto” */
+  #langSwitch{ width:auto; margin:.5rem 0 0 0; }
+  #site-menu .login-btn{
+    width:auto;               /* não ocupar 100% */
+    align-self:flex-start;    /* alinhar à esquerda */
+    margin-top:.8rem;
+    font-size:1.15rem;
+    padding:.6rem 1.1rem;
+  }
+
+  /* Evitar que o layout desktop interfira */
+  nav ul{ flex-wrap:nowrap !important; }
+}
   </style>
 </head>
 <body>
