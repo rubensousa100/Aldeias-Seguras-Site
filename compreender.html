@@ -17,7 +17,7 @@
     html{scroll-behavior:smooth}
     body{margin:0;font-family:'Roboto',sans-serif;background:#f6f7f6;color:var(--text);line-height:1.65;display:flex;flex-direction:column;min-height:100vh}
 
-    /* ===== HEADER ===== */
+    /* ===== HEADER (desktop) ===== */
     header{
       background:#fff;padding:1rem 2rem;
       display:flex;justify-content:space-between;align-items:center;
@@ -32,6 +32,7 @@
     nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
     nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
 
+    /* ações (iguais à home) */
     #langSwitch{
       border:1px solid #cfe7d0;border-radius:20px;
       padding:.25rem .6rem;color:#2e7d32;background:#fff;font-weight:600;
@@ -55,38 +56,10 @@
     .hero h2{font-size:2rem;margin:.2rem 0}
     .hero p{max-width:860px;margin:.4rem auto 0;opacity:.95}
 
-    /* ===== TOC fixa (igual "Reduzir") ===== */
-    .toc-bar{
-      position:sticky;
-      top:var(--header-h);
-      z-index:1100;
-      background:#fff;
-      border-bottom:1px solid var(--line);
-      box-shadow:0 1px 2px rgba(0,0,0,.03);
-    }
-    .toc-bar .wrap{max-width:1060px;margin:0 auto;padding:.5rem 1rem;}
-    .toc{
-      display:flex; gap:.6rem;
-      flex-wrap:nowrap; overflow-x:auto; white-space:nowrap;
-      -webkit-overflow-scrolling:touch; scrollbar-width:thin;
-      padding-bottom:.25rem;
-    }
-    .toc::-webkit-scrollbar{height:6px}
-    .toc::-webkit-scrollbar-thumb{background:#d7e9d9;border-radius:999px}
-
-    .pill{
-      flex:0 0 auto;
-      display:inline-flex; align-items:center; gap:.4rem;
-      padding:.45rem .8rem;
-      border:1px solid #d5ead7; border-radius:999px;
-      background:#eef7ef; color:var(--green);
-      font-size:.92rem; text-decoration:none;
-      box-shadow:0 1px 2px rgba(0,0,0,.04);
-    }
+    /* ===== TOC (igual ao Reduzir, NÃO sticky) ===== */
+    .toc{display:flex;flex-wrap:wrap;gap:.6rem;margin:1rem 0 1.25rem}
+    .pill{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .8rem;border:1px solid var(--line);border-radius:999px;background:#eef7ef;color:#2d4733;font-size:.92rem;text-decoration:none;box-shadow:0 1px 2px rgba(0,0,0,.04);border-color:#d5ead7}
     .pill.active{background:var(--mint);border-color:#cfe8d3}
-
-    /* garante que âncoras não ficam escondidas pelo header+toc */
-    [id]{ scroll-margin-top: calc(var(--header-h) + 54px); }
 
     .content{max-width:1060px;margin:1.2rem auto 2.6rem;padding:0 1.1rem}
     .lead{background:#f8faf8;border-left:6px solid var(--green);padding:1rem 1.2rem;border-radius:8px;box-shadow:var(--shadow);margin:.5rem 0 1.2rem}
@@ -136,16 +109,21 @@
 
     footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
 
-    /* ===== Mobile Nav ===== */
+    /* ===== Mobile Nav (apenas <900px) ===== */
     .burger{
       display:none; width:40px; height:40px; border:1px solid #cfe7d0;
       border-radius:10px; background:#fff; cursor:pointer;
       align-items:center; justify-content:center;
     }
-    .burger span{display:block; width:18px; height:2px; background:#2e7d32; position:relative}
-    .burger span::before,.burger span::after{content:""; position:absolute; left:0; width:18px; height:2px; background:#2e7d32}
+    .burger span{
+      display:block; width:18px; height:2px; background:#2e7d32; position:relative;
+    }
+    .burger span::before,.burger span::after{
+      content:""; position:absolute; left:0; width:18px; height:2px; background:#2e7d32;
+    }
     .burger span::before{ top:-6px } .burger span::after{ top:6px }
 
+    /* SEMPRE escondido por defeito; abre só com .open */
     .mobile-nav{
       position:fixed; inset:var(--header-h) 0 0 0;
       background:#fff; border-top:1px solid var(--line);
@@ -153,40 +131,49 @@
       display:none !important; z-index:2000;
     }
     .mobile-nav.open{ display:block !important; }
+
     .scrim{
       position:fixed; inset:var(--header-h) 0 0 0;
       background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px);
       display:none !important; z-index:1500;
     }
     .scrim.open{ display:block !important; }
-    .mobile-nav a{ display:block; padding:.85rem 0; font-weight:700; font-size:1.18rem; }
-    .mobile-nav a:link,.mobile-nav a:visited{ color:var(--green); text-decoration:none; }
+
+    /* ESTILO dos links do painel mobile */
+    .mobile-nav a{
+      display:block; padding:.85rem 0;
+      font-weight:700; font-size:1.18rem;
+    }
+    .mobile-nav a:link,
+    .mobile-nav a:visited{ color:var(--green); text-decoration:none; }
     .mobile-nav a:hover{ text-decoration:underline; }
     .mobile-nav .actions{ display:flex; gap:.6rem; align-items:center; margin-top:.6rem }
+
+    /* bloquear scroll quando menu abre (iOS-safe) */
     body.no-scroll{ position:fixed; width:100%; overflow:hidden; overscroll-behavior:none; touch-action:none; }
 
+    /* Desktop seguro: nada do mobile aparece */
     @media (min-width:901px){
       .mobile-nav,.scrim{ display:none !important; }
       .burger{ display:none !important; }
     }
+    /* Tablet/Telemóvel */
     @media (max-width:900px){
-      :root{ --header-h:64px; }
+      :root{ --header-h: 64px; }
       header{ padding:.8rem 1rem }
       nav ul{ display:none }
-      #langSwitch, .login-btn{ display:none }
+      #langSwitch, .login-btn{ display:none } /* ficam no painel mobile */
       .burger{ display:flex }
     }
+    /* Telemóveis pequenos */
     @media (max-width:600px){
-      :root{ --header-h:56px; }
+      :root{ --header-h: 56px; }
       .mobile-nav, .scrim{ inset:var(--header-h) 0 0 0; }
     }
 
     /* Conteúdos responsivos */
     @media (max-width:980px){.grid-3{grid-template-columns:1fr 1fr}}
-    @media (max-width:760px){
-      .grid-2,.grid-3{grid-template-columns:1fr}
-      .hero h2{font-size:1.6rem}
-    }
+    @media (max-width:760px){.grid-2,.grid-3{grid-template-columns:1fr}.hero h2{font-size:1.6rem}}
   </style>
 </head>
 <body>
@@ -214,7 +201,10 @@
       </select>
       <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
 
-      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
+      <!-- hamburger (só em mobile) -->
+      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+        <span></span>
+      </button>
     </nav>
   </header>
 
@@ -228,6 +218,7 @@
     <a href="aldeias.html"      data-i18n="nav.villages">Aldeias Seguras</a>
     <a href="Incendio.html">Fogo à Vista</a>
     <a href="contacto.html"     data-i18n="nav.contact">Contacto</a>
+
     <div class="actions">
       <select id="langSwitch2" aria-label="Idioma">
         <option value="pt">PT</option>
@@ -243,25 +234,21 @@
     <p>Os incêndios não são todos iguais. O risco combina a probabilidade de acontecer, a força do fogo e o que pode ser atingido. Veja como cada peça se liga e por onde agir primeiro.</p>
   </section>
 
-  <!-- TOC fixa ao topo -->
-  <nav class="toc-bar" aria-label="Navegação de secções">
-    <div class="wrap">
-      <div class="toc">
-        <a class="pill" href="#visao">Visão geral</a>
-        <a class="pill" href="#equacao">Equação do risco</a>
-        <a class="pill" href="#probabilidade">Probabilidade</a>
-        <a class="pill" href="#intensidade">Intensidade</a>
-        <a class="pill" href="#exposicao">Exposição</a>
-        <a class="pill" href="#suscetibilidade">Suscetibilidade</a>
-        <a class="pill" href="#comportamento">Comportamento do fogo</a>
-        <a class="pill" href="#organizacao">Resposta & comando</a>
-        <a class="pill" href="#faq">FAQ</a>
-        <a class="pill" href="#artigos">Artigos</a>
-      </div>
-    </div>
-  </nav>
-
+  <!-- TOC NO INÍCIO DO CONTEÚDO (não sticky) -->
   <section class="content" id="visao">
+    <div class="toc" aria-label="Navegação de secções">
+      <a class="pill" href="#visao">Visão geral</a>
+      <a class="pill" href="#equacao">Equação do risco</a>
+      <a class="pill" href="#probabilidade">Probabilidade</a>
+      <a class="pill" href="#intensidade">Intensidade</a>
+      <a class="pill" href="#exposicao">Exposição</a>
+      <a class="pill" href="#suscetibilidade">Suscetibilidade</a>
+      <a class="pill" href="#comportamento">Comportamento do fogo</a>
+      <a class="pill" href="#organizacao">Resposta & comando</a>
+      <a class="pill" href="#faq">FAQ</a>
+      <a class="pill" href="#artigos">Artigos</a>
+    </div>
+
     <div class="lead">
       <span class="eyebrow">Objetivo</span>
       <p>Explicar, de forma clara e prática, como o risco de incêndio rural resulta do encontro entre <em>perigo</em> (probabilidade × intensidade) e <em>vulnerabilidade</em> (exposição × suscetibilidade). A página apresenta os quatro fatores, ilustra o comportamento do fogo e descreve, de alto nível, a organização da resposta.</p>
@@ -401,10 +388,10 @@
 
   <footer>© 2025 Ruben Sousa · Todos os direitos reservados</footer>
 
-  <!-- JS: acordeão + TOC + mobile nav -->
+  <!-- JS: acordeão + toc + mobile nav -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      /* === Mobile nav (com scrim e scroll lock) === */
+      /* === Mobile nav toggle (com scrim e scroll lock) — só mobile === */
       (function(){
         const burger = document.querySelector('.burger');
         const panel  = document.getElementById('mobileNav');
@@ -461,8 +448,8 @@
         if (icon) icon.textContent = isOpen ? '–' : '+';
       });
 
-      /* === Destacar pill ativa conforme secção visível === */
-      const pills = document.querySelectorAll('.toc-bar .pill');
+      /* === Destacar pill ativa (opcional) — funciona com .toc ou .subnav, se existir em outras páginas === */
+      const pills = document.querySelectorAll('.toc .pill, .subnav .pill');
       const sections = [...pills].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
       if (sections.length) {
         const obs = new IntersectionObserver((entries)=>{
@@ -473,6 +460,17 @@
         }, {rootMargin:'-40% 0px -55% 0px', threshold:[0, .25, .5, .75, 1]});
         sections.forEach(s=>obs.observe(s));
       }
+
+      /* limpeza de text nodes “fantasma”, se existirem (mantido do teu original) */
+      try {
+        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+        var del = [], n;
+        while ((n = walker.nextNode())) {
+          var s = (n.nodeValue || '').trim();
+          if (s === 'ection>' || s === '$1') del.push(n);
+        }
+        del.forEach(function (t) { if (t && t.parentNode) t.parentNode.removeChild(t); });
+      } catch (e) {}
     });
   </script>
 </body>
