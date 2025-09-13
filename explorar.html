@@ -99,6 +99,26 @@
   .legend b{display:block;margin:.1rem 0 .4rem}
   .legend .src{margin-top:.45rem;padding-top:.35rem;border-top:1px solid #eee;font-size:.85rem;color:#555}
 
+  /* ===== LEGENDA COMPACTA EM MOBILE ===== */
+  .legend { position: relative; }
+  .legend .legend-title{
+    display:flex; align-items:center; gap:.4rem; cursor:pointer; user-select:none;
+    font-weight:700; line-height:1.2;
+  }
+  .legend .legend-body{ margin-top:.4rem; }
+  .legend .chev{ display:none; } /* só mostraremos em mobile */
+
+  @media (max-width: 768px){
+    .legend{ max-width:75vw; padding:.5rem .6rem; font-size:.9rem }
+    .legend .legend-body{ max-height:35vh; overflow:auto; }
+    .legend.collapsed .legend-body{ display:none; } /* estado fechado */
+    .legend .chev{ display:inline-block; transition:transform .2s }
+    .legend.open .chev{ transform:rotate(90deg) } /* indicador aberto */
+
+    /* (opcional) caixas de cor um pouco menores em mobile */
+    .legend .legend-body span[style*="width:18px"]{ width:14px !important; height:10px !important; }
+  }
+
   .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;background:#ffe9e9;color:#a33;border:1px solid #f5b5b5;border-radius:10px;padding:.5rem .8rem;display:none;z-index:9999}
 
   .emergency{background:#e1f8e4;padding:.5rem 1rem;width:100%;margin:2rem auto;border-top:2px solid var(--green-2);border-bottom:2px solid var(--green-2);border-radius:8px;display:flex;flex-direction:column;align-items:center}
@@ -109,6 +129,7 @@
   @media (max-width:992px){ #map{width:95%} .hero h2{font-size:1.6rem} }
 </style>
 </head>
+
 <body>
 
 <!-- ===== HEADER ===== -->
@@ -414,6 +435,43 @@
     });
   });
 
+  /* ===== LEGENDA COLAPSÁVEL (helper) ===== */
+  function makeCollapsibleLegend(title, itemsHTML, sourceText){
+    const ctl = L.control({ position:'bottomright' });
+    ctl.onAdd = ()=>{
+      const div = L.DomUtil.create('div','legend collapsed'); // começa fechada em mobile
+      div.innerHTML = `
+        <div class="legend-title" role="button" tabindex="0" aria-expanded="false">
+          <span class="chev">▶</span><span>${title}</span>
+        </div>
+        <div class="legend-body">
+          ${itemsHTML}
+          ${sourceText ? `<div class="src">${sourceText}</div>` : ``}
+        </div>`;
+      // impedir propagação para o mapa
+      L.DomEvent.disableClickPropagation(div);
+      L.DomEvent.disableScrollPropagation(div);
+
+      const btn  = div.querySelector('.legend-title');
+      function toggle(open){
+        const willOpen = (open!=null)? open : div.classList.contains('collapsed');
+        div.classList.toggle('collapsed', !willOpen);
+        div.classList.toggle('open', willOpen);
+        btn.setAttribute('aria-expanded', String(willOpen));
+      }
+      btn.addEventListener('click', ()=>toggle());
+      btn.addEventListener('keydown', e=>{
+        if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); }
+      });
+
+      // Em desktop, abre por defeito; em mobile fica fechada
+      if (!matchMedia('(max-width:768px)').matches) toggle(true);
+
+      return div;
+    };
+    return ctl;
+  }
+
   Promise.all([pFreg,pOcup,pAlt,pArd,pSlp,pPeri]).then(()=>{
     const overlays = {
       'Freguesias (Arcos de Valdevez)': layerFreg,
@@ -426,33 +484,54 @@
     L.control.layers(null, overlays, { collapsed:false }).addTo(map);
     if (layerFreg) layerFreg.addTo(map);
 
-    // Legendas
-    const legendOcup = L.control({ position:'bottomright' });
-    legendOcup.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Ocupação do solo</b>';
-      Object.entries(OCUP_COLORS).forEach(([lbl,clr])=>{
-        div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:${clr};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}</div>`;
-      });
-      div.innerHTML+=`<div class="src">Fonte: Dados provenientes da COS2018</div>`; return div; };
+    /* ===== LEGENDAS (versão colapsável) ===== */
+    const legendOcup = makeCollapsibleLegend(
+      'Ocupação do solo',
+      Object.entries(OCUP_COLORS).map(([lbl, clr]) =>
+        `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
+          <span style="width:18px;height:12px;background:${clr};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}
+        </div>`
+      ).join(''),
+      'Fonte: Dados provenientes da COS2018'
+    );
 
-    const legendAlt = L.control({ position:'bottomright' });
-    legendAlt.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Altitude (m)</b>';
-      ALT_LABELS.forEach(lbl=>{ div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:${ALT_COLORS[lbl]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}</div>`; });
-      div.innerHTML+=`<div class="src">Fonte: Dados provenientes do CIGeoE</div>`; return div; };
+    const legendAlt = makeCollapsibleLegend(
+      'Altitude (m)',
+      ALT_LABELS.map(lbl =>
+        `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
+          <span style="width:18px;height:12px;background:${ALT_COLORS[lbl]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}
+        </div>`
+      ).join(''),
+      'Fonte: Dados provenientes do CIGeoE'
+    );
 
-    const legendArd = L.control({ position:'bottomright' });
-    legendArd.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Área ardida (1975–2024)</b>';
-      div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:#ff0000;display:inline-block;border:1px solid #555;border-radius:2px;"></span> Área ardida</div>`;
-      div.innerHTML+=`<div class="src">Fonte: Dados provenientes do ICNF</div>`; return div; };
+    const legendArd = makeCollapsibleLegend(
+      'Área ardida (1975–2024)',
+      `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
+         <span style="width:18px;height:12px;background:#ff0000;display:inline-block;border:1px solid #555;border-radius:2px;"></span> Área ardida
+       </div>`,
+      'Fonte: Dados provenientes do ICNF'
+    );
 
-    const legendSlp = L.control({ position:'bottomright' });
-    legendSlp.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Declive (%)</b>';
-      SLP_LABELS.forEach(lbl=>{ div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:${SLP_COLORS[lbl]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}</div>`; });
-      div.innerHTML+=`<div class="src">Fonte: Dados provenientes do CIGeoE</div>`; return div; };
+    const legendSlp = makeCollapsibleLegend(
+      'Declive (%)',
+      SLP_LABELS.map(lbl =>
+        `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
+          <span style="width:18px;height:12px;background:${SLP_COLORS[lbl]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${lbl}
+        </div>`
+      ).join(''),
+      'Fonte: Dados provenientes do CIGeoE'
+    );
 
-    const legendPeri = L.control({ position:'bottomright' });
-    legendPeri.onAdd = ()=>{ const div=L.DomUtil.create('div','legend'); div.innerHTML='<b>Classe de Perigosidade</b>';
-      [0,1,2,3,4,5].forEach(code=>{ div.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;margin:3px 0;"><span style="width:18px;height:12px;background:${PERI_COLORS[code]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${PERI_CLASS_NAME[code]}</div>`; });
-      div.innerHTML+=`<div class="src">Fonte: Dados provenientes do ICNF</div>`; return div; };
+    const legendPeri = makeCollapsibleLegend(
+      'Classe de Perigosidade',
+      [0,1,2,3,4,5].map(code =>
+        `<div style="display:flex;align-items:center;gap:6px;margin:3px 0;">
+          <span style="width:18px;height:12px;background:${PERI_COLORS[code]};display:inline-block;border:1px solid #555;border-radius:2px;"></span>${PERI_CLASS_NAME[code]}
+        </div>`
+      ).join(''),
+      'Fonte: Dados provenientes do ICNF'
+    );
 
     function refreshLegends(){
       if (map.hasLayer(layerOcup)) legendOcup.addTo(map); else legendOcup.remove();
@@ -471,6 +550,6 @@
     toast('Erro a carregar camadas: ' + (err.message||err));
   });
 </script>
+
 </body>
 </html>
-
