@@ -1,140 +1,143 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contacto | Aldeia Segura Pessoas Seguras</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
-  <style>
-    :root{
-      --green:#2e7d32; --green-2:#2e7d32;
-      --mint:#e8f5e9; --line:#e7e7e7;
-      --shadow:0 2px 6px rgba(0,0,0,.08);
-      --text:#333;
-      --header-h:72px; /* desktop header height */
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;font-family:'Roboto',sans-serif;color:var(--text);line-height:1.6;display:flex;flex-direction:column;min-height:100vh;background:#fff}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contacto | Aldeia Segura Pessoas Seguras</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
 
-    /* ===== HEADER (desktop, igual às outras páginas) ===== */
-    header{
-      background:#fff;display:flex;align-items:center;justify-content:space-between;
-      padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);
-      position:sticky;top:0;z-index:1000;gap:1rem
-    }
-    .logo{display:flex;align-items:center;gap:10px;min-width:0}
-    .logo img{width:35px;height:35px}
-    .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+<style>
+  :root{
+    --green:#2e7d32; --green-2:#2e7d32;
+    --line:#e7e7e7; --text:#333;
+    --header-h:72px; /* altura do header em desktop */
+    --shadow:0 2px 8px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Roboto',system-ui,-apple-system,Segoe UI,Ubuntu,"Helvetica Neue",Arial;background:#f6f7f6;color:var(--text);line-height:1.6;display:flex;flex-direction:column;min-height:100vh}
 
-    nav{display:flex;align-items:center;gap:1rem}
-    nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
-    nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
+  /* ===== HEADER (igual às outras páginas) ===== */
+  header{
+    background:#fff;display:flex;align-items:center;justify-content:space-between;
+    padding:1rem 2rem;box-shadow:0 2px 5px rgba(0,0,0,.1);
+    position:sticky;top:0;z-index:5000;gap:1rem
+  }
+  .logo{display:flex;align-items:center;gap:10px;min-width:0}
+  .logo img{width:35px;height:35px}
+  .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    #langSwitch{
-      border:1px solid #cfe7d0;border-radius:20px;padding:.25rem .6rem;
-      color:#2e7d32;background:#fff;font-weight:600
-    }
-    .login-btn{
-      background:var(--green);color:#fff !important;padding:.45rem .95rem;border-radius:25px;
-      font-weight:700;border:1px solid #2e6b39;transition:background .2s,transform .1s;text-decoration:none
-    }
-    .login-btn:hover{background:#2a6f2d;transform:translateY(-1px)}
-    .login-btn:active{transform:translateY(0)}
+  nav{display:flex;align-items:center;gap:1rem}
+  nav ul{list-style:none;display:flex;gap:1.2rem;margin:0;padding:0}
+  nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem}
 
-    /* ===== MENU MOBILE (igual) ===== */
-    .burger{
-      display:none;width:40px;height:40px;border:1px solid #cfe7d0;border-radius:10px;background:#fff;cursor:pointer;
-      align-items:center;justify-content:center
-    }
-    .burger span{display:block;width:18px;height:2px;background:#2e7d32;position:relative}
-    .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:#2e7d32}
-    .burger span::before{top:-6px}.burger span::after{top:6px}
+  #langSwitch{
+    border:1px solid #cfe7d0;border-radius:20px;padding:.25rem .6rem;
+    color:#2e7d32;background:#fff;font-weight:600
+  }
+  .login-btn{
+    background:var(--green);color:#fff !important;padding:.45rem .95rem;border-radius:25px;
+    font-weight:700;border:1px solid #2e6b39;transition:background .2s,transform .1s;text-decoration:none
+  }
+  .login-btn:hover{background:#2a6f2d;transform:translateY(-1px)}
+  .login-btn:active{transform:translateY(0)}
 
-    .mobile-nav{
-      position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid var(--line);
-      padding:1rem 1.25rem 2rem; overflow:auto; display:none !important; z-index:2000;
-    }
-    .mobile-nav.open{display:block !important}
-    .mobile-nav a{display:block;padding:.85rem 0;font-weight:700;font-size:1.18rem}
-    .mobile-nav a:link,.mobile-nav a:visited{color:var(--green);text-decoration:none}
-    .mobile-nav a:hover{text-decoration:underline}
-    .mobile-nav .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+  /* ===== MENU MOBILE (igual às outras) ===== */
+  .burger{
+    display:none;width:40px;height:40px;border:1px solid #cfe7d0;border-radius:10px;background:#fff;cursor:pointer;
+    align-items:center;justify-content:center
+  }
+  .burger span{display:block;width:18px;height:2px;background:#2e7d32;position:relative}
+  .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:#2e7d32}
+  .burger span::before{top:-6px}.burger span::after{top:6px}
 
-    .scrim{
-      position:fixed; inset:var(--header-h) 0 0 0; background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px);
-      display:none !important; z-index:1500;
-    }
-    .scrim.open{display:block !important}
-    body.no-scroll{position:fixed;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
+  .mobile-nav{
+    position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid #e7e7e7;
+    padding:1rem 1.25rem 2rem; overflow:auto; display:none !important; z-index:2000;
+  }
+  .mobile-nav.open{display:block !important}
+  .mobile-nav a{display:block;padding:.85rem 0;font-weight:700;font-size:1.18rem}
+  .mobile-nav a:link,.mobile-nav a:visited{color:var(--green);text-decoration:none}
+  .mobile-nav a:hover{text-decoration:underline}
+  .mobile-nav .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
 
-    @media (min-width:901px){
-      .mobile-nav,.scrim{display:none !important}
-      .burger{display:none !important}
-    }
-    @media (max-width:900px){
-      :root{ --header-h:64px; }
-      header{padding:.8rem 1rem}
-      nav ul{display:none}
-      #langSwitch,.login-btn{display:none}
-      .burger{display:flex}
-    }
-    @media (max-width:600px){
-      :root{ --header-h:56px; }
-      .mobile-nav,.scrim{inset:var(--header-h) 0 0 0}
-    }
+  .scrim{
+    position:fixed; inset:var(--header-h) 0 0 0; background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px);
+    display:none !important; z-index:1500;
+  }
+  .scrim.open{display:block !important}
 
-    /* ===== HERO (igual) ===== */
-    .hero{
-      background:url('Imagens/incendio20.jpg') center/cover no-repeat;
-      color:#fff;height:35vh;text-align:center;display:flex;flex-direction:column;justify-content:center;position:relative
-    }
-    .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
-    .hero-content{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 1rem}
-    .hero h2{font-size:2rem;margin:.6rem 0 .2rem}
-    .hero p{font-size:1.05rem;margin:0}
+  /* Desktop: painel mobile escondido */
+  @media (min-width:901px){
+    .mobile-nav,.scrim{display:none !important}
+    .burger{display:none !important}
+  }
+  /* Tablet/Telemóvel */
+  @media (max-width:900px){
+    :root{ --header-h:64px; }
+    header{padding:.8rem 1rem}
+    nav ul{display:none}
+    #langSwitch,.login-btn{display:none} /* estes vão para o painel mobile */
+    .burger{display:flex}
+  }
+  /* Telemóveis pequenos */
+  @media (max-width:600px){
+    :root{ --header-h:56px; }
+    .mobile-nav,.scrim{inset:var(--header-h) 0 0 0}
+  }
 
-    /* ===== CONTEÚDO ===== */
-    .wrap{max-width:1100px;margin:1.75rem auto 2.5rem;padding:0 1.2rem}
-    .grid{display:grid;grid-template-columns: 1.1fr .9fr;gap:1.25rem}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  /* ===== HERO (igual em estilo às outras) ===== */
+  .hero{
+    background:url('Imagens/Incendio20.jpg') center/cover no-repeat;
+    color:#fff;text-align:center;padding:3rem 1rem;position:relative
+  }
+  .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
+  .hero h2{position:relative;z-index:1;margin:0;font-size:2rem}
+  .hero p{position:relative;z-index:1;margin:.5rem 0 0}
 
-    .card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
-    .card .head{padding:1rem 1.25rem;border-bottom:1px solid var(--line);background:#f9fbf9}
-    .card .head h3{margin:0;color:var(--green)}
-    .card .body{padding:1rem 1.25rem}
+  /* ===== CONTACTO ===== */
+  .wrap{max-width:1100px;margin:1.5rem auto 2.5rem;padding:0 1.2rem}
+  .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1.25rem}
+  @media (max-width:900px){ .grid{grid-template-columns:1fr} }
 
-    .info{display:grid;gap:.6rem;margin:0;padding:0;list-style:none}
-    .info li{display:flex;gap:.6rem;align-items:flex-start}
-    .badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
-      background:#eef7ef;color:#2e7d32;border:1px solid #d5ead7;font-size:1rem;flex:0 0 28px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+  .card .head{padding:1rem 1.25rem;border-bottom:1px solid var(--line);background:#f9fbf9}
+  .card .head h3{margin:0;color:var(--green)}
+  .card .body{padding:1rem 1.25rem}
 
-    form .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-    @media (max-width:640px){form .row{grid-template-columns:1fr}}
-    label{display:block;font-weight:600;color:#1f3b22;margin:.2rem 0 .25rem}
-    input,select,textarea{
-      width:100%;padding:.78rem .85rem;border:1px solid #cfd9cf;border-radius:8px;
-      font:16px/1.4 'Roboto',sans-serif;background:#fff;outline:none;box-shadow:inset 0 1px 2px rgba(0,0,0,.02);
-    }
-    input:focus,select:focus,textarea:focus{border-color:#9acd9e;box-shadow:0 0 0 3px rgba(58,125,68,.12),inset 0 1px 2px rgba(0,0,0,.02)}
-    textarea{min-height:140px;resize:vertical}
+  .info{display:grid;gap:.6rem;margin:0;padding:0;list-style:none}
+  .info li{display:flex;gap:.6rem;align-items:flex-start}
+  .badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
+         background:#eef7ef;color:var(--green-2);border:1px solid #d5ead7;font-size:1rem;flex:0 0 28px}
 
-    .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem;flex-wrap:wrap}
-    button{padding:.85rem 1.15rem;border:0;border-radius:10px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#2e7d32,#256b2a);color:#fff;box-shadow:0 2px 8px rgba(46,125,50,.25)}
-    button:hover{filter:brightness(1.03)}
-    .ghost{background:#eef7ef;color:#2e7d32;border:1px solid #cfe7d2;box-shadow:none;font-weight:600}
-    .hint{font-size:.9rem;color:#566;margin:.2rem 0 0}
+  form .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  @media (max-width:640px){ form .row{grid-template-columns:1fr} }
+  label{display:block;font-weight:600;color:#1f3b22;margin:.2rem 0 .25rem}
+  input,select,textarea{
+    width:100%;padding:.75rem .8rem;border:1px solid #cfd9cf;border-radius:8px;font:inherit;background:#fff;
+    outline:none;box-shadow:inset 0 1px 2px rgba(0,0,0,.02)
+  }
+  input:focus,select:focus,textarea:focus{border-color:#9acd9e;box-shadow:0 0 0 3px rgba(46,125,50,.12), inset 0 1px 2px rgba(0,0,0,.02)}
+  textarea{min-height:140px;resize:vertical}
 
-    .emergency{margin-top:1rem;padding:.85rem 1rem;border-radius:10px;background:#fff3f3;border:1px solid #ffcdd2}
-    .emergency b{color:#c62828}
+  .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+  button{
+    padding:.75rem 1.1rem;border:0;border-radius:10px;font-weight:700;cursor:pointer;
+    background:linear-gradient(180deg,#2e7d32,#256b2a);color:#fff;box-shadow:0 2px 8px rgba(46,125,50,.25)
+  }
+  button:hover{filter:brightness(1.03)}
+  .ghost{background:#eef7ef;color:#2e7d32;border:1px solid #cfe7d2;box-shadow:none;font-weight:600}
+  .hint{font-size:.9rem;color:#566;margin:.2rem 0 0}
 
-    .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1b5e20;color:#fff;padding:.7rem 1rem;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.18);font-size:.95rem;display:none;z-index:2000}
-    footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
-  </style>
+  .emergency{margin-top:1rem;padding:.85rem 1rem;border-radius:10px;background:#fff3f3;border:1px solid #ffcdd2}
+  .emergency b{color:#c62828}
+
+  footer{background:#fff;padding:.7rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555;border-top:1px solid var(--line)}
+</style>
 </head>
 <body>
 
-  <!-- ===== HEADER ===== -->
+  <!-- HEADER (copiado 1:1) -->
   <header>
     <div class="logo">
       <img src="Imagens/Aldeia.png" alt="Logo">
@@ -143,33 +146,39 @@
 
     <nav aria-label="Principal">
       <ul>
-        <li><a href="index.html" data-i18n="nav.home">Início</a></li>
-        <li><a href="compreender.html" data-i18n="nav.understand">Compreender</a></li>
-        <li><a href="explorar.html" data-i18n="nav.explore">Explorar</a></li>
-        <li><a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a></li>
-        <li><a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a></li>
+        <li><a href="index.html"        data-i18n="nav.home">Início</a></li>
+        <li><a href="compreender.html"  data-i18n="nav.understand">Compreender</a></li>
+        <li><a href="explorar.html"     data-i18n="nav.explore">Explorar</a></li>
+        <li><a href="reduzir.html"      data-i18n="nav.reduce">Reduzir</a></li>
+        <li><a href="aldeias.html"      data-i18n="nav.villages">Aldeias Seguras</a></li>
         <li><a href="Incendio.html">Fogo à Vista</a></li>
-        <li><a href="contacto.html" data-i18n="nav.contact">Contacto</a></li>
+        <li><a href="contacto.html"     data-i18n="nav.contact">Contacto</a></li>
       </ul>
+
       <select id="langSwitch" aria-label="Idioma">
         <option value="pt">PT</option>
         <option value="en">EN</option>
       </select>
       <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
-      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
+
+      <!-- hamburger (só em mobile) -->
+      <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+        <span></span>
+      </button>
     </nav>
   </header>
 
-  <!-- SCRIM + MENU MOBILE (idêntico) -->
+  <!-- SCRIM + MENU MOBILE (igual às outras) -->
   <div id="scrim" class="scrim" aria-hidden="true"></div>
   <aside id="mobileNav" class="mobile-nav" aria-hidden="true">
-    <a href="index.html" data-i18n="nav.home">Início</a>
-    <a href="compreender.html" data-i18n="nav.understand">Compreender</a>
-    <a href="explorar.html" data-i18n="nav.explore">Explorar</a>
-    <a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a>
-    <a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a>
+    <a href="index.html"        data-i18n="nav.home">Início</a>
+    <a href="compreender.html"  data-i18n="nav.understand">Compreender</a>
+    <a href="explorar.html"     data-i18n="nav.explore">Explorar</a>
+    <a href="reduzir.html"      data-i18n="nav.reduce">Reduzir</a>
+    <a href="aldeias.html"      data-i18n="nav.villages">Aldeias Seguras</a>
     <a href="Incendio.html">Fogo à Vista</a>
-    <a href="contacto.html" data-i18n="nav.contact">Contacto</a>
+    <a href="contacto.html"     data-i18n="nav.contact">Contacto</a>
+
     <div class="actions">
       <select id="langSwitch2" aria-label="Idioma">
         <option value="pt">PT</option>
@@ -179,18 +188,17 @@
     </div>
   </aside>
 
-  <!-- ===== HERO ===== -->
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-content">
-      <h2>Contacto</h2>
-      <p>Fala connosco — dúvidas, sugestões, parcerias ou reporte de risco.</p>
-    </div>
+    <h2>Contacto</h2>
+    <p>Fala connosco — dúvidas, sugestões, parcerias ou reporte de risco.</p>
   </section>
 
-  <!-- ===== CONTEÚDO ===== -->
+  <!-- CONTEÚDO -->
   <main class="wrap">
     <div class="grid">
-      <!-- Coluna: Informação -->
+
+      <!-- Contactos -->
       <section class="card">
         <div class="head"><h3>Contactos úteis</h3></div>
         <div class="body">
@@ -232,7 +240,7 @@
         </div>
       </section>
 
-      <!-- Coluna: Formulário -->
+      <!-- Formulário -->
       <section class="card">
         <div class="head"><h3>Envia-nos uma mensagem</h3></div>
         <div class="body">
@@ -276,20 +284,19 @@
               <button type="button" class="ghost" id="mailtoBtn">Abrir no e-mail</button>
             </div>
             <p class="hint">Sem servidor? O botão “Abrir no e-mail” compõe uma mensagem no teu cliente de e-mail.</p>
-
             <p class="hint" style="margin-top:.6rem">
               <small><b>Privacidade:</b> os dados serão usados apenas para responder ao teu pedido.</small>
             </p>
           </form>
         </div>
       </section>
+
     </div>
   </main>
 
-  <div id="toast" class="toast">A abrir o teu e-mail…</div>
   <footer>© 2025 Ruben Sousa · Todos os direitos reservados</footer>
 
-  <!-- ===== MENU MOBILE + i18n (igual) ===== -->
+  <!-- JS: menu mobile + sync idioma (idêntico às outras) + mailto -->
   <script>
     (function(){
       const burger = document.querySelector('.burger');
@@ -316,7 +323,7 @@
         window.addEventListener('keydown', e=>{ if(e.key==='Escape') closeNav(); });
       }
 
-      /* i18n mínimo, igual às outras */
+      // i18n: sincronizar selects desktop <-> mobile
       const LS_KEY='lang';
       const lang1=document.getElementById('langSwitch');
       const lang2=document.getElementById('langSwitch2');
@@ -345,6 +352,7 @@
       lang1?.addEventListener('change',e=>setLang(e.target.value));
       lang2?.addEventListener('change',e=>setLang(e.target.value));
 
+      // fallback mínimo (apenas header/rodapé)
       const fallback={pt:{
         "site.title":"Aldeia Segura Pessoas Seguras",
         "nav.home":"Início","nav.understand":"Compreender","nav.explore":"Explorar","nav.reduce":"Reduzir","nav.villages":"Aldeias Seguras","nav.contact":"Contacto","nav.login":"Login / Registar"
@@ -353,24 +361,35 @@
         "nav.home":"Home","nav.understand":"Understand","nav.explore":"Explore","nav.reduce":"Reduce","nav.villages":"Safe Villages","nav.contact":"Contact","nav.login":"Login / Sign up"
       }};
     })();
-  </script>
 
-  <!-- ===== FORM: mailto helper ===== -->
-  <script>
-    const CONTACT_EMAIL='contacto@aldeiasseguras.pt';
+    /* ====== Formulário via mailto (site estático) ====== */
+    const CONTACT_EMAIL = 'contacto@aldeiasseguras.pt';
     function buildMailto(){
-      const nome=document.getElementById('nome').value.trim();
-      const email=document.getElementById('email').value.trim();
-      const assunto=document.getElementById('assunto').value||'Contacto';
-      const telefone=document.getElementById('telefone').value.trim();
-      const mensagem=document.getElementById('mensagem').value.trim();
-      const subject=`[Site] ${assunto} — ${nome||'Sem nome'}`;
-      const body=`Nome: ${nome}\nE-mail: ${email}\nTelefone: ${telefone||'—'}\nAssunto: ${assunto}\n\nMensagem:\n${mensagem}\n\n— Enviado via página de contacto`;
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const assunto = document.getElementById('assunto').value || 'Contacto';
+      const telefone = document.getElementById('telefone').value.trim();
+      const mensagem = document.getElementById('mensagem').value.trim();
+      const subject = `[Site] ${assunto} — ${nome || 'Sem nome'}`;
+      const body =
+`Nome: ${nome}
+E-mail: ${email}
+Telefone: ${telefone || '—'}
+Assunto: ${assunto}
+
+Mensagem:
+${mensagem}
+
+— Enviado via página de contacto`;
       return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
-    function toast(msg){const t=document.getElementById('toast');t.textContent=msg||'A abrir…';t.style.display='block';setTimeout(()=>t.style.display='none',2000);}
-    document.getElementById('mailtoBtn').addEventListener('click',()=>{window.location.href=buildMailto();toast('A abrir o teu e-mail…')});
-    document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();window.location.href=buildMailto();toast('A abrir o teu e-mail…')});
+    document.getElementById('mailtoBtn').addEventListener('click', ()=>{
+      window.location.href = buildMailto();
+    });
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      window.location.href = buildMailto();
+    });
   </script>
 </body>
 </html>
