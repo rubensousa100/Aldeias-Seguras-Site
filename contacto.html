@@ -15,165 +15,159 @@
     html{scroll-behavior:smooth}
     body{margin:0;font-family:'Roboto',sans-serif;color:var(--text);line-height:1.6;display:flex;flex-direction:column;min-height:100vh;background:#fff}
 
-    /* ===== HEADER ===== */
+    /* ===== HEADER (desktop) ===== */
     header{
-      background:#fff;display:flex;align-items:center;justify-content:space-between;
-      padding:1rem 2rem;box-shadow:var(--shadow);position:sticky;top:0;z-index:1000;gap:1rem;
-      white-space:nowrap;overflow:visible; /* evita quebra e corte do botão menu */
+      position:sticky; top:0; z-index:1000;
+      background:#fff; box-shadow:var(--shadow);
+      display:flex; align-items:center; justify-content:space-between; gap:1rem;
+      padding:1rem 1.25rem; overflow:visible; white-space:nowrap;
     }
-    .logo{display:flex;align-items:center;gap:10px;min-width:0}
-    .logo img{width:35px;height:35px}
-    .logo h1{margin:0;color:var(--green);font-weight:700;font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .logo{display:flex; align-items:center; gap:10px; min-width:0}
+    .logo img{width:35px; height:35px}
+    .logo h1{margin:0; color:var(--green); font-weight:700; font-size:1.1rem; overflow:hidden; text-overflow:ellipsis}
 
-    nav{display:flex;align-items:center;gap:.9rem;flex-wrap:nowrap;min-width:0}
-    nav ul{list-style:none;display:flex;gap:1.1rem;margin:0;padding:0;flex-wrap:nowrap}
-    nav a{text-decoration:none;color:var(--green);font-weight:500;font-size:.95rem;white-space:nowrap}
-
+    nav{display:flex; align-items:center; gap:1rem; min-width:0}
+    nav ul{list-style:none; display:flex; gap:1.1rem; margin:0; padding:0}
+    nav a{text-decoration:none; color:var(--green); font-weight:500; font-size:.95rem}
     #langSwitch{
-      border:1px solid #cfe7d0;border-radius:22px;padding:.35rem .9rem;
-      color:#2e7d32;background:#fff;font-weight:600;white-space:nowrap;height:40px;
+      border:1px solid #cfe7d0; border-radius:22px; padding:.35rem .9rem; height:40px;
+      color:#2e7d32; background:#fff; font-weight:600;
     }
     .login-btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
-      height:40px;padding:0 16px;border-radius:26px;border:1px solid #2a6d35;
-      background:var(--green);color:#fff !important;font-weight:700;text-decoration:none;white-space:nowrap;line-height:1;
-      transition:background .2s,transform .1s;
+      display:inline-flex; align-items:center; justify-content:center; height:40px;
+      padding:0 16px; border-radius:26px; border:1px solid #2a6d35; background:var(--green);
+      color:#fff !important; font-weight:700; text-decoration:none; line-height:1;
+      transition:background .2s, transform .1s;
     }
-    .login-btn:hover{background:#2a6f2d;transform:translateY(-1px)}
+    .login-btn:hover{background:#2a6f2d; transform:translateY(-1px)}
     .login-btn:active{transform:translateY(0)}
 
-    /* ===== MENU MOBILE ===== */
+    /* ===== HAMBURGUER ===== */
     .burger{
-      display:none;width:40px;height:40px;border:1px solid #cfe7d0;border-radius:10px;background:#fff;cursor:pointer;
-      align-items:center;justify-content:center;flex:0 0 auto; box-shadow:0 6px 14px rgba(0,0,0,.10);
+      display:none; width:44px; height:44px; flex:0 0 44px;
+      border:1px solid #cfe7d0; border-radius:12px; background:#fff; cursor:pointer;
+      align-items:center; justify-content:center;
+      box-shadow:0 6px 14px rgba(0,0,0,.08);
     }
-    .burger span{display:block;width:18px;height:2px;background:#2e7d32;position:relative}
-    .burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:#2e7d32}
-    .burger span::before{top:-6px}.burger span::after{top:6px}
+    .burger span{display:block; width:20px; height:2px; background:#2e7d32; position:relative}
+    .burger span::before,.burger span::after{content:""; position:absolute; left:0; width:20px; height:2px; background:#2e7d32}
+    .burger span::before{top:-6px} .burger span::after{top:6px}
+
+    /* ===== MENU MOBILE (drawer bonito) ===== */
+    .scrim{
+      position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; z-index:1500;
+      backdrop-filter:saturate(120%) blur(2px);
+    }
+    .scrim.open{display:block}
 
     .mobile-nav{
-      position:fixed; inset:var(--header-h) 0 0 0; background:#fff; border-top:1px solid var(--line);
-      padding:1rem 1.25rem 2.5rem; overflow:auto; display:none !important; z-index:2000;
+      position:fixed; top:0; right:0; bottom:0; left:0; display:none; z-index:2000;
+      padding:calc(12px + env(safe-area-inset-top,0)) 18px calc(20px + env(safe-area-inset-bottom,0));
+      background:#fff;
+      overflow:auto; -webkit-overflow-scrolling:touch;
     }
-    .mobile-nav.open{display:block !important}
-    .mobile-nav a{display:block;padding:.9rem 0;font-weight:800;font-size:2rem;color:var(--green);text-decoration:none}
-    .mobile-nav a:hover{text-decoration:underline}
+    .mobile-nav.open{display:block}
+    .mobile-header{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px;
+    }
+    .mobile-title{font-weight:700; color:var(--green); font-size:1.05rem; letter-spacing:.2px}
+    .mobile-close{
+      width:44px; height:44px; border-radius:12px; border:1px solid #cfe7d0; background:#fff; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; box-shadow:0 6px 14px rgba(0,0,0,.08);
+    }
+    .mobile-close:before,.mobile-close:after{content:""; position:absolute; width:18px; height:2px; background:#2e7d32}
+    .mobile-close{position:relative}
+    .mobile-close:before{transform:rotate(45deg)}
+    .mobile-close:after{transform:rotate(-45deg)}
 
-    /* bloco do PT + botão login, em linha no mobile */
-    .mobile-nav .actions{
-      display:flex;gap:.75rem;align-items:center;margin-top:.8rem;flex-wrap:nowrap;
+    .mobile-list{margin:8px 0 14px; padding:0; list-style:none}
+    .mobile-list a{
+      display:block; padding:14px 4px; border-radius:10px;
+      font-weight:800; font-size:1.35rem; color:var(--green); text-decoration:none;
     }
-    /* PT como chip pequeno */
+    .mobile-list a:active{background:#f1f7f1}
+
+    .mobile-actions{
+      display:flex; align-items:center; gap:10px; margin-top:4px; flex-wrap:nowrap;
+    }
+    /* chip PT curtinho */
     #langSwitch2{
-      -webkit-appearance:none;appearance:none;
-      height:36px;line-height:36px;padding:0 .9rem;border-radius:18px;border:1px solid #cfe7d0;
-      background:#fff;color:#2e7d32;font-weight:700;white-space:nowrap;max-width:100%; /* sem ocupar a largura toda */
+      -webkit-appearance:none; appearance:none;
+      height:36px; line-height:36px; padding:0 12px;
+      border-radius:18px; border:1px solid #cfe7d0; background:#fff; color:#2e7d32; font-weight:700;
+      width:fit-content; max-width:fit-content; min-width:0;
     }
-    /* botão login grande/oval no menu mobile */
-    .mobile-nav .login-btn{
-      height:56px;font-size:1.35rem;padding:0 22px;border-radius:32px;flex:0 0 auto;
+    /* botão oval grande */
+    .mobile-actions .login-btn{
+      height:52px; font-size:1.15rem; padding:0 18px; border-radius:28px; flex:1 1 auto; min-width:0;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     }
 
-    .scrim{position:fixed;inset:var(--header-h) 0 0 0;background:rgba(0,0,0,.28);backdrop-filter:saturate(120%) blur(2px);display:none !important;z-index:1500}
-    .scrim.open{display:block !important}
-    body.no-scroll{position:fixed;width:100%;overflow:hidden;overscroll-behavior:none;touch-action:none}
-
-    @media (min-width:901px){
-      .mobile-nav,.scrim{display:none !important}
-      .burger{display:none !important}
-    }
     @media (max-width:900px){
       :root{ --header-h:64px }
-      header{padding:.8rem 1.2rem}   /* +folga à direita para o botão não parecer cortado */
+      header{padding:.8rem 1rem}
       nav ul{display:none}
       #langSwitch,.login-btn{display:none}
       .burger{display:flex}
     }
     @media (max-width:600px){
       :root{ --header-h:56px }
-      .mobile-nav,.scrim{inset:var(--header-h) 0 0 0}
     }
 
     /* ===== HERO ===== */
     .hero{
       background:url('Imagens/Incendio20.jpg') center/cover no-repeat #111;
-      color:#fff;height:35vh;text-align:center;display:flex;flex-direction:column;justify-content:center;position:relative
+      color:#fff; height:35vh; text-align:center; display:flex; flex-direction:column; justify-content:center; position:relative
     }
-    .hero::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}
-    .hero-content{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 1rem}
-    .hero h2{font-size:2rem;margin:.6rem 0 .2rem}
-    .hero p{font-size:1.05rem;margin:0}
+    .hero::after{content:""; position:absolute; inset:0; background:rgba(0,0,0,.45)}
+    .hero-content{position:relative; z-index:1; max-width:900px; margin:0 auto; padding:0 1rem}
+    .hero h2{font-size:2rem; margin:.6rem 0 .2rem}
+    .hero p{font-size:1.05rem; margin:0}
 
     /* ===== CONTEÚDO ===== */
-    .wrap{max-width:1100px;margin:1.75rem auto 2.5rem;padding:0 1.2rem}
-    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1.25rem}
+    .wrap{max-width:1100px; margin:1.75rem auto 2.5rem; padding:0 1.2rem}
+    .grid{display:grid; grid-template-columns:1.1fr .9fr; gap:1.25rem}
     @media (max-width:900px){.grid{grid-template-columns:1fr}}
 
-    .card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
-    .card .head{padding:1rem 1.25rem;border-bottom:1px solid var(--line);background:#f9fbf9}
-    .card .head h3{margin:0;color:var(--green)}
+    .card{background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); overflow:hidden}
+    .card .head{padding:1rem 1.25rem; border-bottom:1px solid var(--line); background:#f9fbf9}
+    .card .head h3{margin:0; color:var(--green)}
     .card .body{padding:1rem 1.25rem}
 
-    .info{display:grid;gap:.6rem;margin:0;padding:0;list-style:none}
-    .info li{display:flex;gap:.6rem;align-items:flex-start}
-    .badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
-      background:#eef7ef;color:#2e7d32;border:1px solid #d5ead7;font-size:1rem;flex:0 0 28px}
+    .info{display:grid; gap:.6rem; margin:0; padding:0; list-style:none}
+    .info li{display:flex; gap:.6rem; align-items:flex-start}
+    .badge{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%;
+      background:#eef7ef; color:#2e7d32; border:1px solid #d5ead7; font-size:1rem; flex:0 0 28px}
 
-    form .row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    form .row{display:grid; grid-template-columns:1fr 1fr; gap:.8rem}
     @media (max-width:640px){form .row{grid-template-columns:1fr}}
-    label{display:block;font-weight:600;color:#1f3b22;margin:.2rem 0 .25rem}
+    label{display:block; font-weight:600; color:#1f3b22; margin:.2rem 0 .25rem}
     input,select,textarea{
-      width:100%;padding:.78rem .85rem;border:1px solid #cfd9cf;border-radius:8px;
-      font:16px/1.4 'Roboto',sans-serif;background:#fff;outline:none;box-shadow:inset 0 1px 2px rgba(0,0,0,.02);
+      width:100%; padding:.78rem .85rem; border:1px solid #cfd9cf; border-radius:8px;
+      font:16px/1.4 'Roboto',sans-serif; background:#fff; outline:none; box-shadow:inset 0 1px 2px rgba(0,0,0,.02);
     }
-    input:focus,select:focus,textarea:focus{border-color:#9acd9e;box-shadow:0 0 0 3px rgba(58,125,68,.12),inset 0 1px 2px rgba(0,0,0,.02)}
-    textarea{min-height:140px;resize:vertical}
-    .actions{display:flex;gap:.6rem;align-items:center;margin-top:.6rem;flex-wrap:wrap}
-    button{padding:.85rem 1.15rem;border:0;border-radius:10px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#2e7d32,#256b2a);color:#fff;box-shadow:0 2px 8px rgba(46,125,50,.25)}
-    button:hover{filter:brightness(1.03)}
-    .ghost{background:#eef7ef;color:#2e7d32;border:1px solid #cfe7d2;box-shadow:none;font-weight:600}
-    .hint{font-size:.9rem;color:#566;margin:.2rem 0 0}
+    input:focus,select:focus,textarea:focus{border-color:#9acd9e; box-shadow:0 0 0 3px rgba(58,125,68,.12), inset 0 1px 2px rgba(0,0,0,.02)}
+    textarea{min-height:140px; resize:vertical}
 
-    .emergency{margin-top:1rem;padding:.85rem 1rem;border-radius:10px;background:#fff3f3;border:1px solid #ffcdd2}
+    .actions{display:flex; gap:.6rem; align-items:center; margin-top:.6rem; flex-wrap:wrap}
+    button{padding:.85rem 1.15rem; border:0; border-radius:10px; font-weight:700; cursor:pointer; background:linear-gradient(180deg,#2e7d32,#256b2a); color:#fff; box-shadow:0 2px 8px rgba(46,125,50,.25)}
+    button:hover{filter:brightness(1.03)}
+    .ghost{background:#eef7ef; color:#2e7d32; border:1px solid #cfe7d2; box-shadow:none; font-weight:600}
+    .hint{font-size:.9rem; color:#566; margin:.2rem 0 0}
+
+    .emergency{margin-top:1rem; padding:.85rem 1rem; border-radius:10px; background:#fff3f3; border:1px solid #ffcdd2}
     .emergency b{color:#c62828}
 
-    .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1b5e20;color:#fff;padding:.7rem 1rem;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.18);font-size:.95rem;display:none;z-index:2000}
-    footer{background:#fff;padding:.5rem;text-align:center;margin-top:auto;font-size:.9rem;color:#555}
-
-    /* === Ajustes finos: menu mobile === */
-.mobile-nav{ padding:1rem 1.25rem calc(2.5rem + env(safe-area-inset-bottom, 0)) 1.25rem; }
-
-.mobile-nav .actions{
-  display:flex;
-  gap:.75rem;
-  align-items:center;
-  margin-top:1rem;
-  flex-wrap:nowrap;
-  padding-bottom:env(safe-area-inset-bottom, 0); /* evita “corte” no iPhone */
-}
-
-/* PT em formato chip, largura mínima possível */
-#langSwitch2{
-  -webkit-appearance:none; appearance:none;
-  height:36px; line-height:36px;
-  padding:0 .9rem;
-  border-radius:18px; border:1px solid #cfe7d0;
-  background:#fff; color:#2e7d32; font-weight:700;
-  display:inline-flex; align-items:center;
-  width:fit-content; max-width:fit-content; min-width:0; /* 👈 não alarga */
-}
-
-/* Botão grande/oval, mas sem ultrapassar a direita */
-.mobile-nav .login-btn{
-  height:56px; font-size:1.35rem; padding:0 22px; border-radius:32px;
-  flex:1 1 auto;                /* encolhe se for preciso */
-  min-width:0;                  /* evita overflow */
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-
+    .toast{
+      position:fixed; left:50%; bottom:20px; transform:translateX(-50%);
+      background:#1b5e20; color:#fff; padding:.7rem 1rem; border-radius:999px; box-shadow:0 6px 20px rgba(0,0,0,.18);
+      font-size:.95rem; display:none; z-index:2000
+    }
+    footer{background:#fff; padding:.5rem; text-align:center; margin-top:auto; font-size:.9rem; color:#555}
   </style>
 </head>
 <body>
+
   <!-- ===== HEADER ===== -->
   <header>
     <div class="logo">
@@ -203,16 +197,22 @@
   <!-- SCRIM + MENU MOBILE -->
   <div id="scrim" class="scrim" aria-hidden="true"></div>
   <aside id="mobileNav" class="mobile-nav" aria-hidden="true">
-    <a href="index.html" data-i18n="nav.home">Início</a>
-    <a href="compreender.html" data-i18n="nav.understand">Compreender</a>
-    <a href="explorar.html" data-i18n="nav.explore">Explorar</a>
-    <a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a>
-    <a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a>
-    <a href="Incendio.html">Fogo à Vista</a>
-    <a href="contacto.html" data-i18n="nav.contact">Contacto</a>
+    <div class="mobile-header">
+      <div class="mobile-title">Menu</div>
+      <button class="mobile-close" aria-label="Fechar menu"></button>
+    </div>
 
-    <!-- AQUI: chip PT + botão grande lado a lado -->
-    <div class="actions">
+    <ul class="mobile-list">
+      <li><a href="index.html" data-i18n="nav.home">Início</a></li>
+      <li><a href="compreender.html" data-i18n="nav.understand">Compreender</a></li>
+      <li><a href="explorar.html" data-i18n="nav.explore">Explorar</a></li>
+      <li><a href="reduzir.html" data-i18n="nav.reduce">Reduzir</a></li>
+      <li><a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a></li>
+      <li><a href="Incendio.html">Fogo à Vista</a></li>
+      <li><a href="contacto.html" data-i18n="nav.contact">Contacto</a></li>
+    </ul>
+
+    <div class="mobile-actions">
       <select id="langSwitch2" aria-label="Idioma">
         <option value="pt">PT</option>
         <option value="en">EN</option>
@@ -232,6 +232,8 @@
   <!-- ===== CONTEÚDO ===== -->
   <main class="wrap">
     <div class="grid">
+
+      <!-- Contactos úteis -->
       <section class="card">
         <div class="head"><h3>Contactos úteis</h3></div>
         <div class="body">
@@ -273,6 +275,7 @@
         </div>
       </section>
 
+      <!-- Formulário -->
       <section class="card">
         <div class="head"><h3>Envia-nos uma mensagem</h3></div>
         <div class="body">
@@ -323,42 +326,50 @@
           </form>
         </div>
       </section>
+
     </div>
   </main>
 
   <div id="toast" class="toast">A abrir o teu e-mail…</div>
   <footer>© 2025 Ruben Sousa · Todos os direitos reservados</footer>
 
-  <!-- ===== JS: menu mobile + i18n ===== -->
+  <!-- ===== JS: menu mobile + i18n + form ===== -->
   <script>
     (function(){
       const burger=document.querySelector('.burger');
       const panel=document.getElementById('mobileNav');
       const scrim=document.getElementById('scrim');
+      const closeBtn=panel.querySelector('.mobile-close');
       const body=document.body;
       let y=0;
-      function closeNav(){panel.classList.remove('open');scrim.classList.remove('open');body.classList.remove('no-scroll');body.style.top='';window.scrollTo(0,y);burger?.setAttribute('aria-expanded','false');panel?.setAttribute('aria-hidden','true');}
-      function openNav(){y=window.scrollY||0;body.style.top=`-${y}px`;body.classList.add('no-scroll');panel.classList.add('open');scrim.classList.add('open');burger?.setAttribute('aria-expanded','true');panel?.setAttribute('aria-hidden','false');}
+      function closeNav(){
+        panel.classList.remove('open'); scrim.classList.remove('open');
+        body.classList.remove('no-scroll'); body.style.top=''; window.scrollTo(0,y);
+        burger?.setAttribute('aria-expanded','false'); panel?.setAttribute('aria-hidden','true');
+      }
+      function openNav(){
+        y=window.scrollY||0; body.style.top=`-${y}px`; body.classList.add('no-scroll');
+        panel.classList.add('open'); scrim.classList.add('open');
+        burger?.setAttribute('aria-expanded','true'); panel?.setAttribute('aria-hidden','false');
+      }
       burger?.addEventListener('click',()=>panel.classList.contains('open')?closeNav():openNav());
-      panel?.addEventListener('click',e=>{if(e.target.closest('a'))closeNav();});
+      closeBtn?.addEventListener('click',closeNav);
       scrim?.addEventListener('click',closeNav);
-      window.addEventListener('keydown',e=>{if(e.key==='Escape')closeNav();});
-
-      // i18n mínimo
-      const LS_KEY='lang';const lang1=document.getElementById('langSwitch');const lang2=document.getElementById('langSwitch2');
+      panel.addEventListener('click',e=>{ if(e.target.closest('a')) closeNav(); });
+      window.addEventListener('keydown',e=>{ if(e.key==='Escape') closeNav(); });
+      /* i18n mínimo */
+      const LS_KEY='lang'; const lang1=document.getElementById('langSwitch'); const lang2=document.getElementById('langSwitch2');
       function apply(dict){document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(dict[k]!=null)el.innerHTML=dict[k];});document.documentElement.lang=(dict===fallback.en?'en':'pt');}
       async function fetchDict(l){try{const r=await fetch(`i18n/${l}.json`,{cache:'no-cache'});if(!r.ok)throw 0;return await r.json();}catch(_){return fallback[l]||fallback.pt}}
       async function setLang(l){const d=await fetchDict(l);apply(d);localStorage.setItem(LS_KEY,l);if(lang1)lang1.value=l;if(lang2)lang2.value=l;}
-      const qs=new URLSearchParams(location.search);const initial=(localStorage.getItem(LS_KEY)||qs.get('lang')||'pt').toLowerCase();
-      if(lang1)lang1.value=initial;if(lang2)lang2.value=initial;setLang(initial);
-      lang1?.addEventListener('change',e=>setLang(e.target.value));lang2?.addEventListener('change',e=>setLang(e.target.value));
+      const qs=new URLSearchParams(location.search); const initial=(localStorage.getItem(LS_KEY)||qs.get('lang')||'pt').toLowerCase();
+      if(lang1)lang1.value=initial; if(lang2)lang2.value=initial; setLang(initial);
+      lang1?.addEventListener('change',e=>setLang(e.target.value)); lang2?.addEventListener('change',e=>setLang(e.target.value));
       const fallback={pt:{"site.title":"Aldeia Segura Pessoas Seguras","nav.home":"Início","nav.understand":"Compreender","nav.explore":"Explorar","nav.reduce":"Reduzir","nav.villages":"Aldeias Seguras","nav.contact":"Contacto","nav.login":"Login / Registar"},
                       en:{"site.title":"Safe Village Safe People","nav.home":"Home","nav.understand":"Understand","nav.explore":"Explore","nav.reduce":"Reduce","nav.villages":"Safe Villages","nav.contact":"Contact","nav.login":"Login / Sign up"}};
     })();
-  </script>
 
-  <!-- ===== FORM: mailto helper ===== -->
-  <script>
+    /* Form mailto */
     const CONTACT_EMAIL='contacto@aldeiasseguras.pt';
     function buildMailto(){
       const nome=document.getElementById('nome').value.trim();
@@ -371,8 +382,8 @@
       return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
     function toast(msg){const t=document.getElementById('toast');t.textContent=msg||'A abrir…';t.style.display='block';setTimeout(()=>t.style.display='none',2000);}
-    document.getElementById('mailtoBtn').addEventListener('click',()=>{window.location.href=buildMailto();toast('A abrir o teu e-mail…')});
-    document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();window.location.href=buildMailto();toast('A abrir o teu e-mail…')});
+    document.getElementById('mailtoBtn')?.addEventListener('click',()=>{window.location.href=buildMailto();toast('A abrir o teu e-mail…')});
+    document.getElementById('contactForm')?.addEventListener('submit',e=>{e.preventDefault();window.location.href=buildMailto();toast('A abrir o teu e-mail…')});
   </script>
 </body>
 </html>
