@@ -1,0 +1,5 @@
+# Ignorar a pasta de dependências do Node.js
+/node_modules
+
+# Ficheiros de log do npm
+npm-debug.log*
