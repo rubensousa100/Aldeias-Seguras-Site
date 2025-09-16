@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reduzir - Aldeia Segura Pessoas Seguras</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  <!-- Variáveis do Supabase -->
+  <script>
+    window.SUPABASE_URL  = "https://pyxoudeamrfisegykdtg.supabase.co";
+    window.SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5eG91ZGVhbXJmaXNlZ3lrZHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MjUzMzQsImV4cCI6MjA3MzIwMTMzNH0.CBOB_ynuUGkrzCdz3bT5YkZvtERRBpV4GJ2AmbHEQdE";
+  </script>
   <style>
     :root{
       --green:#2e7d32; --green-2:#2e7d32;
@@ -153,11 +158,13 @@
         <li><a href="Incendio.html">Fogo à Vista</a></li>
         <li><a href="contacto.html" data-i18n="nav.contact">Contacto</a></li>
       </ul>
-      <select id="langSwitch" aria-label="Idioma">
-        <option value="pt">PT</option>
-        <option value="en">EN</option>
-      </select>
-      <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+      <div data-auth-container style="display: contents;">
+        <select id="langSwitch" aria-label="Idioma">
+          <option value="pt">PT</option>
+          <option value="en">EN</option>
+        </select>
+        <a href="login.html" class="login-btn" data-i18n="nav.login" data-auth-link>Login / Registar</a>
+      </div>
       <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
     </nav>
   </header>
@@ -172,12 +179,12 @@
     <a href="aldeias.html" data-i18n="nav.villages">Aldeias Seguras</a>
     <a href="Incendio.html">Fogo à Vista</a>
     <a href="contacto.html" data-i18n="nav.contact">Contacto</a>
-    <div class="actions">
+    <div class="actions" data-auth-container>
       <select id="langSwitch2" aria-label="Idioma">
         <option value="pt">PT</option>
         <option value="en">EN</option>
       </select>
-      <a href="login.html" class="login-btn" data-i18n="nav.login">Login / Registar</a>
+      <a href="login.html" class="login-btn" data-i18n="nav.login" data-auth-link>Login / Registar</a>
     </div>
   </aside>
 
@@ -467,6 +474,8 @@
 
   <footer>© 2025 Ruben Sousa · Todos os direitos reservados</footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="main.js" defer></script>
   <!-- JS: burger/scrim + acordeão + i18n (mesmo do index) -->
   <script>
     (function(){
