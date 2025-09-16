@@ -104,7 +104,7 @@
 
     /* ===== HERO ===== */
     .hero{
-      background:url('Imagens/incendio20.jpg') center/cover no-repeat;color:#fff;text-align:center;
+      background:url('Imagens/Incendio20.jpg') center/cover no-repeat;color:#fff;text-align:center;
       padding:3rem 1rem;position:relative
     }
     .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
@@ -319,70 +319,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="main.js" defer></script>
-  <script>
-    // ===== MENU MOBILE + i18n =====
-    (function(){
-      const burger = document.querySelector('.burger');
-      const panel  = document.getElementById('mobileNav');
-      const scrim  = document.getElementById('scrim');
-      const body   = document.body;
-      let scrollLockY = 0;
-
-      function closeNav(){
-        panel.classList.remove('open'); scrim.classList.remove('open');
-        body.classList.remove('no-scroll'); body.style.top=''; window.scrollTo(0, scrollLockY);
-        burger.setAttribute('aria-expanded','false'); panel.setAttribute('aria-hidden','true');
-      }
-      function openNav(){
-        scrollLockY = window.scrollY || window.pageYOffset || 0;
-        body.style.top = `-${scrollLockY}px`;
-        body.classList.add('no-scroll'); panel.classList.add('open'); scrim.classList.add('open');
-        burger.setAttribute('aria-expanded','true'); panel.setAttribute('aria-hidden','false');
-      }
-      if (burger && panel){
-        burger.addEventListener('click', ()=> panel.classList.contains('open')? closeNav(): openNav());
-        panel.addEventListener('click', e=>{ if(e.target.closest('a')) closeNav(); });
-        scrim.addEventListener('click', closeNav);
-        window.addEventListener('keydown', e=>{ if(e.key==='Escape') closeNav(); });
-      }
-
-      // PT/EN sincronizado (simples)
-      const LS_KEY='lang';
-      const lang1=document.getElementById('langSwitch');
-      const lang2=document.getElementById('langSwitch2');
-      const saved = (localStorage.getItem(LS_KEY) || 'pt').toLowerCase();
-      if (lang1) lang1.value=saved;
-      if (lang2) lang2.value=saved;
-      function setLang(v){ localStorage.setItem(LS_KEY,v); if(lang1)lang1.value=v; if(lang2)lang2.value=v; }
-      lang1?.addEventListener('change',e=>setLang(e.target.value));
-      lang2?.addEventListener('change',e=>setLang(e.target.value));
-    })();
-
-    // ===== Form por mailto =====
-    const CONTACT_EMAIL = 'contacto@aldeiasseguras.pt';
-    function buildMailto(){
-      const nome = document.getElementById('nome').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const assunto = document.getElementById('assunto').value || 'Contacto';
-      const telefone = document.getElementById('telefone').value.trim();
-      const mensagem = document.getElementById('mensagem').value.trim();
-
-      const subject = `[Site] ${assunto} — ${nome || 'Sem nome'}`;
-      const body =
-`Nome: ${nome}
-E-mail: ${email}
-Telefone: ${telefone || '—'}
-Assunto: ${assunto}
-
-Mensagem:
-${mensagem}
-
-— Enviado via página de contacto`;
-
-      return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    }
-    document.getElementById('mailtoBtn').addEventListener('click', ()=>{ window.location.href = buildMailto(); });
-    document.getElementById('contactForm').addEventListener('submit', (e)=>{ e.preventDefault(); window.location.href = buildMailto(); });
-  </script>
 </body>
 </html>
