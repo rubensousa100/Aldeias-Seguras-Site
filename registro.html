@@ -160,6 +160,11 @@
     }
   </style>
 </head>
+<!-- Variáveis do Supabase -->
+<script>
+  window.SUPABASE_URL  = "https://pyxoudeamrfisegykdtg.supabase.co";
+  window.SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5eG91ZGVhbXJmaXNlZ3lrZHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MjUzMzQsImV4cCI6MjA3MzIwMTMzNH0.CBOB_ynuUGkrzCdz3bT5YkZvtERRBpV4GJ2AmbHEQdE";
+</script>
 <body>
 
   <!-- Voltar FIXO (visível só no desktop) -->
@@ -194,6 +199,24 @@
           </div>
         </div>
 
+        <div class="row" style="margin-top: .85rem;">
+          <div>
+            <label for="morada">Morada (opcional)</label>
+            <input id="morada" name="morada" type="text" autocomplete="street-address" placeholder="A sua rua e número de porta" />
+          </div>
+        </div>
+
+        <div class="row" style="grid-template-columns: 1fr 1fr; gap: .85rem; margin-top: .85rem;">
+          <div>
+            <label for="codigo_postal">Código Postal (opcional)</label>
+            <input id="codigo_postal" name="codigo_postal" type="text" autocomplete="postal-code" placeholder="Ex: 4970-000" />
+          </div>
+          <div>
+            <label for="localidade">Localidade (opcional)</label>
+            <input id="localidade" name="localidade" type="text" autocomplete="address-level2" placeholder="Ex: Arcos de Valdevez" />
+          </div>
+        </div>
+
         <div class="row">
           <div>
             <label for="password">Palavra-passe</label>
@@ -218,6 +241,7 @@
           <input id="terms" type="checkbox" required />
           <span>Li e aceito os <a href="privacidade.html" target="_blank" rel="noopener">termos e a política de privacidade</a>.</span>
         </label>
+        <div id="generalErr" class="error" role="status" aria-live="polite" style="margin-top:.5rem; text-align:center;"></div>
         <div id="termsErr" class="error" role="status" aria-live="polite" style="margin-top:.3rem"></div>
 
         <button type="submit" class="btn">Registar</button>
@@ -227,6 +251,8 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="main.js" defer></script>
   <script>
     // Mostrar/ocultar password
     document.querySelectorAll('.toggle-pass').forEach(btn=>{
@@ -266,6 +292,7 @@
     const passErr  = document.getElementById('passErr');
     const confirmErr = document.getElementById('confirmErr');
     const termsErr = document.getElementById('termsErr');
+    const generalErr = document.getElementById('generalErr');
 
     const showErr = (el,msg)=>{ el.textContent=msg; el.setAttribute('aria-live','polite'); el.style.display='block'; }
     const hideErr = (el)=>{ el.textContent=''; el.removeAttribute('aria-live'); el.style.display='none'; }
@@ -281,13 +308,47 @@
       return ok;
     }
 
-    form.addEventListener('submit', (e)=>{
+    const supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON);
+
+    form.addEventListener('submit', async (e)=>{
       e.preventDefault();
+      hideErr(generalErr);
       if(!validate()) return;
-      alert('Registo válido. Integração com backend necessária para criar a conta.');
+
+      const email = form.email.value;
+      const password = form.password.value;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'A registar...';
+
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            full_name: form.nome.value.trim(),
+            address: form.morada.value.trim(),
+            postal_code: form.codigo_postal.value.trim(),
+            city: form.localidade.value.trim()
+          }
+        }
+      });
+
+      if (error) {
+        showErr(generalErr, `Erro: ${error.message}`);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Registar';
+      } else {
+        // Hide form and show success message
+        form.style.display = 'none';
+        const subtitle = document.querySelector('.subtitle');
+        subtitle.innerHTML = '<h2>Registo quase concluído!</h2><p style="font-size: 1.1rem; line-height: 1.6;">Enviámos um e-mail de confirmação para <strong>' + email + '</strong>. <br>Por favor, clique no link dentro do e-mail para ativar a sua conta.</p><p>(Verifique também a sua pasta de spam)</p>';
+        // Remove o título original para não duplicar
+        document.querySelector('.title').style.display = 'none';
+      }
     });
 
-    ['nome','email','password','confirm'].forEach(id=>{
+    ['nome','email','password','confirm', 'terms'].forEach(id=>{
       document.getElementById(id).addEventListener('input', ()=>{
         if(id==='nome') hideErr(nomeErr);
         if(id==='email') hideErr(emailErr);
@@ -295,7 +356,6 @@
         if(id==='confirm') hideErr(confirmErr);
       });
     });
-    document.getElementById('terms').addEventListener('change', ()=> hideErr(termsErr));
 
     // Ajuste quando o teclado abre (mobile)
     const card = document.querySelector('.auth-card');
