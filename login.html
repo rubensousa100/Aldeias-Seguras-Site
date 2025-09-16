@@ -172,6 +172,11 @@
     }
   </style>
 </head>
+<!-- Variáveis do Supabase -->
+<script>
+  window.SUPABASE_URL  = "https://pyxoudeamrfisegykdtg.supabase.co";
+  window.SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5eG91ZGVhbXJmaXNlZ3lrZHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MjUzMzQsImV4cCI6MjA3MzIwMTMzNH0.CBOB_ynuUGkrzCdz3bT5YkZvtERRBpV4GJ2AmbHEQdE";
+</script>
 <body>
 
   <a href="index.html" class="back-link">← Voltar</a>
@@ -211,6 +216,7 @@
           <a class="link-sm" href="recuperar_senha.html">Esqueceu-se da palavra-passe?</a>
         </div>
 
+        <div id="generalErr" class="error" role="status" aria-live="polite" style="margin-top:.5rem; text-align:center;"></div>
         <button type="submit" class="btn">Entrar</button>
 
         <p class="muted">Ainda não tem conta?
@@ -220,6 +226,8 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="main.js" defer></script>
   <script>
     // Mostrar/ocultar password
     const passInput = document.getElementById('password');
@@ -237,6 +245,8 @@
     const form = document.getElementById('loginForm');
     const emailErr = document.getElementById('emailErr');
     const passErr  = document.getElementById('passErr');
+    const generalErr = document.getElementById('generalErr');
+    const supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON);
 
     function showErr(el, msg){
       el.textContent = msg;
@@ -249,30 +259,47 @@
       el.style.display = 'none';
     }
 
-    form.addEventListener('submit', (e)=>{
+    form.addEventListener('submit', async (e) => {
       let ok = true;
+      e.preventDefault();
+      hideErr(generalErr);
 
-      if(!form.email.checkValidity()){
+      // Validação client-side
+      if (!form.email.checkValidity() || form.email.value.trim() === '') {
         showErr(emailErr, 'Introduz um e-mail válido.');
         ok = false;
-      } else {
-        hideErr(emailErr);
       }
 
-      if(!form.password.checkValidity()){
+      if (!form.password.checkValidity() || form.password.value.length < 6) {
         showErr(passErr, 'A palavra-passe deve ter pelo menos 6 caracteres.');
         ok = false;
+      }
+
+      if (!ok) return;
+
+      // Limpar erros se a validação passou
+      hideErr(emailErr);
+      hideErr(passErr);
+
+      // Lógica de submissão para o Supabase
+      const email = form.email.value;
+      const password = form.password.value;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'A entrar...';
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        showErr(generalErr, 'E-mail ou palavra-passe inválidos.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Entrar';
       } else {
-        hideErr(passErr);
+        window.location.href = 'perfil.html'; // Redireciona em caso de sucesso
       }
-
-      if(!ok){
-        e.preventDefault();
-        return;
-      }
-
-      e.preventDefault();
-      alert('Formulário válido. Integração com backend necessária para autenticar.');
     });
 
     form.email.addEventListener('input', ()=> hideErr(emailErr));
