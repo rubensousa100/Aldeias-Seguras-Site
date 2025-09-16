@@ -15,7 +15,7 @@
 
 <style>
   :root{
-    --green:#2e7d32; --green-2:#2e7d32;
+    --green:#2e7d32; --green-2:#256b2a;
     --mint:#e8f5e9; --line:#e7e7e7;
     --shadow:0 2px 6px rgba(0,0,0,.08);
     --text:#333;
@@ -31,14 +31,16 @@
 
   /* Hero */
   .hero{
-    background:url('Imagens/Incendio20.jpg') center/cover no-repeat; color:#fff; text-align:center; padding:3rem 1rem; position:relative;
+    background:url('Imagens/Incendio20.jpg') center/cover no-repeat;
+    color:#fff; text-align:center; padding:3rem 1rem; position:relative;
   }
   .hero::after{ content:""; position:absolute; inset:0; background:rgba(0,0,0,.5); }
   .hero h2{ position:relative; z-index:1; font-size:2rem; margin:0; }
 
   /* Mapa */
   #map{
-    height:540px; width:80%; margin:2rem auto 0; border:2px solid #ccc; border-radius:10px; position:relative;
+    height:540px; width:80%; margin:2rem auto 0;
+    border:2px solid #ccc; border-radius:10px; position:relative;
   }
   #map .leaflet-top{ top:14px; }
   #map .leaflet-left{ left:12px; }
@@ -47,7 +49,8 @@
 
   /* Legenda fora do mapa */
   .legend{
-    position:static; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; background:#fff;
+    position:static; display:flex; gap:1rem; justify-content:center;
+    flex-wrap:wrap; background:#fff;
     border:1px solid #ddd; border-radius:8px; box-shadow:var(--shadow);
     padding:.6rem .9rem; margin:.75rem auto 1.5rem; width:fit-content;
   }
@@ -61,7 +64,8 @@
   /* Toast */
   .toast{
     position:fixed; left:50%; transform:translateX(-50%); bottom:16px;
-    background:#ffe9e9; color:#a33; border:1px solid #f5b5b5; border-radius:10px;
+    background:#ffe9e9; color:#a33; border:1px solid #f5b5b5;
+    border-radius:10px;
     padding:.6rem .9rem; box-shadow:var(--shadow); z-index:10000; display:none;
   }
 
@@ -72,7 +76,8 @@
     max-width:900px; margin:0 auto;
   }
   .stat-box{
-    background:#fff; border-radius:10px; padding:1rem; box-shadow:var(--shadow); text-align:center;
+    background:#fff; border-radius:10px; padding:1rem;
+    box-shadow:var(--shadow); text-align:center;
     flex:1 1 calc(33.333% - 1rem); max-width:250px;
   }
   .stat-box h3{ font-size:1.6rem; color:#2e7d32; margin:0 0 .5rem; }
@@ -83,11 +88,13 @@
   .fichas h3{ color:var(--green); margin:0 0 .8rem; }
 
   details.ficha{
-    background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
+    background:#fff; border:1px solid var(--line);
+    border-radius:12px; box-shadow:var(--shadow);
     margin-bottom:1rem; overflow:hidden;
   }
   summary.ficha-summary{
-    list-style:none; cursor:pointer; padding:.9rem 1.1rem; display:flex; justify-content:space-between; align-items:center;
+    list-style:none; cursor:pointer; padding:.9rem 1.1rem;
+    display:flex; justify-content:space-between; align-items:center;
   }
   summary.ficha-summary::-webkit-details-marker{ display:none; }
   .sum-left{ display:flex; flex-wrap:wrap; gap:.6rem 1rem; align-items:center; }
@@ -100,7 +107,8 @@
 
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
-    padding:.45rem .7rem; border-radius:9px; border:1px solid #cfe7d0;
+    padding:.45rem .7rem; border-radius:9px;
+    border:1px solid #cfe7d0;
     background:#fff; color:#2e7d32; font-weight:700; text-decoration:none; cursor:pointer; white-space:nowrap;
   }
   .btn.map{ background:var(--green); color:#fff; border-color:#2e7d32; }
@@ -109,13 +117,15 @@
   .ficha-inner{ padding:1rem 1.25rem 1rem 1.1rem; border-top:1px solid var(--line); }
 
   .grid{ display:grid; grid-template-columns:1.2fr 1fr; gap:1rem; }
-  .box{ border:1px solid var(--line); border-radius:10px; padding:1rem 1.1rem; background:#fff; }
+  .box{
+    border:1px solid var(--line); border-radius:10px; padding:1rem 1.1rem; background:#fff;
+  }
   .box h5{ margin:.1rem 0 .6rem; color:#2e7d32; font-size:1rem; }
   .mini-map{ height:220px; border-radius:8px; border:1px solid #ddd; }
 
   .mini-controls{ display:flex; flex-wrap:wrap; gap:.6rem; margin:.2rem 0 .6rem; font-size:.9rem; }
   .mini-controls label{
-    display:flex; align-items:center; gap:.35rem; background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:.2rem .5rem;
+    display:flex; align-items:center; gap:.35rem; background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:.2rem .5rem; cursor:pointer;
   }
 
   .meta{ font-size:.93rem; color:#444; }
@@ -178,8 +188,7 @@
   /* --- Formulários em Grelha (substitui table.clean) --- */
   .form-grid { display: flex; flex-direction: column; gap: .5rem; }
   .form-grid-header {
-    display: grid;
-    gap: .8rem;
+    display: grid; gap: .8rem;
     padding: .5rem .8rem;
     background: #f3f8f3;
     border-radius: 6px;
@@ -188,8 +197,7 @@
     color: #333;
   }
   .form-grid-row {
-    display: grid;
-    gap: .8rem;
+    display: grid; gap: .8rem;
     align-items: center;
     padding: .4rem;
     border: 1px solid #eee;
@@ -220,7 +228,9 @@
   /* FAQ */
   .faq-wrap{ width:95%; max-width:980px; margin:2rem auto; }
   .faq-wrap h3{ color:var(--green); margin:0 0 .8rem; }
-  .accordion{ border:1px solid var(--line); border-radius:10px; overflow:hidden; box-shadow:var(--shadow); background:#fff; }
+  .accordion{
+    border:1px solid var(--line); border-radius:10px; overflow:hidden; box-shadow:var(--shadow); background:#fff;
+  }
   details.acc-item + details.acc-item{ border-top:1px solid var(--line); }
   summary.acc-btn{ list-style:none; padding:1rem 1.1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
   summary.acc-btn::-webkit-details-marker{ display:none; }
@@ -237,7 +247,8 @@
 
   /* Emergência + footer */
   .emergency{
-    background:#e1f8e4; padding:.5rem 1rem; width:100%; margin:2rem auto;
+    background:#e1f8e4; padding:.5rem 1rem;
+    width:100%; margin:2rem auto;
     border-top:2px solid #2e7d32; border-bottom:2px solid #2e7d32; border-radius:8px;
     display:flex; flex-direction:column; align-items:center;
   }
@@ -249,7 +260,9 @@
   .comment-form{ display:grid; gap:.6rem; }
   .comment-form .row{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
   .comment-actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin:.5rem 0; }
-  .filters .btn{ padding:.3rem .6rem; font-weight:600; }
+  .filters{ display:flex; gap:.6rem; flex-wrap:wrap; }
+  .filters .btn{ padding:.3rem .6rem; font-weight:600; border-radius:999px; }
+  .filters .btn.active{ background:var(--green); color:#fff; border-color:var(--green-2); }
   .comment-item{ border:1px solid var(--line); border-radius:10px; padding:.6rem .7rem; margin:.5rem 0; background:#fff; box-shadow:var(--shadow); }
   .badge{ display:inline-block; padding:.12rem .45rem; border-radius:999px; border:1px solid #e0e0e0; background:#f7f7f7; font-size:.8rem; margin-right:.35rem; }
   .badge.cat{ background:#eef7ef; border-color:#d5ead7; color:#2e7d32; }
@@ -267,7 +280,7 @@
   .pulse{ box-shadow:0 0 0 3px rgba(58,125,68,.25) inset; }
 
   /* --------- Responsivo ---------- */
-  @media (max-width:1200px){
+  @media (max-width:1200px) {
     .grid{ grid-template-columns:1fr; }
   }
   @media (max-width:900px){ .fichas, .faq-wrap{ width:92%; } table.clean thead th{ white-space:normal; } }
@@ -309,21 +322,19 @@
     <img src="Imagens/Aldeia.png" alt="Logo" />
     <h1>Aldeia Segura Pessoas Seguras</h1>
   </div>
-
-  <!-- Navegação desktop -->
   <nav aria-label="Principal">
     <ul>
       <li><a href="index.html">Início</a></li>
       <li><a href="compreender.html">Compreender</a></li>
       <li><a href="explorar.html">Explorar</a></li>
       <li><a href="reduzir.html">Reduzir</a></li>
-      <li><a href="Aldeias.html">Aldeias Seguras</a></li>
+      <li><a href="aldeias.html">Aldeias Seguras</a></li>
       <li><a href="Incendio.html">Fogo à Vista</a></li>
       <li><a href="contacto.html">Contacto</a></li>
     </ul>
     <div data-auth-container style="display: contents;">
       <select id="langSwitch" aria-label="Idioma">
-        <option value="pt" selected>PT</option>
+        <option value="pt">PT</option>
         <option value="en">EN</option>
       </select>
       <a href="login.html" class="login-btn" data-auth-link>Login / Registar</a>
@@ -339,7 +350,7 @@
   <a href="compreender.html">Compreender</a>
   <a href="explorar.html">Explorar</a>
   <a href="reduzir.html">Reduzir</a>
-  <a href="Aldeias.html">Aldeias Seguras</a>
+  <a href="aldeias.html">Aldeias Seguras</a>
   <a href="Incendio.html">Fogo à Vista</a>
   <a href="contacto.html">Contacto</a>
   <div class="actions" data-auth-container>
@@ -422,37 +433,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded', function(){
-  function showToast(msg){
-    var t=document.getElementById('toast'); if(!t) return;
-    t.textContent=msg; t.style.display='block';
-    clearTimeout(t._to); t._to=setTimeout(function(){t.style.display='none';}, 5000);
-  }
-  if(!window.L){
-    document.getElementById('map').innerHTML='<div style="padding:1rem">Não foi possível carregar o Leaflet. Verifique a ligação à internet.</div>';
-    showToast('Erro a carregar o Leaflet.'); return;
-  }
-
-  /* Imagens com fallback */
-  function initImageFallbacks(){
-    document.querySelectorAll('img.img-fb').forEach(function(img){
-      var list=(img.getAttribute('data-srcs')||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
-      if(!list.length) return;
-      var i=0; function tryNext(){ if(i>=list.length){ img.alt=(img.alt||'')+' (imagem não disponível)'; return; } var url=list[i++]; img.onerror=tryNext; img.src=url; }
-      tryNext();
-    });
-  }
-  initImageFallbacks();
-
-  function openFichaById(id){
-    var det=document.getElementById(id); if(!det) return;
-    if(!det.open){ det.setAttribute('open',''); det.open=true; }
-    det.scrollIntoView({behavior:'smooth', block:'start'});
-    if(!det.open){ var sm=det.querySelector('summary'); if(sm) sm.click(); }
-    det.classList.add('pulse'); setTimeout(function(){ det.classList.remove('pulse'); }, 1200);
-  }
-  function openFromHash(){ if(location.hash && /^#aldeia-/.test(location.hash)) openFichaById(location.hash.slice(1)); }
-  window.addEventListener('hashchange', openFromHash);
-
   // ---------- CONFIG ----------
   var PATH_FREG = 'Shapfiles2/FreguesiasArcos.json';
   var PATH_ALD  = 'Shapfiles2/AldeiasSeguras.json';
@@ -488,6 +468,27 @@ window.addEventListener('DOMContentLoaded', function(){
     { nome:'São Mamede', freguesia:'Senharei', abrigos:0, refugios:0, exercicios:0, osl:'Sim', plano:'Não' },
     { nome:'Travassos', freguesia:'Senharei', abrigos:0, refugios:0, exercicios:0, osl:'Sim', plano:'Não' }
   ];
+  function showToast(msg){
+    var t=document.getElementById('toast'); if(!t) return;
+    t.textContent=msg; t.style.display='block';
+    clearTimeout(t._to); t._to=setTimeout(function(){t.style.display='none';}, 5000);
+  }
+  if(!window.L){
+    document.getElementById('map').innerHTML='<div style="padding:1rem">Não foi possível carregar o Leaflet. Verifique a ligação à internet.</div>';
+    showToast('Erro a carregar o Leaflet.'); return;
+  }
+
+  /* Imagens com fallback */
+  function initImageFallbacks(){
+    document.querySelectorAll('img.img-fb').forEach(function(img){
+      var list=(img.getAttribute('data-srcs')||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
+      if(!list.length) return;
+      var i=0; function tryNext(){ if(i>=list.length){ img.alt=(img.alt||'')+' (imagem não disponível)'; return; } var url=list[i++]; img.onerror=tryNext; img.src=url; }
+      tryNext();
+    });
+  }
+  initImageFallbacks();
+
   function slug(s){ s=(s||'').toString(); try{ s=s.normalize('NFD'); }catch(e){}; return s.replace(/[̀-ͯ]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/(^-|-$)/g,'').toLowerCase(); }
   const DATA_BY_SLUG = {}; for(let i=0;i<DATA_ALDEIAS.length;i++){ DATA_BY_SLUG[ slug(DATA_ALDEIAS[i].nome) ] = DATA_ALDEIAS[i]; }
   function prefer(o, keys, def){ if(def===void 0) def=''; if(!o) return def; for(const k of keys){ if(o[k]!=null && o[k]!=='' && o[k]!=='null') return o[k]; } return def; }
@@ -522,6 +523,16 @@ window.addEventListener('DOMContentLoaded', function(){
     if(gj && gj.crs) try{ delete gj.crs; }catch(e){}
     return gj;
   }
+
+  function openFichaById(id){
+    var det=document.getElementById(id); if(!det) return;
+    if(!det.open){ det.setAttribute('open',''); det.open=true; }
+    det.scrollIntoView({behavior:'smooth', block:'start'});
+    if(!det.open){ var sm=det.querySelector('summary'); if(sm) sm.click(); }
+    det.classList.add('pulse'); setTimeout(function(){ det.classList.remove('pulse'); }, 1200);
+  }
+  function openFromHash(){ if(location.hash && /^#aldeia-/.test(location.hash)) openFichaById(location.hash.slice(1)); }
+  window.addEventListener('hashchange', openFromHash);
 
   // -------- MAPA PRINCIPAL --------
   const map = L.map('map').setView([41.9,-8.4],10);
@@ -564,7 +575,7 @@ window.addEventListener('DOMContentLoaded', function(){
   function renderComments(fid, filter){
     const wrap = document.getElementById(fid+'-comments');
     if(!wrap) return;
-    let data = loadComments(fid);
+    var data = loadComments(fid);
     if(filter && filter!=='all') data = data.filter(it => (it.status||'pendente')===filter);
     if(!data.length){
       wrap.innerHTML = '<p class="small muted">Ainda sem comentários.</p>';
@@ -605,7 +616,7 @@ window.addEventListener('DOMContentLoaded', function(){
   const API_COMMENTS = `/rest/v1/ficha_comments`;
 
   // Única função de POST
-  async function tryPostJSON(url, payload){
+  function tryPostJSON(url, payload){
     return fetch(url, {
       method: 'POST',
       headers: {
@@ -645,11 +656,11 @@ window.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  async function collectInputs(container){
+  function collectInputs(container){
     const out = [];
     if(!container) return out;
 
-    const elements = Array.from(container.querySelectorAll('input, select, textarea'));
+    var elements = Array.from(container.querySelectorAll('input, select, textarea'));
     
     for (const el of elements) {
       let label = '';
@@ -661,16 +672,7 @@ window.addEventListener('DOMContentLoaded', function(){
       if(!label && el.placeholder) label = el.placeholder.trim();
       
       let value = '';
-      if (el.type === 'file' && el.files && el.files[0]) {
-        value = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.onerror = () => resolve('');
-            reader.readAsDataURL(el.files[0]);
-        });
-      } else {
-        value = (el.value || '').trim();
-      }
+      value = (el.value || '').trim();
 
       out.push({ label: label || el.name || '(sem label)', value: value });
     }
@@ -678,7 +680,7 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   async function buildInfoPayload(fid){
-    const fichaEl = document.getElementById(fid);
+    var fichaEl = document.getElementById(fid);
     if(!fichaEl) return null;
     const nome = fichaEl.querySelector('.sum-title') ? fichaEl.querySelector('.sum-title').textContent.trim() : '';
 
@@ -688,10 +690,10 @@ window.addEventListener('DOMContentLoaded', function(){
     const sim  = getTableData('#'+id+'-sim-grid');
 
     // caixas com inputs
-    const infoBoxes = Array.from(fichaEl.querySelectorAll('.info-comments details:nth-child(1) .box'));
+    var infoBoxes = Array.from(fichaEl.querySelectorAll('.info-comments details:nth-child(1) .box'));
     let inputsCollected = [];
-    for (const bx of infoBoxes) {
-        const collected = await collectInputs(bx);
+    for (var i=0; i<infoBoxes.length; i++) {
+        var collected = await collectInputs(infoBoxes[i]);
         inputsCollected = inputsCollected.concat(collected);
     }
 
@@ -1275,7 +1277,7 @@ window.addEventListener('DOMContentLoaded', function(){
           submitted_at: new Date().toISOString()
         };
 
-      const res = await tryPostJSON(API_INFO, row);
+      var res = await tryPostJSON(API_INFO, row);
       if(!res.ok){ throw new Error(await res.text()); }
       showToast('Informação submetida com sucesso 🎉');
     }catch(err){
@@ -1306,7 +1308,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
     btn.disabled = true;
     try{
-      const res = await tryPostJSON(API_COMMENTS, row);
+      var res = await tryPostJSON(API_COMMENTS, row);
       if(!res.ok){ throw new Error(await res.text()); }
       showToast('Comentários submetidos com sucesso ✅');
     }catch(err){
