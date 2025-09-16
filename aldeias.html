@@ -29,6 +29,52 @@
     display:flex; flex-direction:column; min-height:100vh;
   }
 
+  /* ===== Mobile Nav (igual às outras páginas) ===== */
+  .burger{
+    display:none; width:40px; height:40px; border:1px solid #cfe7d0;
+    border-radius:10px; background:#fff; cursor:pointer;
+    align-items:center; justify-content:center;
+  }
+  .burger span{
+    display:block; width:18px; height:2px; background:#2e7d32; position:relative;
+  }
+  .burger span::before,.burger span::after{
+    content:""; position:absolute; left:0; width:18px; height:2px; background:#2e7d32;
+  }
+  .burger span::before{ top:-6px } .burger span::after{ top:6px }
+
+  .mobile-nav{
+    position:fixed; inset:var(--header-h) 0 0 0;
+    background:#fff; border-top:1px solid var(--line);
+    padding:1rem 1.25rem 2rem; overflow:auto;
+    display:none !important; z-index:2000;
+  }
+  .mobile-nav.open{ display:block !important; }
+
+  .scrim{
+    position:fixed; inset:var(--header-h) 0 0 0;
+    background:rgba(0,0,0,.28); backdrop-filter:saturate(120%) blur(2px);
+    display:none !important; z-index:1500;
+  }
+  .scrim.open{ display:block !important; }
+
+  .mobile-nav a{
+    display:block; padding:.85rem 0;
+    font-weight:700; font-size:1.18rem;
+  }
+  .mobile-nav a:link,
+  .mobile-nav a:visited{ color:var(--green); text-decoration:none; }
+  .mobile-nav a:hover{ text-decoration:underline; }
+  .mobile-nav .actions{ display:flex; gap:.6rem; align-items:center; margin-top:.6rem }
+
+  body.no-scroll{ position:fixed; width:100%; overflow:hidden; overscroll-behavior:none; touch-action:none; }
+
+  /* Desktop seguro: nada do mobile aparece */
+  @media (min-width:901px){
+    .mobile-nav,.scrim{ display:none !important; }
+    .burger{ display:none !important; }
+  }
+
   /* Hero */
   .hero{
     background:url('Imagens/Incendio20.jpg') center/cover no-repeat;
@@ -283,7 +329,16 @@
   @media (max-width:1200px) {
     .grid{ grid-template-columns:1fr; }
   }
-  @media (max-width:900px){ .fichas, .faq-wrap{ width:92%; } table.clean thead th{ white-space:normal; } }
+  @media (max-width:900px){
+    :root{ --header-h: 64px; }
+    header{ padding:.8rem 1rem }
+    nav ul{ display:none }
+    #langSwitch, .login-btn{ display:none } /* ficam no painel mobile */
+    .burger{ display:flex }
+
+    .fichas, .faq-wrap{ width:92%; }
+    table.clean thead th{ white-space:normal; }
+  }
   @media (max-width:768px){
     .hero h2{ font-size:1.5rem; }
     #map{ width:95%; }
@@ -302,6 +357,10 @@
       margin-top: .4rem;
       text-align: center;
     }
+  }
+  @media (max-width:600px){
+    :root{ --header-h: 56px; }
+    .mobile-nav, .scrim{ inset:var(--header-h) 0 0 0; }
   }
   @media (min-width:1440px){
     .fichas{ width:1320px; }
