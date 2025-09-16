@@ -6,29 +6,28 @@
   <title>Aldeia Segura | Aldeias Seguras Pessoas Seguras</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="main.css" />
+  <!-- Variáveis do Supabase -->
+  <script>
+    window.SUPABASE_URL  = "https://pyxoudeamrfisegykdtg.supabase.co";
+    window.SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5eG91ZGVhbXJmaXNlZ3lrZHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MjUzMzQsImV4cCI6MjA3MzIwMTMzNH0.CBOB_ynuUGkrzCdz3bT5YkZvtERRBpV4GJ2AmbHEQdE";
+  </script>
 
 <style>
   :root{
-    --green:#3a7d44; --green-2:#2e7d32; --line:#e7e7e7; --shadow:0 2px 6px rgba(0,0,0,.08);
+    --green:#2e7d32; --green-2:#2e7d32;
+    --mint:#e8f5e9; --line:#e7e7e7;
+    --shadow:0 2px 6px rgba(0,0,0,.08);
+    --text:#333;
+    --header-h:72px; /* altura do header em desktop */
     --space-xs:.4rem; --space-sm:.6rem; --space-md:.9rem; --space-lg:1.2rem;
   }
 
   html{ scroll-behavior:smooth; }
   body{
-    margin:0; font-family:"Roboto",sans-serif; color:#333; line-height:1.6;
+    margin:0; font-family:"Roboto",sans-serif; color:var(--text); line-height:1.6;
     display:flex; flex-direction:column; min-height:100vh;
   }
-
-  /* Header / navegação */
-  header.site{
-    background:#fff; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;
-    box-shadow:0 2px 5px rgba(0,0,0,.1); position:sticky; top:0; z-index:5000;
-  }
-  .logo{ display:flex; align-items:center; gap:10px; }
-  .logo img{ width:35px; height:35px; }
-  .logo h1{ font-size:1.2rem; color:var(--green); margin:0; }
-  nav ul{ list-style:none; display:flex; gap:1.2rem; margin:0; padding:0; }
-  nav a{ text-decoration:none; color:var(--green); font-weight:500; font-size:.95rem; }
 
   /* Hero */
   .hero{
@@ -80,7 +79,7 @@
   .stat-box p{ font-size:.95rem; color:#555; }
 
   /* --------- Fichas (secção principal) ---------- */
-  .fichas{ width:min(96.8vw,1360px); max-width:1360px; margin:1.5rem auto; }
+  .fichas{ width:min(96%, 1200px); max-width:1200px; margin:1.5rem auto; }
   .fichas h3{ color:var(--green); margin:0 0 .8rem; }
 
   details.ficha{
@@ -125,59 +124,95 @@
     width:100%; max-height:220px; object-fit:cover; border-radius:8px; border:1px solid #ddd; display:block;
   }
 
+  /* --- PAINÉIS DE INFORMAÇÃO (Acordeão) --- */
+  .info-comments {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.2rem;
+    align-items: start; /* Alinha os items no topo */
+  }
+  .info-comments summary.btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: .7rem 1.3rem;
+    font-weight: 600;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #f3f4f6;
+    color: #4b5563;
+    transition: background .2s, color .2s;
+  }
+  .info-comments summary.btn:hover {
+    background: #e5e7eb;
+  }
+  .info-comments details[open] > summary.btn {
+    background: var(--green);
+    color: #fff;
+    border-color: var(--green-2);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .info-comments .box {
+    border: 1px solid var(--line);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    background: #fff;
+    padding: 1.2rem;
+    margin-top: -1px; /* Cobre a borda inferior do summary */
+  }
+  .info-comments details:not([open]) > .box { display: none; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:.6rem; }
+
   /* --------- Formulários / inputs ---------- */
-  input[type="text"], input[type="date"], input[type="number"], textarea, select{
+  .box input[type="text"], .box input[type="date"], .box input[type="number"], .box textarea, .box select {
     width:100%; padding:.55rem .65rem; border:1px solid #ddd; border-radius:8px; font:inherit; background:#fff;
     transition:border .15s, box-shadow .15s; box-sizing:border-box; min-height:40px;
   }
-  textarea{ min-height:70px; resize:vertical; }
-  input:focus, select:focus, textarea:focus{
+  .box textarea{ min-height:70px; resize:vertical; }
+  .box input:focus, .box select:focus, .box textarea:focus{
     outline:none; border-color:var(--green); box-shadow:0 0 0 3px rgba(58,125,68,.15);
   }
 
-  /* --------- Tabelas clean ---------- */
-  table.clean{
-    width:100%; border-collapse:collapse; table-layout:fixed;
+  /* --- Formulários em Grelha (substitui table.clean) --- */
+  .form-grid { display: flex; flex-direction: column; gap: .5rem; }
+  .form-grid-header {
+    display: grid;
+    gap: .8rem;
+    padding: .5rem .8rem;
+    background: #f3f8f3;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: .85rem;
+    color: #333;
   }
-  table.clean th, table.clean td{
-    border:1px solid #eee; padding:.6rem .7rem; font-size:.95rem; vertical-align:top; background:#fff;
+  .form-grid-row {
+    display: grid;
+    gap: .8rem;
+    align-items: center;
+    padding: .4rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
   }
-  table.clean thead th{
-    background:#f3f8f3; color:#222; font-weight:700; line-height:1.2; white-space:nowrap;
+  .form-grid-row:hover { background: #fcfdff; }
+  .form-grid-row .btn[data-del-row] {
+    padding: .4rem .8rem; background: #fff; border-color: #ddd; color: #c0392b;
+    justify-self: end;
   }
-  table.clean td input, table.clean td select, table.clean td textarea{ margin:0; min-height:38px; }
+  .form-grid-row .btn[data-del-row]:hover { background: #fff5f5; border-color: #f5c6cb; }
 
-  /* Coluna AÇÕES (Remover) — largura fixa suficiente e botão lá dentro */
-  table.clean th:last-child,
-  table.clean td:last-child{
-    width:12rem; min-width:12rem; text-align:right;
+  /* Layouts de grelha para cada tipo de formulário */
+  .pop-grid { grid-template-columns: minmax(120px, 2fr) minmax(60px, 0.8fr) minmax(60px, 0.8fr) minmax(150px, 2fr) minmax(150px, 3fr) auto; }
+  .osl-grid { grid-template-columns: minmax(150px, 1fr) minmax(120px, 1fr) auto; }
+  .prev-grid { grid-template-columns: minmax(100px, 1fr) minmax(120px, 1.5fr) minmax(80px, 1fr) minmax(150px, 2fr) auto; }
+  .sim-grid { grid-template-columns: minmax(100px, 1fr) minmax(200px, 3fr) minmax(100px, 1fr) auto; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
   }
-  table.clean td:last-child .btn{
-    min-width:8.8rem; padding:.46rem .85rem; width:auto;
-  }
-
-  /* ---------- Larguras por tabela ---------- */
-  /* POP: Casa | Nº | Idade | Incapacidades | Observações | Ações */
-  table.clean[id$="-pop"] th:nth-child(1), table.clean[id$="-pop"] td:nth-child(1){ width:18%; }
-  table.clean[id$="-pop"] th:nth-child(2), table.clean[id$="-pop"] td:nth-child(2){ width:10%; }
-  table.clean[id$="-pop"] th:nth-child(3), table.clean[id$="-pop"] td:nth-child(3){ width:12%; }
-  table.clean[id$="-pop"] th:nth-child(4), table.clean[id$="-pop"] td:nth-child(4){ width:26%; }
-  table.clean[id$="-pop"] th:nth-child(5), table.clean[id$="-pop"] td:nth-child(5){ width:22%; } /* espaço extra para Ações */
-
-  /* OSL: Nome | Contacto | Ações */
-  table.clean[id$="-osl"] th:nth-child(1), table.clean[id$="-osl"] td:nth-child(1){ width:44%; }
-  table.clean[id$="-osl"] th:nth-child(2), table.clean[id$="-osl"] td:nth-child(2){ width:44%; }
-
-  /* PREV: Data | Organizador | Participantes | Faixas | Ações */
-  table.clean[id$="-prev"] th:nth-child(1), table.clean[id$="-prev"] td:nth-child(1){ width:16%; }
-  table.clean[id$="-prev"] th:nth-child(2), table.clean[id$="-prev"] td:nth-child(2){ width:26%; }
-  table.clean[id$="-prev"] th:nth-child(3), table.clean[id$="-prev"] td:nth-child(3){ width:18%; }
-  table.clean[id$="-prev"] th:nth-child(4), table.clean[id$="-prev"] td:nth-child(4){ width:28%; }
-
-  /* SIM: Data | Lições | Participantes | Ações */
-  table.clean[id$="-sim"] th:nth-child(1), table.clean[id$="-sim"] td:nth-child(1){ width:18%; }
-  table.clean[id$="-sim"] th:nth-child(2), table.clean[id$="-sim"] td:nth-child(2){ width:48%; }
-  table.clean[id$="-sim"] th:nth-child(3), table.clean[id$="-sim"] td:nth-child(3){ width:24%; }
 
   /* Controles extra */
   .controls{ display:flex; gap:.75rem; flex-wrap:wrap; margin-top:.6rem; }
@@ -211,7 +246,6 @@
   footer{ background:#fff; padding:.5rem; text-align:center; margin-top:auto; font-size:.9rem; color:#555; }
 
   /* Comentários/Problemas */
-  .info-comments{ display:grid; grid-template-columns:1.2fr 1fr; gap:1.1rem; }
   .comment-form{ display:grid; gap:.6rem; }
   .comment-form .row{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem; }
   .comment-actions{ display:flex; gap:.6rem; flex-wrap:wrap; margin:.5rem 0; }
@@ -227,13 +261,6 @@
   .comment-meta{ font-size:.85rem; color:#666; }
   .comment-actions .btn{ border-color:#ddd; color:#444; }
 
-  /* Quando “Adicionar informação” está aberto, esconder Comentários/Problemas dessa ficha */
-  .info-comments > details[open] ~ details.comments-wrap{ display:none; }
-
-  /* Leaflet tweaks */
-  .leaflet-control-layers-base{ display:none!important; }
-  .leaflet-control-layers-separator{ display:none!important; }
-
   /* Helpers */
   .small{ font-size:.86rem; color:#666; }
   .muted{ color:#777; }
@@ -243,431 +270,33 @@
   @media (max-width:1200px){
     .grid{ grid-template-columns:1fr; }
   }
-  @media (max-width:900px){
-    .fichas, .faq-wrap{ width:92%; }
-    .info-comments{ grid-template-columns:1fr; }
-    table.clean thead th{ white-space:normal; } /* títulos podem quebrar */
-  }
+  @media (max-width:900px){ .fichas, .faq-wrap{ width:92%; } table.clean thead th{ white-space:normal; } }
   @media (max-width:768px){
     .hero h2{ font-size:1.5rem; }
-    nav ul{ flex-direction:column; align-items:center; }
     #map{ width:95%; }
-    table.clean th:last-child, table.clean td:last-child{ width:10.5rem; min-width:10.5rem; }
+    .info-comments, .two-col, .comment-form .row, .row { grid-template-columns: 1fr; }
+    .comment-head { flex-direction: column; align-items: flex-start; gap: .8rem; }
+
+    /* Formulários em grelha responsivos */
+    .form-grid-header { display: none; }
+    .pop-grid, .osl-grid, .prev-grid, .sim-grid {
+      grid-template-columns: 1fr; /* Uma coluna para todos os campos */
+      gap: .6rem; /* Espaço entre os campos empilhados */
+    }
+    .form-grid-row { padding: .8rem; }
+    .form-grid-row .btn[data-del-row] {
+      justify-self: stretch;
+      margin-top: .4rem;
+      text-align: center;
+    }
   }
   @media (min-width:1440px){
     .fichas{ width:1320px; }
   }
 
-  /* 1) Aumentar a “caixa de fora” do formulário */
-.fichas{
-  /* usa mais da largura do ecrã e aumenta o limite máximo */
-  width: min(200vw, 1400px);   /* se precisares ainda mais, troca 98vw por 99vw */
-  max-width: 1400px;
-}
-
-/* (opcional) em ecrãs muito largos mantém uma largura elegante */
-@media (min-width: 1440px){
-  .fichas{ width: 1380px; }
-}
-
-/* 2) Alargar a coluna do botão “Remover” em todas as tabelas do formulário */
-.box table.clean th:last-child,
-.box table.clean td:last-child{
-  width: 25rem;        /* aumenta/baixa este valor conforme precisares */
-  min-width: 25rem;
-  text-align: right;   /* botão encostado à direita dentro da célula */
-  padding-right: 14rem;
-}
-
-/* Botão com largura mínima confortável */
-.box table.clean td:last-child .btn{
-  min-width: 8.8rem;   /* cabe “Remover” folgado */
-  padding: .45rem .85rem;
-}
-
-/* deixa o toast com verde de sucesso */
-#toast{
-  background: #e7f6ea !important;   /* fundo verde-claro */
-  color: #2e7d32 !important;         /* texto verde */
-  border: 1px solid #cfe7d0 !important;
-}
-
-/* ==== AJUSTES DO HEADER PARA IGUALAR AO INDEX (append-only) ==== */
-
-/* Cores/base iguais às do index */
-:root{
-  --green:#2e7d32;
-  --green-2:#2e7d32;
-}
-
-/* Header desktop – mantém a tua estrutura mas uniformiza medidas/cores */
-header.site{
-  background:#fff;
-  padding:1rem 2rem;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 2px 5px rgba(0,0,0,.1);
-  position:sticky;
-  top:0;
-  z-index:5000;
-  gap:1rem;
-}
-header.site .logo{ display:flex; align-items:center; gap:10px; min-width:0; }
-header.site .logo img{ width:35px; height:35px; }
-header.site .logo h1{
-  margin:0; color:var(--green); font-weight:700; font-size:1.1rem;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-
-/* Navegação desktop */
-header.site .nav ul{
-  list-style:none; display:flex; gap:1.2rem; margin:0; padding:0;
-}
-header.site .nav a,
-header.site nav a{
-  color:var(--green);
-  font-weight:500;
-  font-size:.95rem;
-  text-decoration:none;         /* sem sublinhado */
-}
-/* garantir que nenhum “active” sublinha ou coloca barra */
-header.site .nav a.active,
-header.site nav a.active{
-  font-weight:500;
-  border:0;
-  text-decoration:none;
-}
-
-/* Se existir seletor de idioma igual ao index */
-#langSwitch, #langSwitch2{
-  border:1px solid #cfe7d0; border-radius:20px; padding:.25rem .6rem;
-  color:#2e7d32; background:#fff; font-weight:600;
-}
-
-/* Botão Login igual ao index (não interfere com os teus .btn) */
-.login-btn{
-  background:#2e7d32; color:#fff !important; padding:.45rem .95rem; border-radius:25px;
-  font-weight:700; border:1px solid #2e6b39; text-decoration:none;
-  transition:background .2s, transform .1s;
-}
-.login-btn:hover{ background:#2a6f2d; transform:translateY(-1px); }
-.login-btn:active{ transform:translateY(0); }
-
-/* ===== MENU MOBILE ===== */
-/* Estiliza o teu botão existente (.menu-toggle) como o “hamburger” do index */
-.menu-toggle{
-  display:none; width:40px; height:40px; border:1px solid #cfe7d0; border-radius:10px;
-  background:#fff; cursor:pointer; align-items:center; justify-content:center; font-size:0;
-}
-.menu-toggle::before, .menu-toggle::after{
-  content:""; display:block; width:18px; height:2px; background:#2e7d32;
-}
-.menu-toggle span{ display:block; width:18px; height:2px; background:#2e7d32; position:relative; }
-.menu-toggle span::before, .menu-toggle span::after{
-  content:""; position:absolute; left:0; width:18px; height:2px; background:#2e7d32;
-}
-.menu-toggle span::before{ top:-6px; } .menu-toggle span::after{ top:6px; }
-
-/* Painel lateral mobile já é .nav no teu HTML — só afinamos dimensões */
-@media (max-width: 820px){
-  .menu-toggle{ display:flex; }
-  header.site .nav{
-    position:fixed; top:0; right:0; height:100%;
-    width:70%; max-width:420px; background:#fff;
-    box-shadow:-2px 0 8px rgba(0,0,0,.1);
-    transform:translateX(100%); transition:.3s ease;
-    padding:2rem 1.5rem; display:flex; flex-direction:column; align-items:flex-start;
+  @media (max-width: 500px) {
+    .stat-box { flex-basis: calc(50% - .75rem); }
   }
-  header.site .nav.open{ transform:translateX(0); }
-  header.site .nav ul{ flex-direction:column; gap:1rem; }
-}
-
-/* Pequenos ajustes responsivos do header */
-@media (max-width:900px){
-  header.site{ padding:.8rem 1rem; }
-}
-
-/* === FIX HEADER (não deixar o select ocupar 100% e impedir quebra) === */
-header.site { flex-wrap: nowrap; }
-header.site .nav{
-  display:flex;
-  align-items:center;
-  gap:1rem;
-  flex-wrap: nowrap;        /* tudo numa linha */
-  white-space: nowrap;
-}
-
-/* menu desktop na mesma linha */
-header.site .nav ul{
-  list-style:none;
-  display:flex;
-  gap:1.2rem;
-  margin:0;
-  padding:0;
-  flex-wrap: nowrap;
-}
-
-/* Override à regra global dos formulários */
-header.site select,
-header.site .nav select#langSwitch{
-  width: auto !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  display: inline-block;
-}
-
-/* Botão de login sem partir linha */
-header.site .login-btn{
-  white-space: nowrap;
-  display: inline-block;
-}
-
-/* (opcional) dar um espacinho entre o menu e os controlos à direita */
-@media (min-width: 901px){
-  header.site .nav ul { margin-right: .5rem; }
-}
-
-    :root {
-      --green:#2e7d32;
-      --line:#e7e7e7;
-      --shadow:0 2px 6px rgba(0,0,0,.08);
-    }
-    body {
-      margin:0;
-      font-family:"Roboto",sans-serif;
-      color:#333;
-      line-height:1.6;
-      display:flex;
-      flex-direction:column;
-      min-height:100vh;
-    }
-
-    /* ===== Header desktop ===== */
-    header.site {
-      background:#fff;
-      padding:1rem 2rem;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      box-shadow:0 2px 5px rgba(0,0,0,.1);
-      position:sticky;
-      top:0;
-      z-index:5000;
-    }
-    .logo { display:flex; align-items:center; gap:10px; }
-    .logo img { width:35px; height:35px; }
-    .logo h1 { margin:0; font-size:1.1rem; color:var(--green); font-weight:700; white-space:nowrap; }
-
-    nav.nav ul {
-      list-style:none;
-      display:flex;
-      gap:1.2rem;
-      margin:0;
-      padding:0;
-    }
-    nav.nav a {
-      color:var(--green);
-      font-weight:500;
-      text-decoration:none;
-    }
-    nav.nav a.active { font-weight:600; }
-    #langSwitch {
-      border:1px solid #cfe7d0;
-      border-radius:20px;
-      padding:.25rem .6rem;
-      color:#2e7d32;
-      background:#fff;
-      font-weight:600;
-    }
-    .login-btn {
-      background:#2e7d32;
-      color:#fff !important;
-      padding:.45rem .95rem;
-      border-radius:25px;
-      font-weight:700;
-      border:1px solid #2e6b39;
-      text-decoration:none;
-    }
-
-    /* ===== Mobile menu ===== */
-    .burger {
-      display:none;
-      width:40px;
-      height:40px;
-      border:1px solid #cfe7d0;
-      border-radius:10px;
-      background:#fff;
-      cursor:pointer;
-      align-items:center;
-      justify-content:center;
-      z-index:6000;
-    }
-    .burger span,
-    .burger span::before,
-    .burger span::after {
-      content:"";
-      display:block;
-      width:18px;
-      height:2px;
-      background:#2e7d32;
-      position:relative;
-    }
-    .burger span::before { position:absolute; top:-6px; }
-    .burger span::after { position:absolute; top:6px; }
-
-    .scrim {
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.4);
-      z-index:5500;
-    }
-    aside.mobile-nav {
-      position:fixed;
-      top:0; right:0;
-      height:100%;
-      width:75%;
-      max-width:360px;
-      background:#fff;
-      box-shadow:-2px 0 8px rgba(0,0,0,.1);
-      transform:translateX(100%);
-      transition:transform .3s ease;
-      z-index:6001;
-      padding:2rem 1.5rem;
-      display:flex;
-      flex-direction:column;
-      gap:1.2rem;
-    }
-    aside.mobile-nav.open { transform:translateX(0); }
-    aside.mobile-nav ul {
-      list-style:none;
-      padding:0;
-      margin:0;
-      display:flex;
-      flex-direction:column;
-      gap:1rem;
-    }
-    aside.mobile-nav a { color:var(--green); font-weight:500; text-decoration:none; }
-
-    aside.mobile-nav select,
-    aside.mobile-nav .login-btn {
-      margin-top:1rem;
-      width:100%;
-    }
-
-    @media (max-width:820px){
-      nav.nav { display:none; }
-      .burger { display:flex; }
-    }
-
-    /* ==== MOBILE: menu aberto por baixo do header (igual à 2.ª imagem) ==== */
-@media (max-width: 900px){
-  /* o painel deixa de ser “fixed overlay” e passa a bloco normal */
-  .mobile-nav{
-    position: relative !important;
-    inset: auto !important;
-    top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
-    display: none !important;              /* fechado por omissão */
-    border-top: 1px solid var(--line);
-    box-shadow: none !important;
-    padding: 1rem 1.25rem 1.25rem;
-  }
-  .mobile-nav.open{                        /* abre como bloco abaixo do header */
-    display: block !important;
-  }
-
-  /* não precisamos de “scrim”/escurecimento do fundo */
-  .scrim{ display:none !important; }
-  .scrim.open{ display:none !important; }
-
-  /* não bloquear o scroll da página quando o menu abre */
-  body.no-scroll{
-    position: static !important;
-    width: auto !important;
-    overflow: visible !important;
-    overscroll-behavior: auto !important;
-    touch-action: auto !important;
-  }
-
-  /* tipografia/espacamentos como na 2.ª imagem */
-  .mobile-nav a{
-    font-size: 1.6rem;
-    font-weight: 700;
-    padding: 1.1rem 0;
-  }
-  .mobile-nav .actions{
-    margin-top: .8rem;
-  }
-
-  /* pill do idioma compacto, igual ao desktop */
-  #langSwitch2{
-    width:auto !important; min-width:0 !important; max-width:none !important;
-    height:36px; line-height:36px; padding:.25rem .75rem;
-    border:1px solid #cfe7d0; border-radius:20px; background:#fff; color:#2e7d32; font-weight:600;
-  }
-
-  /* botão grande e fluido */
-  .mobile-nav .login-btn{
-    display:block;
-    width:100%;
-    max-width:520px;
-    margin-top: .6rem;
-  }
-}
-
-/* === UNIFICAR MENU MOBILE COM AS OUTRAS PÁGINAS === */
-/* Links do menu (mesmo tamanho/espacamento do index & reduzir) */
-@media (max-width: 900px){
-  header.site .nav.open a{
-    display:block;
-    padding:.85rem 0;
-    font-weight:700;
-    font-size:1.18rem;   /* igual às outras páginas */
-    text-decoration:none;
-  }
-  /* linha de ações (select + botão) dentro do painel mobile */
-  header.site .nav.open .actions{
-    display:flex;
-    gap:.6rem;
-    align-items:center;
-    margin-top:.6rem;
-    width:auto;
-  }
-  /* garantir que o <select> NÃO fica a 100% (override ao form global) */
-  header.site .nav.open select{
-    width:auto !important;
-    min-width:0 !important;
-    max-width:none !important;
-    display:inline-block;
-  }
-  /* botão de login do mobile igual ao das outras páginas (não ocupar a largura toda) */
-  header.site .nav.open .login-btn{
-    display:inline-block;
-    width:auto !important;
-    padding:.45rem .95rem;
-    border-radius:25px;
-    font-weight:700;
-  }
-}
-
-/* === UNIFICAR TAMANHO DO TEXTO NO MENU MOBILE (igual às outras páginas) === */
-@media (max-width: 900px){
-  /* links do menu dentro do painel mobile e dentro do nav aberto */
-  .mobile-nav a,
-  header.site .nav.open a{
-    font-size: 1.18rem;   /* antes 1.6rem */
-    padding: .85rem 0;    /* antes 1.1rem 0 */
-    font-weight: 700;
-  }
-
-  /* botão login no mobile com proporção igual às outras páginas (opcional) */
-  .mobile-nav .login-btn,
-  header.site .nav.open .login-btn{
-    font-size: 1rem;
-    padding: .45rem .95rem;
-  }
-}
 
 </style>
 
@@ -675,100 +304,51 @@ header.site .login-btn{
 <body>
 
 <!-- HEADER -->
-<header class="site">
+<header>
   <div class="logo">
     <img src="Imagens/Aldeia.png" alt="Logo" />
     <h1>Aldeia Segura Pessoas Seguras</h1>
   </div>
 
-  <!-- Botão burger (mobile) -->
-  <button class="burger" aria-label="Abrir menu" aria-expanded="false">
-    <span></span>
-  </button>
-
   <!-- Navegação desktop -->
-  <nav class="nav" aria-label="Principal">
+  <nav aria-label="Principal">
     <ul>
       <li><a href="index.html">Início</a></li>
       <li><a href="compreender.html">Compreender</a></li>
       <li><a href="explorar.html">Explorar</a></li>
       <li><a href="reduzir.html">Reduzir</a></li>
-      <li><a href="aldeias.html">Aldeias Seguras</a></li>
+      <li><a href="Aldeias.html">Aldeias Seguras</a></li>
       <li><a href="Incendio.html">Fogo à Vista</a></li>
       <li><a href="contacto.html">Contacto</a></li>
     </ul>
-    <select id="langSwitch" aria-label="Idioma">
-      <option value="pt" selected>PT</option>
-      <option value="en">EN</option>
-    </select>
-    <a href="login.html" class="login-btn">Login / Registar</a>
+    <div data-auth-container style="display: contents;">
+      <select id="langSwitch" aria-label="Idioma">
+        <option value="pt" selected>PT</option>
+        <option value="en">EN</option>
+      </select>
+      <a href="login.html" class="login-btn" data-auth-link>Login / Registar</a>
+    </div>
+    <button class="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
   </nav>
 </header>
 
 <!-- Scrim + Mobile Nav -->
-<div class="scrim"></div>
-<aside class="mobile-nav" aria-label="Menu Mobile">
-  <ul>
-    <li><a href="index.html">Início</a></li>
-    <li><a href="compreender.html">Compreender</a></li>
-    <li><a href="explorar.html">Explorar</a></li>
-    <li><a href="reduzir.html">Reduzir</a></li>
-    <li><a href="aldeias.html">Aldeias Seguras</a></li>
-    <li><a href="Incendio.html">Fogo à Vista</a></li>
-    <li><a href="contacto.html">Contacto</a></li>
-  </ul>
-  <select id="langSwitch2" aria-label="Idioma">
-    <option value="pt" selected>PT</option>
-    <option value="en">EN</option>
-  </select>
-  <a href="login.html" class="login-btn">Login / Registar</a>
+<div id="scrim" class="scrim" aria-hidden="true"></div>
+<aside id="mobileNav" class="mobile-nav" aria-hidden="true">
+  <a href="index.html">Início</a>
+  <a href="compreender.html">Compreender</a>
+  <a href="explorar.html">Explorar</a>
+  <a href="reduzir.html">Reduzir</a>
+  <a href="Aldeias.html">Aldeias Seguras</a>
+  <a href="Incendio.html">Fogo à Vista</a>
+  <a href="contacto.html">Contacto</a>
+  <div class="actions" data-auth-container>
+    <select id="langSwitch2" aria-label="Idioma">
+      <option value="pt">PT</option><option value="en">EN</option>
+    </select>
+    <a href="login.html" class="login-btn" data-auth-link>Login / Registar</a>
+  </div>
 </aside>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const burger = document.querySelector(".burger");
-    const scrim = document.querySelector(".scrim");
-    const mobileNav = document.querySelector(".mobile-nav");
-
-    function closeMenu(){
-      mobileNav.classList.remove("open");
-      scrim.style.display="none";
-      document.body.style.overflow="";
-      burger.setAttribute("aria-expanded","false");
-    }
-    function openMenu(){
-      mobileNav.classList.add("open");
-      scrim.style.display="block";
-      document.body.style.overflow="hidden";
-      burger.setAttribute("aria-expanded","true");
-    }
-
-    burger.addEventListener("click", () => {
-      if(mobileNav.classList.contains("open")) closeMenu();
-      else openMenu();
-    });
-    scrim.addEventListener("click", closeMenu);
-    document.addEventListener("keydown", e => {
-      if(e.key==="Escape") closeMenu();
-    });
-    mobileNav.querySelectorAll("a").forEach(link=>{
-      link.addEventListener("click", closeMenu);
-    });
-
-    // Marcar link ativo
-    const current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-    document.querySelectorAll("nav.nav a, aside.mobile-nav a").forEach(a=>{
-      if(a.getAttribute("href").toLowerCase() === current){
-        a.classList.add("active");
-      }
-    });
-  });
-</script>
-
-<!-- ===== resto do conteúdo (mapa, fichas, etc.) fica igual ao teu ficheiro ===== -->
-
-</body>
-
 
 <section class="hero"><h2>Localização das Aldeias Seguras</h2></section>
 
@@ -793,7 +373,6 @@ header.site .login-btn{
 <section class="fichas" id="fichas">
   <h3>Fichas das Aldeias</h3>
   <div id="fichasList"></div>
-  <p class="small muted">Nota: “Adicionar informação” e “Comentários/Problemas” são locais ao navegador (não enviam para servidor).</p>
 </section>
 
 <section class="faq-wrap" id="faqs">
@@ -836,6 +415,8 @@ header.site .login-btn{
 
 <footer>© 2025 Ruben Sousa · Todos os direitos reservados</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="main.js" defer></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/proj4@2.11.0/dist/proj4.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
@@ -875,7 +456,6 @@ window.addEventListener('DOMContentLoaded', function(){
   // ---------- CONFIG ----------
   var PATH_FREG = 'Shapfiles2/FreguesiasArcos.json';
   var PATH_ALD  = 'Shapfiles2/AldeiasSeguras.json';
-  var PATH_BOM  = 'Shapfiles2/Bombeiros.json';
   var PATH_REDE = 'AldeiasSeguras/Shapfiles2/RedeViaria.json';
   var PATH_EDIF = 'AldeiasSeguras/Shapfiles2/Edificios.json';
   var PATH_AR   = 'AldeiasSeguras/Shapfiles2/AbrigosRefugios.json';
@@ -893,9 +473,9 @@ window.addEventListener('DOMContentLoaded', function(){
     "Massas de água superficiais": "#0000ff"
   };
 
-  var GJ_REDE=null, GJ_EDIF=null, GJ_AR=null, GJ_OCUP=null;
+  let GJ_REDE=null, GJ_EDIF=null, GJ_AR=null, GJ_OCUP=null;
 
-  var DATA_ALDEIAS = [
+  const DATA_ALDEIAS = [
     { nome:'Ínsuas', freguesia:'Soajo', abrigos:null, refugios:null, exercicios:null, osl:'Sim', plano:'Não' },
     { nome:'S. Sebastião de Cima', freguesia:'Cabreiro', abrigos:0, refugios:1, exercicios:0, osl:'Sim', plano:'Sim' },
     { nome:'Vilar de Suente', freguesia:'Soajo', abrigos:1, refugios:1, exercicios:1, osl:'Sim', plano:'Sim' },
@@ -909,21 +489,21 @@ window.addEventListener('DOMContentLoaded', function(){
     { nome:'Travassos', freguesia:'Senharei', abrigos:0, refugios:0, exercicios:0, osl:'Sim', plano:'Não' }
   ];
   function slug(s){ s=(s||'').toString(); try{ s=s.normalize('NFD'); }catch(e){}; return s.replace(/[̀-ͯ]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/(^-|-$)/g,'').toLowerCase(); }
-  var DATA_BY_SLUG = {}; for(var i=0;i<DATA_ALDEIAS.length;i++){ DATA_BY_SLUG[ slug(DATA_ALDEIAS[i].nome) ] = DATA_ALDEIAS[i]; }
-  function prefer(o, keys, def){ if(def===void 0) def=''; if(!o) return def; for(var i=0;i<keys.length;i++){ var k=keys[i]; if(o[k]!=null && o[k]!=='' && o[k]!=='null') return o[k]; } return def; }
+  const DATA_BY_SLUG = {}; for(let i=0;i<DATA_ALDEIAS.length;i++){ DATA_BY_SLUG[ slug(DATA_ALDEIAS[i].nome) ] = DATA_ALDEIAS[i]; }
+  function prefer(o, keys, def){ if(def===void 0) def=''; if(!o) return def; for(const k of keys){ if(o[k]!=null && o[k]!=='' && o[k]!=='null') return o[k]; } return def; }
 
   function smartFetchJSON(originalPath){
-    var candidates=[originalPath];
+    const candidates=[originalPath];
     if(/^AldeiasSeguras\//.test(originalPath)) candidates.push(originalPath.replace(/^AldeiasSeguras\//,''));
     candidates.push('./'+originalPath); candidates.push('../'+originalPath);
-    var lastErr=null;
-    return new Promise(function(resolve){
+    let lastErr=null;
+    return new Promise(resolve => {
       (function tryOne(ix){
         if(ix>=candidates.length){ if(lastErr){ console.error(lastErr); showToast('Falha a carregar '+originalPath); } return resolve(null); }
         fetch(candidates[ix],{cache:'no-cache'})
-          .then(function(r){ if(r.ok) return r.json(); lastErr=new Error('HTTP '+r.status+' em '+candidates[ix]); throw lastErr; })
-          .then(function(json){ resolve(json); })
-          .catch(function(err){ lastErr=err; tryOne(ix+1); });
+          .then(r => { if(r.ok) return r.json(); lastErr=new Error('HTTP '+r.status+' em '+candidates[ix]); throw lastErr; })
+          .then(json => resolve(json))
+          .catch(err => { lastErr=err; tryOne(ix+1); });
       })(0);
     });
   }
@@ -931,57 +511,47 @@ window.addEventListener('DOMContentLoaded', function(){
   if(window.proj4){
     proj4.defs('EPSG:3763','+proj=tmerc +lat_0=39.66825833333333 +lon_0=-8.13310833333333 +k=1 +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs');
   }
-  function looksProjected(gj){ var c=null; function pick(g){ if(!g) return; if(g.type==='Point') c=g.coordinates; else if(g.type==='MultiPoint'||g.type==='LineString') c=g.coordinates&&g.coordinates[0]; else if(g.type==='MultiLineString'||g.type==='Polygon') c=g.coordinates&&g.coordinates[0]&&g.coordinates[0][0]; else if(g.type==='MultiPolygon') c=g.coordinates&&g.coordinates[0]&&g.coordinates[0][0]&&g.coordinates[0][0][0]; else if(g.type==='GeometryCollection') return pick(g.geometries&&g.geometries[0]); }
+  function looksProjected(gj){ let c=null; function pick(g){ if(!g) return; if(g.type==='Point') c=g.coordinates; else if(g.type==='MultiPoint'||g.type==='LineString') c=g.coordinates&&g.coordinates[0]; else if(g.type==='MultiLineString'||g.type==='Polygon') c=g.coordinates&&g.coordinates[0]&&g.coordinates[0][0]; else if(g.type==='MultiPolygon') c=g.coordinates&&g.coordinates[0]&&g.coordinates[0][0]&&g.coordinates[0][0][0]; else if(g.type==='GeometryCollection') return pick(g.geometries&&g.geometries[0]); }
     pick(gj && (gj.type==='Feature'? gj.geometry : ((gj.features&&gj.features[0]&&gj.features[0].geometry)||gj))); return Array.isArray(c) && Math.abs(c[0])>180; }
   function reprojectGeoJSON(gj,from,to){ from=from||'EPSG:3763'; to=to||'EPSG:4326'; if(!window.proj4) return gj;
-    function projPt(coord){ var p=proj4(from,to,coord); coord[0]=p[0]; coord[1]=p[1]; }
-    function walk(arr,d){ if(!arr) return; if(d===1){ for(var i=0;i<arr.length;i++) projPt(arr[i]); } else { for(var j=0;j<arr.length;j++) walk(arr[j], d-1); } }
-    function handle(g){ if(!g) return; switch(g.type){ case 'Point': projPt(g.coordinates); break; case 'MultiPoint': case 'LineString': walk(g.coordinates,1); break; case 'MultiLineString': case 'Polygon': walk(g.coordinates,2); break; case 'MultiPolygon': walk(g.coordinates,3); break; case 'GeometryCollection': for(var k=0;k<g.geometries.length;k++) handle(g.geometries[k]); break; } }
-    if(gj && gj.type==='FeatureCollection'){ for(var i=0;i<gj.features.length;i++) handle(gj.features[i].geometry); }
+    function projPt(coord){ const p=proj4(from,to,coord); coord[0]=p[0]; coord[1]=p[1]; }
+    function walk(arr,d){ if(!arr) return; if(d===1){ for(let i=0;i<arr.length;i++) projPt(arr[i]); } else { for(let j=0;j<arr.length;j++) walk(arr[j], d-1); } }
+    function handle(g){ if(!g) return; switch(g.type){ case 'Point': projPt(g.coordinates); break; case 'MultiPoint': case 'LineString': walk(g.coordinates,1); break; case 'MultiLineString': case 'Polygon': walk(g.coordinates,2); break; case 'MultiPolygon': walk(g.coordinates,3); break; case 'GeometryCollection': for(let k=0;k<g.geometries.length;k++) handle(g.geometries[k]); break; } }
+    if(gj && gj.type==='FeatureCollection'){ for(let i=0;i<gj.features.length;i++) handle(gj.features[i].geometry); }
     else if(gj && gj.type==='Feature') handle(gj.geometry); else if(gj) handle(gj);
     if(gj && gj.crs) try{ delete gj.crs; }catch(e){}
     return gj;
   }
 
   // -------- MAPA PRINCIPAL --------
-  var map = L.map('map').setView([41.9,-8.4],10);
-  var baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
+  const map = L.map('map').setView([41.9,-8.4],10);
+  const baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 
-  map.on('popupopen', function(e){
-    var el = e.popup && e.popup.getElement && e.popup.getElement();
+  map.on('popupopen', e => {
+    const el = e.popup && e.popup.getElement && e.popup.getElement();
     if(!el) return;
-    el.addEventListener('click', function(ev){
-      var lk = ev.target.closest && ev.target.closest('a.open-ficha[href^="#"]');
+    el.addEventListener('click', ev => {
+      const lk = ev.target.closest && ev.target.closest('a.open-ficha[href^="#"]');
       if(lk){ ev.preventDefault(); openFichaById(lk.getAttribute('href').slice(1)); }
     });
   });
 
-  var layerFreg, layerAldeias, layerBombeiros, layerRede, layerEdif, layerAR;
-  var aldeiaIndex = {};
-
-  // Bombeiros (opcional)
-  var pBom = smartFetchJSON(PATH_BOM).then(function(gj){
-    if(!gj) return null; if(looksProjected(gj)) reprojectGeoJSON(gj);
-    layerBombeiros = L.geoJSON(gj,{
-      pointToLayer:function(f,latlng){ return L.circleMarker(latlng,{radius:5,color:'#fff',weight:1,fillColor:'#1565c0',fillOpacity:0.95}); },
-      onEachFeature:function(f,l){ l.bindTooltip(prefer(f.properties,['Nome','Designacao','DESIG','NOME'],'Bombeiros'),{direction:'top'}); }
-    });
-    return layerBombeiros;
-  });
+  let layerFreg, layerAldeias, layerRede, layerEdif, layerAR;
+  const aldeiaIndex = {};
 
   // Freguesias
-  var pF = smartFetchJSON(PATH_FREG).then(function(gj){
+  const pF = smartFetchJSON(PATH_FREG).then(gj => {
     if(!gj) return null; if(looksProjected(gj)) reprojectGeoJSON(gj);
     layerFreg = L.geoJSON(gj,{
       style:{ color:'#1f78b4', weight:2, fillOpacity:0.05 },
-      onEachFeature:function(f,l){
-        var P=f.properties||{}; var freg=prefer(P,['Freguesia','Nome_Freg','NOME_FREG'],'(sem nome)'); var conc=prefer(P,['Concelho','Municipio','Município','MUNICIPIO'],''); var dist=prefer(P,['Distrito','DISTRICT'],'');
-        var areaHa = prefer(P,['Area_ha','AreaHa','AREA_HA','Area_Ha','HA'],'');
-        try{ if(!areaHa && window.turf){ var a=turf.area(f); areaHa=(a/10000).toFixed(2); } }catch(e){}
-        var html = '<b>Freguesia:</b> '+freg+'<br>'+(conc?'<b>Concelho:</b> '+conc+'<br>':'')+(dist?'<b>Distrito:</b> '+dist+'<br>':'')+(areaHa?'<b>Área:</b> '+areaHa+' ha':'');
+      onEachFeature:(f,l) => {
+        const P=f.properties||{}; const freg=prefer(P,['Freguesia','Nome_Freg','NOME_FREG'],'(sem nome)'); const conc=prefer(P,['Concelho','Municipio','Município','MUNICIPIO'],''); const dist=prefer(P,['Distrito','DISTRICT'],'');
+        let areaHa = prefer(P,['Area_ha','AreaHa','AREA_HA','Area_Ha','HA'],'');
+        try{ if(!areaHa && window.turf){ const a=turf.area(f); areaHa=(a/10000).toFixed(2); } }catch(e){}
+        const html = '<b>Freguesia:</b> '+freg+'<br>'+(conc?'<b>Concelho:</b> '+conc+'<br>':'')+(dist?'<b>Distrito:</b> '+dist+'<br>':'')+(areaHa?'<b>Área:</b> '+areaHa+' ha':'');
         l.bindPopup(html);
-        l.on('mouseover',function(){ l.setStyle({weight:3, fillOpacity:0.12}); });
-        l.on('mouseout', function(){ l.setStyle({weight:2, fillOpacity:0.05}); });
+        l.on('mouseover',() => l.setStyle({weight:3, fillOpacity:0.12}));
+        l.on('mouseout', () => l.setStyle({weight:2, fillOpacity:0.05}));
       }
     }).addTo(map);
     return layerFreg;
@@ -992,20 +562,20 @@ window.addEventListener('DOMContentLoaded', function(){
   function loadComments(fid){ try{ return JSON.parse(localStorage.getItem(commentsKey(fid))||'[]'); }catch(_){ return []; } }
   function saveComments(fid, arr){ localStorage.setItem(commentsKey(fid), JSON.stringify(arr)); }
   function renderComments(fid, filter){
-    var wrap = document.getElementById(fid+'-comments');
+    const wrap = document.getElementById(fid+'-comments');
     if(!wrap) return;
-    var data = loadComments(fid);
-    if(filter && filter!=='all') data = data.filter(function(it){ return (it.status||'pendente')===filter; });
+    let data = loadComments(fid);
+    if(filter && filter!=='all') data = data.filter(it => (it.status||'pendente')===filter);
     if(!data.length){
       wrap.innerHTML = '<p class="small muted">Ainda sem comentários.</p>';
       return;
     }
-    data.sort(function(a,b){ return (b.created||0) - (a.created||0); });
-    wrap.innerHTML = data.map(function(it){
-      var dt = new Date(it.created||Date.now());
-      var ds = dt.toLocaleString();
-      var foto = it.foto ? ('<div class="comment-meta"><a href="'+it.foto+'" target="_blank" rel="noopener">Ver foto</a></div>') : '';
-      var st = (it.status||'pendente');
+    data.sort((a,b) => (b.created||0) - (a.created||0));
+    wrap.innerHTML = data.map(it => {
+      const dt = new Date(it.created||Date.now());
+      const ds = dt.toLocaleString();
+      const foto = it.foto ? ('<div class="comment-meta"><a href="'+it.foto+'" target="_blank" rel="noopener">Ver foto</a></div>') : '';
+      const st = (it.status||'pendente');
       return '<div class="comment-item" data-cid="'+it.id+'">\
         <div class="comment-head">\
           <div>\
@@ -1031,8 +601,8 @@ window.addEventListener('DOMContentLoaded', function(){
   const SUPA_URL  = "https://pyxoudeamrfisegykdtg.supabase.co";
   const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5eG91ZGVhbXJmaXNlZ3lrZHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MjUzMzQsImV4cCI6MjA3MzIwMTMzNH0.CBOB_ynuUGkrzCdz3bT5YkZvtERRBpV4GJ2AmbHEQdE";
 
-  const API_INFO     = `${SUPA_URL}/rest/v1/ficha_info`;
-  const API_COMMENTS = `${SUPA_URL}/rest/v1/ficha_comments`;
+  const API_INFO     = `/rest/v1/ficha_info`;
+  const API_COMMENTS = `/rest/v1/ficha_comments`;
 
   // Única função de POST
   async function tryPostJSON(url, payload){
@@ -1040,7 +610,7 @@ window.addEventListener('DOMContentLoaded', function(){
       method: 'POST',
       headers: {
         apikey: SUPA_ANON,
-        Authorization: `Bearer ${SUPA_ANON}`,
+        Authorization: `Bearer `,
         'Content-Type': 'application/json',
         Prefer: 'return=minimal'
       },
@@ -1049,57 +619,83 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   function getTableData(tblSel){
-    var tbl = document.querySelector(tblSel);
-    if(!tbl) return [];
-    var headers = Array.from(tbl.tHead ? tbl.tHead.rows[0].cells : []);
-    var rows = Array.from(tbl.tBodies[0].rows);
-    return rows.map(function(tr){
-      var obj = {};
-      Array.from(tr.cells).forEach(function(td, i){
-        var key = headers[i] ? headers[i].textContent.trim() : ('Col'+(i+1));
-        var el = td.querySelector('input, select, textarea');
-        var val = el ? (el.type==='number' ? (el.value===''?null:+el.value) : el.value) : td.textContent;
+    const container = document.querySelector(tblSel);
+    if (!container) return [];
+    const headerDiv = container.querySelector('.form-grid-header');
+    if (!headerDiv) return [];
+
+    const headers = Array.from(headerDiv.children).map(span => span.textContent.trim()).filter(Boolean);
+    const rows = Array.from(container.querySelectorAll('.form-grid-body > .form-grid-row'));
+
+    return rows.map(rowDiv => {
+      const obj = {};
+      const cells = Array.from(rowDiv.children);
+      cells.forEach((child, i) => {
+        if (i >= headers.length) return;
+        const key = headers[i];
+        const el = child.matches('input, select, textarea') ? child : child.querySelector('input, select, textarea');
+        let val = '';
+        if(el) val = (el.type==='number' ? (el.value===''?null:+el.value) : el.value);
         if(typeof val === 'string') val = val.trim();
         obj[key] = val;
       });
       return obj;
-    }).filter(function(row){
-      return Object.values(row).some(function(v){ return (v!=='' && v!==null && typeof v!=='undefined'); });
+    }).filter(row => {
+      return Object.values(row).some(v => (v!=='' && v!==null && typeof v!=='undefined'));
     });
   }
 
-  function collectInputs(container){
-    var out = [];
+  async function collectInputs(container){
+    const out = [];
     if(!container) return out;
-    container.querySelectorAll('input, select, textarea').forEach(function(el){
-      var label = '';
-      var wrap = el.closest('div');
+
+    const elements = Array.from(container.querySelectorAll('input, select, textarea'));
+    
+    for (const el of elements) {
+      let label = '';
+      const wrap = el.closest('div');
       if(wrap){
-        var lbl = wrap.querySelector('label');
+        const lbl = wrap.querySelector('label');
         if(lbl) label = lbl.textContent.trim();
       }
       if(!label && el.placeholder) label = el.placeholder.trim();
-      out.push({ label: label || el.name || '(sem label)', value: (el.value||'').trim() });
-    });
+      
+      let value = '';
+      if (el.type === 'file' && el.files && el.files[0]) {
+        value = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = () => resolve('');
+            reader.readAsDataURL(el.files[0]);
+        });
+      } else {
+        value = (el.value || '').trim();
+      }
+
+      out.push({ label: label || el.name || '(sem label)', value: value });
+    }
     return out;
   }
 
-  function buildInfoPayload(fid){
-    var fichaEl = document.getElementById(fid);
+  async function buildInfoPayload(fid){
+    const fichaEl = document.getElementById(fid);
     if(!fichaEl) return null;
-    var nome = fichaEl.querySelector('.sum-title') ? fichaEl.querySelector('.sum-title').textContent.trim() : '';
+    const nome = fichaEl.querySelector('.sum-title') ? fichaEl.querySelector('.sum-title').textContent.trim() : '';
 
-    var pop  = getTableData('#'+fid+'-pop');
-    var osl  = getTableData('#'+fid+'-osl');
-    var prev = getTableData('#'+fid+'-prev');
-    var sim  = getTableData('#'+fid+'-sim');
+    const pop  = getTableData('#'+fid+'-pop-grid');
+    const osl  = getTableData('#'+id+'-osl-grid');
+    const prev = getTableData('#'+id+'-prev-grid');
+    const sim  = getTableData('#'+id+'-sim-grid');
 
     // caixas com inputs
-    var infoBoxes = Array.from(fichaEl.querySelectorAll('.info-comments details:nth-child(1) .box'));
-    var inputsCollected = [];
-    infoBoxes.forEach(function(bx){ inputsCollected = inputsCollected.concat(collectInputs(bx)); });
+    const infoBoxes = Array.from(fichaEl.querySelectorAll('.info-comments details:nth-child(1) .box'));
+    let inputsCollected = [];
+    for (const bx of infoBoxes) {
+        const collected = await collectInputs(bx);
+        inputsCollected = inputsCollected.concat(collected);
+    }
 
-    var tags = Array.from(fichaEl.querySelectorAll('.sum-tag')).map(function(t){return t.textContent.trim();});
+    const tags = Array.from(fichaEl.querySelectorAll('.sum-tag')).map(function(t){return t.textContent.trim();});
 
     return {
       aldeiaId: fid,
@@ -1120,9 +716,9 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   // Fichas (mini-mapas)
-  var fichasList = document.getElementById('fichasList');
-  var MINI_REG = [];
-  var io = new IntersectionObserver(function(entries){
+  const fichasList = document.getElementById('fichasList');
+  const MINI_REG = [];
+  const io = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       if(!entry.isIntersecting) return; var el=entry.target; if(el.dataset.done) return; el.dataset.done='1';
       var lat=parseFloat(el.dataset.lat), lng=parseFloat(el.dataset.lng);
@@ -1136,48 +732,46 @@ window.addEventListener('DOMContentLoaded', function(){
     });
   },{threshold:0.2});
 
-  function tableRowPopTpl(){
-    return '<tr>\
-      <td><input type="text" placeholder="Casa"/></td>\
-      <td><input type="number" min="0" step="1" placeholder="Nº"/></td>\
-      <td><input type="number" min="0" max="130" step="1" placeholder="Idade"/></td>\
-      <td><input type="text" placeholder="Incapacidades"/></td>\
-      <td><input type="text" placeholder="Observações"/></td>\
-      <td style="width:1%;white-space:nowrap"><button class="btn" data-del-row>Remover</button></td>\
-    </tr>';
+  function formRowPopTpl(){
+    return '<div class="form-grid-row pop-grid">\
+      <input type="text" placeholder="Casa"/>\
+      <input type="number" min="0" step="1" placeholder="Nº"/>\
+      <input type="number" min="0" max="130" step="1" placeholder="Idade"/>\
+      <input type="text" placeholder="Incapacidades"/>\
+      <input type="text" placeholder="Observações"/>\
+      <button class="btn" data-del-row>Remover</button>\
+    </div>';
   }
-  function tableRowOSLTpl(){
-    return '<tr>\
-      <td><input type="text" placeholder="Nome do OSL"/></td>\
-      <td><input type="text" placeholder="Contacto"/></td>\
-      <td style="width:1%;white-space:nowrap"><button class="btn" data-del-row>Remover</button></td>\
-    </tr>';
+  function formRowOSLTpl(){
+    return '<div class="form-grid-row osl-grid">\
+      <input type="text" placeholder="Nome do OSL"/>\
+      <input type="text" placeholder="Contacto"/>\
+      <button class="btn" data-del-row>Remover</button>\
+    </div>';
   }
-  function tableRowPrevTpl(){
-    return '<tr>\
-      <td><input type="date"/></td>\
-      <td>\
-        <select>\
-          <option>GNR</option><option>ICNF</option><option>ANEPC</option><option>Município</option><option>Outro</option>\
-        </select>\
-      </td>\
-      <td><input type="number" min="0" step="1" placeholder="Nº"/></td>\
-      <td><input type="text" placeholder="Faixas GFC"/></td>\
-      <td style="width:1%;white-space:nowrap"><button class="btn" data-del-row>Remover</button></td>\
-    </tr>';
+  function formRowPrevTpl(){
+    return '<div class="form-grid-row prev-grid">\
+      <input type="date"/>\
+      <select>\
+        <option>GNR</option><option>ICNF</option><option>ANEPC</option><option>Município</option><option>Outro</option>\
+      </select>\
+      <input type="number" min="0" step="1" placeholder="Nº"/>\
+      <input type="text" placeholder="Faixas GFC"/>\
+      <button class="btn" data-del-row>Remover</button>\
+    </div>';
   }
-  function tableRowSimTpl(){
-    return '<tr>\
-      <td><input type="date"/></td>\
-      <td><textarea placeholder="Lições aprendidas"></textarea></td>\
-      <td><input type="number" min="0" step="1" placeholder="Participantes"/></td>\
-      <td style="width:1%;white-space:nowrap"><button class="btn" data-del-row>Remover</button></td>\
-    </tr>';
+  function formRowSimTpl(){
+    return '<div class="form-grid-row sim-grid">\
+      <input type="date"/>\
+      <textarea placeholder="Lições aprendidas"></textarea>\
+      <input type="number" min="0" step="1" placeholder="Participantes"/>\
+      <button class="btn" data-del-row>Remover</button>\
+    </div>';
   }
 
   function createFicha(info){
-    var id=info.id,nome=info.nome,distrito=info.distrito,concelho=info.concelho,freguesia=info.freguesia,lat=info.lat,lng=info.lng,foto=info.foto; var abrigos=info.abrigos,refugios=info.refugios,exercicios=info.exercicios,osl=info.osl,plano=info.plano,distBombeirosKm=info.distBombeirosKm;
-    var el=document.createElement('details'); el.className='ficha'; el.id=id;
+    const {id,nome,distrito,concelho,freguesia,lat,lng,foto,abrigos,refugios,exercicios,osl,plano,distBombeirosKm} = info;
+    const el=document.createElement('details'); el.className='ficha'; el.id=id;
     el.innerHTML='\
       <summary class="ficha-summary">\
         <div class="sum-left">\
@@ -1222,51 +816,49 @@ window.addEventListener('DOMContentLoaded', function(){
             <p class="small muted" style="margin:.5rem 0 0;">Mostra camadas dentro do buffer de 100 m. Pode ligar/desligar em cima.</p>\
           </div>\
         </div>\
-        <div class="info-comments" style="margin-top:.8rem;">\
+        <div class="info-comments">\
           <!-- ESQUERDA: Adicionar informação -->\
           <details>\
-            <summary class="btn" style="display:inline-block">Adicionar informação</summary>\
-            <div class="box" style="margin-top:.6rem;">\
+            <summary class="btn">Adicionar informação</summary>\
+            <div class="box">\
               <h5>Caracterização da população residente</h5>\
-              <table class="clean" id="'+id+'-pop">\
-                <thead><tr><th>Casa</th><th>Número</th><th>Idade</th><th>Incapacidades</th><th>Observações</th><th style="width:1%"></th></tr></thead>\
-                <tbody>'+tableRowPopTpl()+tableRowPopTpl()+'</tbody>\
-              </table>\
-              <div class="controls">\
-                <button class="btn" data-add-row="#'+id+'-pop" data-template="pop">Adicionar linha</button>\
+              <div class="form-grid" id="'+id+'-pop-grid">\
+                <div class="form-grid-header pop-grid"><span>Casa</span><span>Número</span><span>Idade</span><span>Incapacidades</span><span>Observações</span></div>\
+                <div class="form-grid-body">'+formRowPopTpl()+formRowPopTpl()+'</div>\
               </div>\
-              <div class="two-col" style="margin-top:.6rem;">\
-                <div class="box">\
-                  <h5>Oficiais de Segurança</h5>\
-                  <table class="clean" id="'+id+'-osl">\
-                    <thead><tr><th>Nome</th><th>Contacto</th><th style="width:1%"></th></tr></thead>\
-                    <tbody>'+tableRowOSLTpl()+'</tbody>\
-                  </table>\
-                  <div class="controls"><button class="btn" data-add-row="#'+id+'-osl" data-template="osl">Adicionar oficial</button></div>\
+              <div class="controls">\
+                <button class="btn" data-add-row="#'+id+'-pop-grid .form-grid-body" data-template="pop">Adicionar linha</button>\
+              </div>\
+              <div class="box" style="margin-top:1rem;">\
+                <h5>Oficiais de Segurança</h5>\
+                <div class="form-grid" id="'+id+'-osl-grid">\
+                  <div class="form-grid-header osl-grid"><span>Nome</span><span>Contacto</span></div>\
+                  <div class="form-grid-body">'+formRowOSLTpl()+'</div>\
                 </div>\
-                <div class="box">\
-                  <h5>Prevenção (sensibilização / GFC)</h5>\
-                  <table class="clean" id="'+id+'-prev">\
-                    <thead><tr><th>Data</th><th>Organizador</th><th>Participantes</th><th>Faixas GFC</th><th style="width:1%"></th></tr></thead>\
-                    <tbody>'+tableRowPrevTpl()+'</tbody>\
-                  </table>\
-                  <div class="controls"><button class="btn" data-add-row="#'+id+'-prev" data-template="prev">Adicionar ação</button></div>\
+                <div class="controls"><button class="btn" data-add-row="#'+id+'-osl-grid .form-grid-body" data-template="osl">Adicionar oficial</button></div>\
+              </div>\
+              <div class="box" style="margin-top:1rem;">\
+                <h5>Prevenção (sensibilização / GFC)</h5>\
+                <div class="form-grid" id="'+id+'-prev-grid">\
+                  <div class="form-grid-header prev-grid"><span>Data</span><span>Organizador</span><span>Participantes</span><span>Faixas GFC</span></div>\
+                  <div class="form-grid-body">'+formRowPrevTpl()+'</div>\
                 </div>\
+                <div class="controls"><button class="btn" data-add-row="#'+id+'-prev-grid .form-grid-body" data-template="prev">Adicionar ação</button></div>\
               </div>\
               <div class="box" style="margin-top:.6rem;">\
                 <h5>Preparação e resposta</h5>\
                 <div class="row">\
                   <div>\
                     <label><b>Abrigo:</b> <select><option>SIM</option><option>NÃO</option></select></label>\
-                    <label>Localização (coords)</label><input type="text" placeholder="Lat, Lon">\
-                    <label>Foto (URL ou caminho)</label><input type="text" placeholder="Ex.: Imagens/abrigo.jpg">\
+                    <label>Localização (coords)</label><input type="text" placeholder="Lat, Lon" />\
+                    <label>Foto do Abrigo</label><input type="file" accept="image/*" />\
                     <label>Privado/Público</label><input type="text" placeholder="Privado / Público">\
                     <label>Observações</label><textarea placeholder="Notas sobre abrigo"></textarea>\
                   </div>\
                   <div>\
                     <label><b>Refúgio:</b> <select><option>SIM</option><option>NÃO</option></select></label>\
-                    <label>Localização (coords)</label><input type="text" placeholder="Lat, Lon">\
-                    <label>Foto (URL ou caminho)</label><input type="text" placeholder="Ex.: Imagens/refugio.jpg">\
+                    <label>Localização (coords)</label><input type="text" placeholder="Lat, Lon" />\
+                    <label>Foto do Refúgio</label><input type="file" accept="image/*" />\
                     <label>Privado/Público</label><input type="text" placeholder="Privado / Público">\
                     <label>Observações</label><textarea placeholder="Notas sobre refúgio"></textarea>\
                   </div>\
@@ -1274,15 +866,15 @@ window.addEventListener('DOMContentLoaded', function(){
                 <div class="row">\
                   <div>\
                     <label><b>Plano de evacuação:</b> <select><option>SIM</option><option>NÃO</option></select></label>\
-                    <label>Ficheiro do plano</label><input type="text" placeholder="Ex.: Documentos/Plano.pdf">\
+                    <label>Ficheiro do plano</label><input type="file" accept=".pdf,.doc,.docx,image/*" />\
                   </div>\
                   <div>\
                     <label><b>Simulacros</b></label>\
-                    <table class="clean" id="'+id+'-sim">\
-                      <thead><tr><th>Data</th><th>Lições aprendidas</th><th>Participantes nº</th><th style="width:1%"></th></tr></thead>\
-                      <tbody>'+tableRowSimTpl()+'</tbody>\
-                    </table>\
-                    <div class="controls"><button class="btn" data-add-row="#'+id+'-sim" data-template="sim">Adicionar simulacro</button></div>\
+                    <div class="form-grid" id="'+id+'-sim-grid">\
+                      <div class="form-grid-header sim-grid"><span>Data</span><span>Lições aprendidas</span><span>Participantes nº</span></div>\
+                      <div class="form-grid-body">'+formRowSimTpl()+'</div>\
+                    </div>\
+                    <div class="controls"><button class="btn" data-add-row="#'+id+'-sim-grid .form-grid-body" data-template="sim">Adicionar simulacro</button></div>\
                   </div>\
                 </div>\
               </div>\
@@ -1300,9 +892,9 @@ window.addEventListener('DOMContentLoaded', function(){
           </details>\
           <!-- DIREITA: Comentários / Problemas -->\
           <details class="comments-wrap">\
-            <summary class="btn" style="display:inline-block">Comentários / Problemas</summary>\
-            <div class="box" style="margin-top:.6rem;">\
-              <p class="small muted">Reporta problemas locais (ex.: sinalização partida, falta de limpeza, vegetação a invadir caminhos, iluminação avariada). <b>Não envia para servidor</b> — fica guardado neste navegador.</p>\
+            <summary class="btn">Comentários / Problemas</summary>\
+            <div class="box">\
+              <p class="small muted">Reporte problemas locais (ex.: sinalização partida, falta de limpeza, vegetação a invadir caminhos, iluminação avariada). Os dados são enviados para o servidor ao clicar em "Submeter comentários".</p>\
               <div class="comment-form">\
                 <div class="row">\
                   <div>\
@@ -1321,8 +913,8 @@ window.addEventListener('DOMContentLoaded', function(){
                 <label>Descrição</label>\
                 <textarea id="'+id+'-c-text" placeholder="Explica o problema…" required></textarea>\
                 <div class="row">\
-                  <div><label>Localização (coords ou texto)</label><input id="'+id+'-c-loc" type="text" placeholder="Ex.: 41.90, -8.40 ou \'Rua Principal\'"></div>\
-                  <div><label>Foto (URL opcional)</label><input id="'+id+'-c-foto" type="text" placeholder="Ex.: Imagens/problema.jpg"></div>\
+                  <div><label>Localização (coords ou texto)</label><input id="'+id+'-c-loc" type="text" placeholder="Ex.: 41.90, -8.40 ou \'Rua Principal\'" /></div>\
+                  <div><label>Foto (opcional)</label><input id="'+id+'-c-foto" type="file" accept="image/*" /></div>\
                 </div>\
                 <div class="comment-actions">\
                   <button class="btn" data-add-comment="'+id+'">Adicionar comentário</button>\
@@ -1345,19 +937,19 @@ window.addEventListener('DOMContentLoaded', function(){
         </div>\
       </div>';
     fichasList.appendChild(el);
-    var mini=el.querySelector('.mini-map'); io.observe(mini);
+    const mini=el.querySelector('.mini-map'); io.observe(mini);
     renderComments(id, 'all');
   }
 
   // Aldeias
-  var pA = smartFetchJSON(PATH_ALD).then(function(gj){
+  const pA = smartFetchJSON(PATH_ALD).then(gj => {
     if(!gj) return null; if(looksProjected(gj)) reprojectGeoJSON(gj);
     layerAldeias = L.geoJSON(gj,{
-      pointToLayer:function(feat,latlng){ return L.circleMarker(latlng,{ radius:6, color:'#fff', weight:1, fillColor:'#ff6f00', fillOpacity:0.95 }); },
-      onEachFeature:function(f,l){
-        var P=f.properties||{}; var nome=prefer(P,['Nome','Aldeia','Nome_Aldeia','NOME','DESIG','DESIGNACAO'],'(sem nome)'); var nomeSlug=slug(nome); var ref=DATA_BY_SLUG[nomeSlug]||{}; var freg=prefer(P,['Freguesia','freguesia'], ref.freguesia||''); var conc=prefer(P,['Concelho','Municipio','Município'],''); var dist=prefer(P,['Distrito'],'');
-        var lat,lng; if(f.geometry && f.geometry.type==='Point'){ lng=+f.geometry.coordinates[0]; lat=+f.geometry.coordinates[1]; } else { var ll=l.getLatLng(); lat=ll.lat; lng=ll.lng; }
-        var id='aldeia-'+nomeSlug; aldeiaIndex[id]={layer:l,lat:lat,lng:lng};
+      pointToLayer:(feat,latlng) => L.circleMarker(latlng,{ radius:6, color:'#fff', weight:1, fillColor:'#ff6f00', fillOpacity:0.95 }),
+      onEachFeature:(f,l) => {
+        const P=f.properties||{}; const nome=prefer(P,['Nome','Aldeia','Nome_Aldeia','NOME','DESIG','DESIGNACAO'],'(sem nome)'); const nomeSlug=slug(nome); const ref=DATA_BY_SLUG[nomeSlug]||{}; const freg=prefer(P,['Freguesia','freguesia'], ref.freguesia||''); const conc=prefer(P,['Concelho','Municipio','Município'],''); const dist=prefer(P,['Distrito'],'');
+        let lat,lng; if(f.geometry && f.geometry.type==='Point'){ lng=+f.geometry.coordinates[0]; lat=+f.geometry.coordinates[1]; } else { const ll=l.getLatLng(); lat=ll.lat; lng=ll.lng; }
+        const id='aldeia-'+nomeSlug; aldeiaIndex[id]={layer:l,lat:lat,lng:lng};
         createFicha({
           id:id, nome:nome, distrito:dist, concelho:conc, freguesia:freg, lat:lat, lng:lng, foto:P.Foto||null,
           abrigos:(P.Abrigos!=null?P.Abrigos:(ref.abrigos!=null?ref.abrigos:null)),
@@ -1367,7 +959,7 @@ window.addEventListener('DOMContentLoaded', function(){
           plano:(P.Plano!=null?P.Plano:(ref.plano!=null?ref.plano:null)),
           distBombeirosKm:null
         });
-        var html='<div style="font-size:.95rem">'+
+        const html='<div style="font-size:.95rem">'+
           '<b>Nome da aldeia:</b> '+nome+'<br>'+
           (dist?'<b>Distrito:</b> '+dist+'<br>':'')+(conc?'<b>Concelho:</b> '+conc+'<br>':'')+(freg?'<b>Freguesia:</b> '+freg+'<br>':'')+
           '<b>Latitude:</b> '+lat.toFixed(5)+' <b>Longitude:</b> '+lng.toFixed(5)+'<br>'+
@@ -1381,54 +973,52 @@ window.addEventListener('DOMContentLoaded', function(){
   });
 
   // Rede VIÁRIA
-  var pRede = smartFetchJSON(PATH_REDE).then(function(gj){
+  const pRede = smartFetchJSON(PATH_REDE).then(gj => {
     if(!gj) return null; GJ_REDE=gj; if(looksProjected(gj)) reprojectGeoJSON(gj);
     layerRede = L.geoJSON(gj,{
-      style:function(f){ var P=f.properties||{}; var classe=(prefer(P,['classe','CLASSE','tipo','TIPO','Categoria'],'')+'').toLowerCase(); var w=(classe.indexOf('principal')>-1||classe.indexOf('nacional')>-1)?3:(classe.indexOf('municipal')>-1?2:1.5); return { color:'#777', weight:w, opacity:0.9 }; },
-      onEachFeature:function(f,l){ var P=f.properties||{}; var nome=prefer(P,['nome','NOME','Designacao','DESIG','via','road'],'Via'); var classe=prefer(P,['classe','CLASSE','tipo','TIPO','Categoria'],''); l.bindTooltip(nome+(classe?' — '+classe:''),{sticky:true}); }
+      style:f => { const P=f.properties||{}; const classe=(prefer(P,['classe','CLASSE','tipo','TIPO','Categoria'],'')+'').toLowerCase(); const w=(classe.indexOf('principal')>-1||classe.indexOf('nacional')>-1)?3:(classe.indexOf('municipal')>-1?2:1.5); return { color:'#777', weight:w, opacity:0.9 }; },
+      onEachFeature:(f,l) => { const P=f.properties||{}; const nome=prefer(P,['nome','NOME','Designacao','DESIG','via','road'],'Via'); const classe=prefer(P,['classe','CLASSE','tipo','TIPO','Categoria'],''); l.bindTooltip(nome+(classe?' — '+classe:''),{sticky:true}); }
     });
     return layerRede;
   });
 
   // Edifícios
-  var pEdif = smartFetchJSON(PATH_EDIF).then(function(gj){
+  const pEdif = smartFetchJSON(PATH_EDIF).then(gj => {
     if(!gj) return null; GJ_EDIF=gj; if(looksProjected(gj)) reprojectGeoJSON(gj);
-    layerEdif = L.geoJSON(gj,{ style:function(){ return { color:'#c2185b', weight:0.8, fillColor:'#ff69b4', fillOpacity:0.35 }; },
-      onEachFeature:function(f,l){ var P=f.properties||{}; var id=prefer(P,['id','ID','ident','IDENT'],'Edifício'); var uso=prefer(P,['uso','USO','funcao','FUNCAO','tipo','TIPO'],''); var pisos=prefer(P,['pisos','PISOS','n_pisos','NPISOS'],''); l.bindPopup('<b>'+id+'</b>'+(uso?'<br><b>Uso:</b> '+uso:'')+(pisos?'<br><b>Pisos:</b> '+pisos:'')); l.on('mouseover',function(){ l.setStyle({weight:1.1, fillOpacity:0.5}); }); l.on('mouseout',function(){ l.setStyle({weight:0.8}); }); }
+    layerEdif = L.geoJSON(gj,{ style:() => ({ color:'#c2185b', weight:0.8, fillColor:'#ff69b4', fillOpacity:0.35 }),
+      onEachFeature:(f,l) => { const P=f.properties||{}; const id=prefer(P,['id','ID','ident','IDENT'],'Edifício'); const uso=prefer(P,['uso','USO','funcao','FUNCAO','tipo','TIPO'],''); const pisos=prefer(P,['pisos','PISOS','n_pisos','NPISOS'],''); l.bindPopup('<b>'+id+'</b>'+(uso?'<br><b>Uso:</b> '+uso:'')+(pisos?'<br><b>Pisos:</b> '+pisos:'')); l.on('mouseover',() => l.setStyle({weight:1.1, fillOpacity:0.5})); l.on('mouseout',() => l.setStyle({weight:0.8})); }
     });
     return layerEdif;
   });
 
   // Abrigos/Refúgios
-  var pAR = smartFetchJSON(PATH_AR).then(function(gj){
+  const pAR = smartFetchJSON(PATH_AR).then(gj => {
     if(!gj) return null; GJ_AR=gj; if(looksProjected(gj)) reprojectGeoJSON(gj);
-    var stylePoly={color:'#d32f2f', weight:2, fillOpacity:0.15};
-    function pointTo(f,latlng){ return L.circleMarker(latlng,{radius:6,color:'#fff',weight:1,fillColor:'#d32f2f',fillOpacity:0.95}); }
-    var asGeo=(gj && gj.type==='FeatureCollection')? gj : {type:'FeatureCollection', features:(gj && gj.features)||[]};
-    layerAR = L.geoJSON(asGeo,{ pointToLayer:pointTo, style:function(){ return stylePoly; },
-      onEachFeature:function(f,l){ var P=f.properties||{}; var nome=prefer(P,['Nome','Designacao','DESIG','NOME'],'Abrigo/Refúgio'); var extra=prefer(P,['Cap','capacidade','Capacidade','Pavimento','Material','Tipo','Notas','OBS'],''); l.bindPopup('<b>'+nome+'</b>'+(extra?'<br>'+extra:'')); l.bindTooltip(nome,{direction:'top'}); }
+    const stylePoly={color:'#d32f2f', weight:2, fillOpacity:0.15};
+    const pointTo = (f,latlng) => L.circleMarker(latlng,{radius:6,color:'#fff',weight:1,fillColor:'#d32f2f',fillOpacity:0.95});
+    const asGeo=(gj && gj.type==='FeatureCollection')? gj : {type:'FeatureCollection', features:(gj && gj.features)||[]};
+    layerAR = L.geoJSON(asGeo,{ pointToLayer:pointTo, style:() => stylePoly,
+      onEachFeature:(f,l) => { const P=f.properties||{}; const nome=prefer(P,['Nome','Designacao','DESIG','NOME'],'Abrigo/Refúgio'); const extra=prefer(P,['Cap','capacidade','Capacidade','Pavimento','Material','Tipo','Notas','OBS'],''); l.bindPopup('<b>'+nome+'</b>'+(extra?'<br>'+extra:'')); l.bindTooltip(nome,{direction:'top'}); }
     });
     return layerAR;
   });
 
   // Ocupação do solo (mini-mapas)
-  var pOcup = smartFetchJSON(PATH_OCUP).then(function(gj){
+  const pOcup = smartFetchJSON(PATH_OCUP).then(gj => {
     if(!gj) return null; if(looksProjected(gj)) reprojectGeoJSON(gj);
     GJ_OCUP = (gj.type==='FeatureCollection')? gj : {type:'FeatureCollection',features:(gj.features||[])};
     return GJ_OCUP;
   });
 
   // Controlos do mapa principal
-  Promise.all([pF,pA,pBom,pRede,pEdif,pAR,pOcup]).then(function(){
-    var baseMaps = { 'OpenStreetMap': baseOSM };
-    var overlays = {};
+  Promise.all([pF,pA,pRede,pEdif,pAR,pOcup]).then(() => {
+    const overlays = {};
     if(layerFreg) overlays['Freguesias']=layerFreg;
     if(layerAldeias) overlays['Aldeias']=layerAldeias;
-    if(layerBombeiros) overlays['Bombeiros']=layerBombeiros;
     if(layerRede) overlays['Rede viária']=layerRede;
     if(layerEdif) overlays['Edifícios']=layerEdif;
     if(layerAR) overlays['Abrigos/Refúgios']=layerAR;
-    L.control.layers(baseMaps, overlays, { collapsed:false }).addTo(map);
+    L.control.layers(null, overlays, { collapsed:false }).addTo(map);
     if(layerFreg) layerFreg.addTo(map);
     if(layerAldeias) layerAldeias.addTo(map);
     if(layerRede) layerRede.addTo(map);
@@ -1449,36 +1039,35 @@ window.addEventListener('DOMContentLoaded', function(){
     // Adicionar linha a tabelas
     var addBtn=e.target.closest && e.target.closest('button[data-add-row]');
     if(addBtn){
-      var tblSel = addBtn.getAttribute('data-add-row');
+      var containerSel = addBtn.getAttribute('data-add-row');
       var kind   = addBtn.getAttribute('data-template');
-      var tbl=document.querySelector(tblSel);
-      if(tbl){
-        var html = (kind==='pop')? tableRowPopTpl() : (kind==='osl')? tableRowOSLTpl() : (kind==='prev')? tableRowPrevTpl() : tableRowSimTpl();
-        var tr = document.createElement('tr'); tr.innerHTML = html.replace(/^<tr>|<\/tr>$/g,'');
-        tbl.tBodies[0].appendChild(tr);
+      var container=document.querySelector(containerSel);
+      if(container){
+        var html = (kind==='pop')? formRowPopTpl() : (kind==='osl')? formRowOSLTpl() : (kind==='prev')? formRowPrevTpl() : formRowSimTpl();
+        var div = document.createElement('div'); div.innerHTML = html;
+        container.appendChild(div.firstChild);
       }
     }
 
     // Remover linha
     var delBtn = e.target.closest && e.target.closest('button[data-del-row]');
     if(delBtn){
-      var tr = delBtn.closest('tr');
-      var tbody = tr && tr.parentElement;
-      if(tbody && tbody.rows.length>1){ tbody.removeChild(tr); }
+      var row = delBtn.closest('.form-grid-row');
+      if(row && row.parentElement.children.length > 1){ row.parentElement.removeChild(row); }
       else{ showToast('Mantive a última linha para não ficares sem a estrutura.'); }
     }
   });
 
   // Ligar/desligar camadas do mini-mapa
-  document.addEventListener('change', function(e){
-    var cb = e.target.closest && e.target.closest('input[data-mini-layer]');
+  document.addEventListener('change', e => {
+    const cb = e.target.closest && e.target.closest('input[data-mini-layer]');
     if(!cb) return;
-    var box = cb.closest('.box'); if(!box) return;
-    var miniEl = box.querySelector('.mini-map'); if(!miniEl) return;
-    var rec = MINI_REG.find(function(r){ return r.el===miniEl; });
+    const box = cb.closest('.box'); if(!box) return;
+    const miniEl = box.querySelector('.mini-map'); if(!miniEl) return;
+    const rec = MINI_REG.find(r => r.el===miniEl);
     if(!rec || !rec.layers) return;
-    var key = cb.getAttribute('data-mini-layer');
-    var lyr = rec.layers[key];
+    const key = cb.getAttribute('data-mini-layer');
+    const lyr = rec.layers[key];
     if(!lyr) return;
     if(cb.checked){ try{ lyr.addTo(rec.map); }catch(_){} }
     else{ try{ rec.map.removeLayer(lyr); }catch(_){} }
@@ -1491,13 +1080,13 @@ window.addEventListener('DOMContentLoaded', function(){
 
     function intersectFC(gj,circlePoly){
       if(!gj||!circlePoly) return null;
-      var fc=(gj.type==='FeatureCollection')?gj:{type:'FeatureCollection',features:(gj.features||[])};
-      var out=[];
-      fc.features.forEach(function(f){
+      const fc=(gj.type==='FeatureCollection')?gj:{type:'FeatureCollection',features:(gj.features||[])};
+      const out=[];
+      fc.features.forEach(f => {
         try{
           if(!f||!f.geometry) return;
-          var fb=turf.bbox(f); var cb=turf.bbox(circlePoly);
-          var overlap=!(fb[0]>cb[2]||fb[2]<cb[0]||fb[1]>cb[3]||fb[3]<cb[1]);
+          const fb=turf.bbox(f); const cb=turf.bbox(circlePoly);
+          const overlap=!(fb[0]>cb[2]||fb[2]<cb[0]||fb[1]>cb[3]||fb[3]<cb[1]);
           if(!overlap) return;
           if(turf.booleanIntersects(f,circlePoly)) out.push(f);
         }catch(e){}
@@ -1505,23 +1094,23 @@ window.addEventListener('DOMContentLoaded', function(){
       return {type:'FeatureCollection',features:out};
     }
 
-    MINI_REG.forEach(function(rec){
+    MINI_REG.forEach(rec => {
       if(rec._drawn) return;
-      var mm=rec.map, circlePoly=rec.circlePoly; if(!mm||!circlePoly) return;
+      const mm=rec.map, circlePoly=rec.circlePoly; if(!mm||!circlePoly) return;
 
       rec.layers = rec.layers || {};
 
       if(GJ_OCUP){
-        var fco = intersectFC(GJ_OCUP, circlePoly);
+        const fco = intersectFC(GJ_OCUP, circlePoly);
         if(fco && fco.features.length){
           rec.layers.ocup = L.geoJSON(fco, {
-            style:function(feat){
-              var cat = String((feat.properties && feat.properties[KEY_OCUP]) || 'Sem classe');
-              var clr = OCUP_COLORS[cat] || '#cccccc';
+            style:feat => {
+              const cat = String((feat.properties && feat.properties[KEY_OCUP]) || 'Sem classe');
+              const clr = OCUP_COLORS[cat] || '#cccccc';
               return { stroke:false, fillColor: clr, fillOpacity:.5 };
             },
-            onEachFeature:function(f,l){
-              var cat = (f.properties && f.properties[KEY_OCUP]) || 'Sem classe';
+            onEachFeature:(f,l) => {
+              const cat = (f.properties && f.properties[KEY_OCUP]) || 'Sem classe';
               l.bindTooltip(cat,{sticky:true, opacity:.85});
             }
           });
@@ -1529,24 +1118,24 @@ window.addEventListener('DOMContentLoaded', function(){
       }
 
       if(GJ_EDIF){
-        var fc1=intersectFC(GJ_EDIF,circlePoly);
+        const fc1=intersectFC(GJ_EDIF,circlePoly);
         if(fc1 && fc1.features.length) rec.layers.edif = L.geoJSON(fc1,{ style:{color:'#c2185b', weight:0.8, fillColor:'#ff69b4', fillOpacity:0.35} });
       }
       if(GJ_REDE){
-        var fc2=intersectFC(GJ_REDE,circlePoly);
+        const fc2=intersectFC(GJ_REDE,circlePoly);
         if(fc2 && fc2.features.length) rec.layers.rede = L.geoJSON(fc2,{ style:{color:'#777', weight:2, opacity:0.9} });
       }
       if(GJ_AR){
-        var fc3=intersectFC(GJ_AR,circlePoly);
+        const fc3=intersectFC(GJ_AR,circlePoly);
         if(fc3 && fc3.features.length) rec.layers.ar = L.geoJSON(fc3,{
-          pointToLayer:function(f,latlng){ return L.circleMarker(latlng,{radius:5,color:'#fff',weight:1,fillColor:'#d32f2f',fillOpacity:0.95}); },
+          pointToLayer:(f,latlng) => L.circleMarker(latlng,{radius:5,color:'#fff',weight:1,fillColor:'#d32f2f',fillOpacity:0.95}),
           style:{color:'#d32f2f', weight:2, fillOpacity:0.15}
         });
       }
 
-      var box = rec.el.closest('.box') || document;
-      ['ocup','rede','edif','ar'].forEach(function(k){
-        var cb = box.querySelector('input[data-mini-layer="'+k+'"]');
+      const box = rec.el.closest('.box') || document;
+      ['ocup','rede','edif','ar'].forEach(k => {
+        const cb = box.querySelector('input[data-mini-layer="'+k+'"]');
         if(cb && cb.checked && rec.layers[k]) rec.layers[k].addTo(mm);
       });
 
@@ -1563,18 +1152,33 @@ window.addEventListener('DOMContentLoaded', function(){
       var sev  = (document.getElementById(fid+'-c-sev')||{}).value || 'Média';
       var text = (document.getElementById(fid+'-c-text')||{}).value || '';
       var loc  = (document.getElementById(fid+'-c-loc')||{}).value || '';
-      var foto = (document.getElementById(fid+'-c-foto')||{}).value || '';
+      
+      var fotoInput = document.getElementById(fid+'-c-foto');
+      var fotoFile = fotoInput && fotoInput.files.length > 0 ? fotoInput.files[0] : null;
+
       if(!text.trim()){ showToast('Escreve uma descrição do problema.'); return; }
-      var arr = loadComments(fid);
-      arr.push({ id: Date.now(), cat:cat, sev:sev, text:text.trim(), loc:loc.trim(), foto:foto.trim(), status:'pendente', created:Date.now() });
-      saveComments(fid, arr);
-      if(document.getElementById(fid+'-c-text')) document.getElementById(fid+'-c-text').value='';
-      if(document.getElementById(fid+'-c-loc')) document.getElementById(fid+'-c-loc').value='';
-      if(document.getElementById(fid+'-c-foto')) document.getElementById(fid+'-c-foto').value='';
-      var activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
-      var currentFilter = activeBtn ? activeBtn.getAttribute('data-val') : 'all';
-      renderComments(fid, currentFilter);
-      showToast('Comentário adicionado.');
+
+      const addCommentWithPhoto = (photoDataUrl) => {
+        var arr = loadComments(fid);
+        arr.push({ id: Date.now(), cat:cat, sev:sev, text:text.trim(), loc:loc.trim(), foto:photoDataUrl || '', status:'pendente', created:Date.now() });
+        saveComments(fid, arr);
+        // limpar
+        if(document.getElementById(fid+'-c-text')) document.getElementById(fid+'-c-text').value='';
+        if(document.getElementById(fid+'-c-loc')) document.getElementById(fid+'-c-loc').value='';
+        if(fotoInput) fotoInput.value = '';
+        var activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
+        var currentFilter = activeBtn ? activeBtn.getAttribute('data-val') : 'all';
+        renderComments(fid, currentFilter);
+        showToast('Comentário adicionado.');
+      };
+
+      if (fotoFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) { addCommentWithPhoto(e.target.result); };
+        reader.readAsDataURL(fotoFile);
+      } else {
+        addCommentWithPhoto(''); // No photo
+      }
     }
 
     var act = e.target.closest && e.target.closest('button[data-cmd]');
@@ -1653,30 +1257,33 @@ window.addEventListener('DOMContentLoaded', function(){
 
   // Submeter INFORMAÇÃO (Supabase)
   document.addEventListener('click', async function(e){
-    var btn = e.target.closest && e.target.closest('button[data-submit-info]');
+    const btn = e.target.closest && e.target.closest('button[data-submit-info]');
     if(!btn) return;
-    var fid = btn.getAttribute('data-submit-info');
-    var payload = buildInfoPayload(fid);
-    if(!payload){ showToast('Não foi possível preparar os dados.'); return; }
-
-    const row = {
-      aldeia_id: payload.aldeiaId,
-      aldeia_nome: payload.aldeiaNome,
-      payload: payload,
-      submitted_at: new Date().toISOString()
-    };
-
+    const fid = btn.getAttribute('data-submit-info');
+    
     btn.disabled = true;
+    btn.textContent = 'A processar...';
+
     try{
+        const payload = await buildInfoPayload(fid);
+        if(!payload){ showToast('Não foi possível preparar os dados.'); return; }
+
+        const row = {
+          aldeia_id: payload.aldeiaId,
+          aldeia_nome: payload.aldeiaNome,
+          payload: payload,
+          submitted_at: new Date().toISOString()
+        };
+
       const res = await tryPostJSON(API_INFO, row);
       if(!res.ok){ throw new Error(await res.text()); }
       showToast('Informação submetida com sucesso 🎉');
     }catch(err){
       console.error(err);
       showToast('Erro ao submeter informação. Ver consola.');
-      // fallbackDownload(fid+'-informacao.json', row); // opcional
     }finally{
       btn.disabled=false;
+      btn.textContent = 'Submeter informação';
     }
   });
 
@@ -1711,35 +1318,31 @@ window.addEventListener('DOMContentLoaded', function(){
     }
   });
 
-  /* Painéis exclusivos (Adicionar informação vs Comentários) + fallback p/ browsers sem :has() */
+  /* Painéis exclusivos (Adicionar informação vs Comentários) */
   document.addEventListener('toggle', function(ev){
     var det = ev.target;
     if(det.tagName !== 'DETAILS') return;
-    var wrap = det.closest('.info-comments');
+    // Apenas para os painéis de info/comentários
+    var wrap = det.closest('.info-comments'); // O pai comum
     if(!wrap) return;
 
     if(det.open){
       wrap.querySelectorAll(':scope > details').forEach(function(d){
         if(d !== det) d.open = false;
       });
-      wrap.classList.add('single-open');
-    }else{
-      var algumAberto = wrap.querySelector(':scope > details[open]');
-      if(!algumAberto) wrap.classList.remove('single-open');
     }
   }, true);
 
-  document.querySelectorAll('.info-comments').forEach(function(wrap){
-    var aberto = wrap.querySelector(':scope > details[open]');
-    if(aberto){
-      wrap.querySelectorAll(':scope > details').forEach(function(d){ if(d!==aberto) d.open=false; });
-      wrap.classList.add('single-open');
+  // Ao carregar a página, garantir que apenas um painel está aberto
+  document.querySelectorAll('.info-comments').forEach(function(container){
+    var openDetails = container.querySelectorAll(':scope > details[open]');
+    if (openDetails.length > 1) {
+      // Deixa apenas o primeiro aberto e fecha os outros
+      openDetails.forEach((det, index) => { if(index > 0) det.open = false; });
     }
   });
   // -------- FIM DOMContentLoaded
 });
 </script>
 
-</body>
 </html>
-
