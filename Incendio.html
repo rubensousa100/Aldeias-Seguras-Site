@@ -591,8 +591,6 @@ footer{
         <div class="ffr-actions" style="margin-top:.6rem">
           <button class="ffr-btn secondary" id="back-3">Voltar</button>
           <button class="ffr-btn" id="ffr-submit">Enviar</button>
-          <a class="ffr-btn" id="ffr-mail" href="#" target="_blank" rel="noopener">Abrir email com resumo</a>
-          <button class="ffr-btn secondary" id="ffr-copy">Copiar resumo</button>
         </div>
 
         <div class="ffr-toast ok" id="ffr-ok" style="display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
@@ -916,10 +914,6 @@ footer{
         const okToast = $('#ffr-ok');
         okToast.style.display = 'flex';
         okToast.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        const subject = 'Relato de incêndio';
-        const body = encodeURIComponent(JSON.stringify(row, null, 2));
-        $('#ffr-mail').setAttribute('href', `mailto:?subject=${encodeURIComponent(subject)}&body=${body}`);
-        $('#ffr-copy').onclick = () => navigator.clipboard.writeText(JSON.stringify(row, null, 2));
 
         if (gridLayer || rawLayer) {
           await showGrid(true); // Atualiza o mapa colaborativo se já estiver visível
