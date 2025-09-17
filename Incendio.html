@@ -1115,16 +1115,13 @@ footer{
         // Espera um pouco para a transição do 'goto' terminar antes de manipular o mapa
         setTimeout(() => {
             if (collabMap && lat != null && lng != null) {
-                // Centra o mapa na localização do relato
+                // 1. Forçar a atualização do tamanho do mapa para corrigir a renderização
+                collabMap.invalidateSize();
+
+                // 2. Centrar o mapa na localização do relato
                 collabMap.setView([lat, lng], 14); // Zoom 14 é um bom detalhe
 
-                // Adiciona um marcador temporário para destacar o local
-                L.marker([lat, lng])
-                    .addTo(collabMap)
-                    .bindPopup('<b>O seu relato foi submetido aqui.</b>')
-                    .openPopup();
-                
-                // Faz scroll para o mapa colaborativo para garantir que está visível
+                // 4. Faz scroll para o mapa colaborativo para garantir que está visível
                 $('#ffr-map-collab').scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }, 100); // 100ms de delay deve ser suficiente
