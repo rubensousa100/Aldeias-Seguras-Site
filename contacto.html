@@ -298,9 +298,7 @@
 
             <div class="actions">
               <button type="submit" class="btn">Enviar</button>
-              <button type="button" class="btn ghost" id="mailtoBtn">Abrir no e-mail</button>
             </div>
-            <p class="hint">Sem servidor? O botão “Abrir no e-mail” compõe uma mensagem no teu cliente de e-mail.</p>
 
             <p class="hint" style="margin-top:.6rem">
               <small><b>Privacidade:</b> os dados serão usados apenas para responder ao teu pedido.</small>
@@ -316,5 +314,65 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="main.js" defer></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('contactForm');
+      if (!form) return;
+
+      // Criar dinamicamente a área de mensagens para manter o HTML limpo
+      const formMessage = document.createElement('div');
+      formMessage.id = 'formMessage';
+      formMessage.style.display = 'none';
+      formMessage.style.marginTop = '.8rem';
+      formMessage.style.padding = '.8rem 1rem';
+      formMessage.style.borderRadius = '8px';
+      form.querySelector('.actions').insertAdjacentElement('afterend', formMessage);
+
+      const supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'A enviar...';
+        formMessage.style.display = 'none';
+
+        const formData = {
+          name: form.nome.value.trim(),
+          email: form.email.value.trim(),
+          subject: form.assunto.value,
+          phone: form.telefone.value.trim(),
+          message: form.mensagem.value.trim()
+        };
+
+        // Validação simples
+        if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+          formMessage.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+          formMessage.style.background = '#fff3f3'; formMessage.style.color = '#c62828';
+          formMessage.style.display = 'block';
+          submitBtn.disabled = false; submitBtn.textContent = originalBtnText;
+          return;
+        }
+
+        const { error } = await supabase.from('contacts').insert([formData]);
+
+        if (error) {
+          console.error('Erro ao enviar contacto:', error);
+          formMessage.textContent = `Erro ao enviar: ${error.message}`;
+          formMessage.style.background = '#fff3f3'; formMessage.style.color = '#c62828';
+        } else {
+          formMessage.textContent = 'Mensagem enviada com sucesso! Obrigado.';
+          formMessage.style.background = '#eef7ef'; formMessage.style.color = '#1b5e20';
+          form.reset();
+        }
+
+        formMessage.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      });
+    });
+  </script>
 </body>
 </html>
