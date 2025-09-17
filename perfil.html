@@ -479,7 +479,7 @@
           if (isFirstLoad) {
               reportsContainer.innerHTML = '<p>A carregar relatos...</p>';
               loadMoreContainer.innerHTML = ''; // Limpa o botão ao carregar pela primeira vez
-          } else if (isFirstLoad) {
+          } else {
               const btn = loadMoreContainer.querySelector('button');
               if (btn) {
                   btn.disabled = true;
