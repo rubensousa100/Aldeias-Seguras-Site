@@ -132,17 +132,16 @@
       .ffr-card{padding:1rem}
       #ffr-map-report{height:320px}
 
-      /* wizard em grelha 2 colunas (sem overflow) */
+      /* wizard empilhado em mobile para melhor leitura */
       .ffr-wizard{
         display:grid;
-        grid-template-columns:1fr 1fr;
+        grid-template-columns:1fr; /* Empilha os passos na vertical */
         gap:.6rem;
         overflow:visible; /* sem scroll horizontal */
       }
       .ffr-step{min-width:auto}
 
-      .ffr-btn{width:100%}
-      .ffr-actions .ffr-btn{flex:1}
+      .ffr-actions .ffr-btn{flex:1} /* Botões de ação partilham o espaço */
       .leaflet-bottom.leaflet-right .ffr-legend{max-width:75vw}
     }
 
