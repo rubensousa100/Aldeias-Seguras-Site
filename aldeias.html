@@ -114,6 +114,11 @@
     border-radius:10px;
     padding:.6rem .9rem; box-shadow:var(--shadow); z-index:10000; display:none;
   }
+  .toast.success {
+    background: #e7f6ea;
+    color: #2e7d32;
+    border-color: #cfe7d0;
+  }
 
   /* Stats */
   .stats{
@@ -527,10 +532,16 @@ window.addEventListener('DOMContentLoaded', function(){
     { nome:'São Mamede', freguesia:'Senharei', abrigos:0, refugios:0, exercicios:0, osl:'Sim', plano:'Não' },
     { nome:'Travassos', freguesia:'Senharei', abrigos:0, refugios:0, exercicios:0, osl:'Sim', plano:'Não' }
   ];
-  function showToast(msg){
+  function showToast(msg, type = 'error'){
     var t=document.getElementById('toast'); if(!t) return;
-    t.textContent=msg; t.style.display='block';
-    clearTimeout(t._to); t._to=setTimeout(function(){t.style.display='none';}, 5000);
+    t.textContent = msg;
+    t.className = 'toast'; // Reset
+    if (type === 'success') {
+      t.classList.add('success');
+    }
+    t.style.display = 'block';
+    clearTimeout(t._to);
+    t._to = setTimeout(function(){t.style.display='none';}, 5000);
   }
   if(!window.L){
     document.getElementById('map').innerHTML='<div style="padding:1rem">Não foi possível carregar o Leaflet. Verifique a ligação à internet.</div>';
@@ -550,7 +561,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
   function slug(s){ s=(s||'').toString(); try{ s=s.normalize('NFD'); }catch(e){}; return s.replace(/[̀-ͯ]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/(^-|-$)/g,'').toLowerCase(); }
   const DATA_BY_SLUG = {}; for(let i=0;i<DATA_ALDEIAS.length;i++){ DATA_BY_SLUG[ slug(DATA_ALDEIAS[i].nome) ] = DATA_ALDEIAS[i]; }
-  function prefer(o, keys, def){ if(def===void 0) def=''; if(!o) return def; for(const k of keys){ if(o[k]!=null && o[k]!=='' && o[k]!=='null') return o[k]; } return def; }
+  function prefer(o, keys, def){ if(def===void 0) def=''; if(!o) return def; for(var i=0;i<keys.length;i++){ var k=keys[i]; if(o[k]!=null && o[k]!=='' && o[k]!=='null') return o[k]; } return def; }
 
   function smartFetchJSON(originalPath){
     const candidates=[originalPath];
@@ -676,11 +687,11 @@ window.addEventListener('DOMContentLoaded', function(){
 
   // Única função de POST
   function tryPostJSON(url, payload){
-    return fetch(url, {
+    return fetch(SUPA_URL + url, {
       method: 'POST',
       headers: {
         apikey: SUPA_ANON,
-        Authorization: `Bearer `,
+        Authorization: `Bearer ${SUPA_ANON}`,
         'Content-Type': 'application/json',
         Prefer: 'return=minimal'
       },
@@ -715,25 +726,50 @@ window.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  function collectInputs(container){
+  async function collectInputs(container) {
     const out = [];
-    if(!container) return out;
+    if (!container) return out;
 
-    var elements = Array.from(container.querySelectorAll('input, select, textarea'));
-    
+    const elements = Array.from(container.querySelectorAll('input, select, textarea'));
+
     for (const el of elements) {
       let label = '';
-      const wrap = el.closest('div');
-      if(wrap){
-        const lbl = wrap.querySelector('label');
-        if(lbl) label = lbl.textContent.trim();
+      // 1. Check for an associated <label for="...">
+      if (el.id) {
+        const lblFor = container.querySelector(`label[for="${el.id}"]`);
+        if (lblFor) label = lblFor.textContent.trim();
       }
-      if(!label && el.placeholder) label = el.placeholder.trim();
-      
-      let value = '';
-      value = (el.value || '').trim();
+      // 2. Check if the element is wrapped in a <label>
+      if (!label) {
+        const parentLabel = el.closest('label');
+        if (parentLabel) {
+          const clone = parentLabel.cloneNode(true);
+          const innerEl = clone.querySelector(el.tagName);
+          if (innerEl) innerEl.remove();
+          label = clone.textContent.trim();
+        }
+      }
+      // 3. Check for a preceding <label> sibling
+      if (!label) {
+        const prev = el.previousElementSibling;
+        if (prev && prev.tagName === 'LABEL') label = prev.textContent.trim();
+      }
+      // 4. Fallback to placeholder
+      if (!label && el.placeholder) label = el.placeholder.trim();
 
-      out.push({ label: label || el.name || '(sem label)', value: value });
+      let value;
+      if (el.type === 'file' && el.files && el.files.length > 0) {
+        const file = el.files[0];
+        value = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result); // Retorna base64
+          reader.readAsDataURL(file);
+        });
+      } else {
+        value = (el.value || '').trim();
+      }
+
+      out.push({ label: label || el.name || `(sem label: ${el.type})`, value: value });
     }
     return out;
   }
@@ -744,12 +780,12 @@ window.addEventListener('DOMContentLoaded', function(){
     const nome = fichaEl.querySelector('.sum-title') ? fichaEl.querySelector('.sum-title').textContent.trim() : '';
 
     const pop  = getTableData('#'+fid+'-pop-grid');
-    const osl  = getTableData('#'+id+'-osl-grid');
-    const prev = getTableData('#'+id+'-prev-grid');
-    const sim  = getTableData('#'+id+'-sim-grid');
+    const osl  = getTableData('#'+fid+'-osl-grid');
+    const prev = getTableData('#'+fid+'-prev-grid');
+    const sim  = getTableData('#'+fid+'-sim-grid');
 
     // caixas com inputs
-    var infoBoxes = Array.from(fichaEl.querySelectorAll('.info-comments details:nth-child(1) .box'));
+    var infoBoxes = Array.from(fichaEl.querySelectorAll('.info-comments details:nth-child(1) > .box'));
     let inputsCollected = [];
     for (var i=0; i<infoBoxes.length; i++) {
         var collected = await collectInputs(infoBoxes[i]);
@@ -796,8 +832,8 @@ window.addEventListener('DOMContentLoaded', function(){
   function formRowPopTpl(){
     return '<div class="form-grid-row pop-grid">\
       <input type="text" placeholder="Casa"/>\
-      <input type="number" min="0" step="1" placeholder="Nº"/>\
-      <input type="number" min="0" max="130" step="1" placeholder="Idade"/>\
+      <input type="number" min="0" step="1" placeholder="Nº" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>\
+      <input type="number" min="0" max="130" step="1" placeholder="Idade" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>\
       <input type="text" placeholder="Incapacidades"/>\
       <input type="text" placeholder="Observações"/>\
       <button class="btn" data-del-row>Remover</button>\
@@ -816,7 +852,7 @@ window.addEventListener('DOMContentLoaded', function(){
       <select>\
         <option>GNR</option><option>ICNF</option><option>ANEPC</option><option>Município</option><option>Outro</option>\
       </select>\
-      <input type="number" min="0" step="1" placeholder="Nº"/>\
+      <input type="number" min="0" step="1" placeholder="Nº" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>\
       <input type="text" placeholder="Faixas GFC"/>\
       <button class="btn" data-del-row>Remover</button>\
     </div>';
@@ -825,7 +861,7 @@ window.addEventListener('DOMContentLoaded', function(){
     return '<div class="form-grid-row sim-grid">\
       <input type="date"/>\
       <textarea placeholder="Lições aprendidas"></textarea>\
-      <input type="number" min="0" step="1" placeholder="Participantes"/>\
+      <input type="number" min="0" step="1" placeholder="Participantes" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');"/>\
       <button class="btn" data-del-row>Remover</button>\
     </div>';
   }
@@ -1115,7 +1151,7 @@ window.addEventListener('DOMContentLoaded', function(){
     if(delBtn){
       var row = delBtn.closest('.form-grid-row');
       if(row && row.parentElement.children.length > 1){ row.parentElement.removeChild(row); }
-      else{ showToast('Mantive a última linha para não ficares sem a estrutura.'); }
+      else{ showToast('Mantive a última linha para não ficares sem a estrutura.', 'success'); }
     }
   });
 
@@ -1227,10 +1263,10 @@ window.addEventListener('DOMContentLoaded', function(){
         if(document.getElementById(fid+'-c-text')) document.getElementById(fid+'-c-text').value='';
         if(document.getElementById(fid+'-c-loc')) document.getElementById(fid+'-c-loc').value='';
         if(fotoInput) fotoInput.value = '';
-        var activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
+        const activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
         var currentFilter = activeBtn ? activeBtn.getAttribute('data-val') : 'all';
         renderComments(fid, currentFilter);
-        showToast('Comentário adicionado.');
+        showToast('Comentário adicionado.', 'success');
       };
 
       if (fotoFile) {
@@ -1254,14 +1290,14 @@ window.addEventListener('DOMContentLoaded', function(){
       if(cmd==='toggle'){
         arr[ix].status = (arr[ix].status==='resolvido') ? 'pendente' : 'resolvido';
         saveComments(fid, arr);
-        var activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
+        const activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
         var currentFilter = activeBtn ? activeBtn.getAttribute('data-val') : 'all';
         renderComments(fid, currentFilter);
       } else if(cmd==='delete'){
         if(confirm('Remover este comentário?')){
           arr.splice(ix,1);
           saveComments(fid, arr);
-          var activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
+          const activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
           var currentFilter = activeBtn ? activeBtn.getAttribute('data-val') : 'all';
           renderComments(fid, currentFilter);
         }
@@ -1270,7 +1306,7 @@ window.addEventListener('DOMContentLoaded', function(){
         if(novo!=null){
           arr[ix].text = novo.trim();
           saveComments(fid, arr);
-          var activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
+          const activeBtn = document.querySelector('button[data-comments-filter="'+fid+'"].active');
           var currentFilter = activeBtn ? activeBtn.getAttribute('data-val') : 'all';
           renderComments(fid, currentFilter);
         }
@@ -1310,7 +1346,7 @@ window.addEventListener('DOMContentLoaded', function(){
         if(!Array.isArray(arr)) throw new Error('Formato inválido');
         saveComments(fid, arr);
         renderComments(fid, 'all');
-        showToast('Comentários importados.');
+        showToast('Comentários importados.', 'success');
       }catch(_){ showToast('Falha ao importar JSON.'); }
     };
     rd.readAsText(file);
@@ -1321,13 +1357,15 @@ window.addEventListener('DOMContentLoaded', function(){
     const btn = e.target.closest && e.target.closest('button[data-submit-info]');
     if(!btn) return;
     const fid = btn.getAttribute('data-submit-info');
+    const fichaEl = document.getElementById(fid);
+    if (!fichaEl) return;
     
     btn.disabled = true;
     btn.textContent = 'A processar...';
 
     try{
         const payload = await buildInfoPayload(fid);
-        if(!payload){ showToast('Não foi possível preparar os dados.'); return; }
+        if(!payload){ showToast('Não foi possível preparar os dados.', 'error'); return; }
 
         const row = {
           aldeia_id: payload.aldeiaId,
@@ -1338,7 +1376,24 @@ window.addEventListener('DOMContentLoaded', function(){
 
       var res = await tryPostJSON(API_INFO, row);
       if(!res.ok){ throw new Error(await res.text()); }
-      showToast('Informação submetida com sucesso 🎉');
+      showToast('Informação submetida com sucesso 🎉', 'success');
+
+      // Limpar todos os campos do formulário após sucesso
+      const formContainer = fichaEl.querySelector('.info-comments details:first-child .box');
+      if (formContainer) {
+        formContainer.querySelectorAll('input:not([type="file"]), textarea').forEach(input => input.value = '');
+        formContainer.querySelectorAll('select').forEach(select => select.selectedIndex = 0); // Reset selects
+        formContainer.querySelectorAll('input[type="file"]').forEach(fileInput => fileInput.value = ''); // Clear file inputs
+
+        // Reset dynamic grids to initial state
+        fichaEl.querySelector('#'+fid+'-pop-grid .form-grid-body').innerHTML = formRowPopTpl() + formRowPopTpl();
+        fichaEl.querySelector('#'+fid+'-osl-grid .form-grid-body').innerHTML = formRowOSLTpl();
+        fichaEl.querySelector('#'+fid+'-prev-grid .form-grid-body').innerHTML = formRowPrevTpl();
+        fichaEl.querySelector('#'+fid+'-sim-grid .form-grid-body').innerHTML = formRowSimTpl();
+      }
+
+      // Fechar o painel de "Adicionar informação"
+      fichaEl.querySelector('.info-comments details:first-child').open = false;
     }catch(err){
       console.error(err);
       showToast('Erro ao submeter informação. Ver consola.');
@@ -1369,7 +1424,12 @@ window.addEventListener('DOMContentLoaded', function(){
     try{
       var res = await tryPostJSON(API_COMMENTS, row);
       if(!res.ok){ throw new Error(await res.text()); }
-      showToast('Comentários submetidos com sucesso ✅');
+      showToast('Comentários submetidos com sucesso ✅', 'success');
+
+      // Limpar campos de adicionar comentário após submissão para o servidor
+      if(document.getElementById(fid+'-c-cat')) document.getElementById(fid+'-c-cat').selectedIndex = 0;
+      if(document.getElementById(fid+'-c-sev')) document.getElementById(fid+'-c-sev').selectedIndex = 0;
+      // Os campos de texto e foto já são limpos na função addCommentWithPhoto
     }catch(err){
       console.error(err);
       showToast('Erro ao submeter comentários. Ver consola.');
